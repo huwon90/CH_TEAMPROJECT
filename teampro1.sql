@@ -1,6 +1,6 @@
 ----------------------- ȸ������ member
 DROP TABLE member;
-11
+ 수정
 -- ȸ�����̺� ����
 CREATE TABLE member (
   mId VARCHAR2(20) PRIMARY KEY,
