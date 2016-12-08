@@ -70,6 +70,7 @@
 </head>
 <body>
 <jsp:include page="../member/header.jsp" />
+	<div id="board_banner"></div>
 	<jsp:include page="writeForm.jsp"></jsp:include>
 	<div id="board_content">
 		<c:forEach var="board" items="${list }">

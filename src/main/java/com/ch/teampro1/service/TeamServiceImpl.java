@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ch.teampro1.dao.ITeamDao;
+import com.ch.teampro1.model.Member;
 import com.ch.teampro1.model.MemberTmConn;
 import com.ch.teampro1.model.Team;
 import com.ch.teampro1.model.TeamTmConn;
@@ -106,5 +107,20 @@ public class TeamServiceImpl implements ITeamService {
 	@Override
 	public int requestCount(String mId) {
 		return teamDao.requestCount(mId);
+	}
+
+	@Override
+	public List<TeamTmConn> memberInvitedList(String mId) {
+		return teamDao.memberInvitedList(mId);
+	}
+
+	@Override
+	public List<Member> memberList() {
+		return teamDao.memberList();
+	}
+
+	@Override
+	public int chkTmConn(TmConn tmConn) {
+		return teamDao.chkTmConn(tmConn);
 	}
 }
