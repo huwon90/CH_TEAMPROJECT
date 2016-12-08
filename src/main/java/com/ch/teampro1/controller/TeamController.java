@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.ch.teampro1.model.Member;
 import com.ch.teampro1.model.MemberTmConn;
 import com.ch.teampro1.model.Team;
 import com.ch.teampro1.model.TeamTmConn;
@@ -59,12 +58,15 @@ public class TeamController {
 		model.addAttribute("leaderTeamList", list);
 		int requestCount = tService.requestCount(mId);
 		model.addAttribute("requestCount", requestCount);
+<<<<<<< HEAD
 
 		List<TeamTmConn> invitedlist = tService.memberInvitedLis(mId);
 		System.out.println("초대받은멤버리스트 실행되니");
 		//model.addAttribute("mId",mId);
 		model.addAttribute("invited", invitedlist);//초대받은 리스트
 
+=======
+>>>>>>> 4e994a27f83189ee24e8b5851a204ed585e729b9
 		return "team/leaderTeamList";
 	}
 	
@@ -171,6 +173,7 @@ public class TeamController {
 		return "team/searchResult";
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@RequestMapping(value="listMember", method=RequestMethod.GET)
 	public String listMember(String mId, Model model){
 		List<Member> memberList = tService.memberList();
@@ -220,5 +223,7 @@ public class TeamController {
 		}
 		return "redirect:leaderTeamList.do?mId="+tmConn.getmId();
 	}
+=======
+>>>>>>> 4e994a27f83189ee24e8b5851a204ed585e729b9
 
 }
