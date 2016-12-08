@@ -81,7 +81,7 @@
 					</tr>
 					<tr id="profile">
 						<td rowspan="2" class="profile1">프로필사진</td>
-						<td class="id">${board.bId }</td>
+						<td class="id" data-bId="${board.bId }">${board.bId }</td>
 						<td class="name">${board.mId }</td>
 					<tr>
 						<td colspan="2" class="date">${board.bDate }</td>
