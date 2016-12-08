@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.ch.teampro1.model.Member;
 import com.ch.teampro1.model.MemberTmConn;
 import com.ch.teampro1.model.Team;
 import com.ch.teampro1.model.TeamTmConn;
@@ -101,11 +102,31 @@ public class TeamDaoImpl implements ITeamDao {
 	
 	@Override
 	public List<Team> searchTeam(String tName) {
+		
 		return session.selectList("searchTeam", tName);
 	}
 	
 	@Override
 	public int requestCount(String mId) {
+		
 		return session.selectOne("requestCount", mId);
+	}
+
+	@Override
+	public List<Member> memberList() {
+		// 전체회원 리스트
+		return session.selectList("memberList");
+	}
+
+	@Override
+	public int chkTmConn(TmConn tmConn) {
+		// 이미 팀에 가입되어있는지 여부확인
+		return session.selectOne("chkTmConn", tmConn);
+	}
+
+	@Override
+	public List<TeamTmConn> memberInvitedList(String mId) {
+		// 초대받은 팀 리스트
+		return session.selectList("memberInvitedList", mId);
 	}
 }
