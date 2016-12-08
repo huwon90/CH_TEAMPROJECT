@@ -15,13 +15,13 @@ public interface BoardService {
 	public int reply_insert(BoardRe boardre);
 	public int insert_schedule(Board board);
 	public int delete(int bId);
-<<<<<<< HEAD
+
 
 	public List<MemberTmConn> phoneList(int tId);
 	
 
-=======
+
 	public int update_file(MultipartHttpServletRequest mRequest);
 	public Board detail(int bId);
->>>>>>> fcbe2c50120db79b829138ec9d44d4e5316b4f89
+
 }
