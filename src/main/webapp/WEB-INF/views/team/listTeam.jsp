@@ -39,8 +39,8 @@
 <title>Team Project</title>
 <link rel="stylesheet" href="css/Style.css">
 <link rel="stylesheet" href="css/loginstyle.css">
-<script type="text/javascript"
-	src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 <script>
 	$(document).ready(function() {
 		$("#c2 .dashed").click(function() {
@@ -59,6 +59,13 @@
 			location.href = 'insertTeam.do?mId=${mId }&tName=' + tName;
 		}
 	}
+	
+    $(document).ready(function () {
+        $('#slidebottom').hover(function () {
+            $(".requestslide").slideToggle();
+        });
+    });
+
 </script>
 </head>
 <body>
@@ -104,13 +111,13 @@
 	</div>
 	<div id="c4">
 		<c:forEach var="team" items="${listTeam }">
-			<div class="dashed2">
-				<a href="boardlist.do?tId=${team.tId }">${team.tName }</a>
-				<button
-					onclick="location.href='requestTeam.do?mId=${mId }&tId=${team.tId }'">참여신청</button>
-			</div>
+				<div id="slidebottom" class="dashed2">
+					<a href="boardlist.do?tId=${team.tId }">${team.tName }</a>
+					<div class="requestslide" onclick="location.href='requestTeam.do?mId=${mId }&tId=${team.tId }'">참여신청</div>
+				</div>
 		</c:forEach>
 	</div>
+	
 
 
 

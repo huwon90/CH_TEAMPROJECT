@@ -41,7 +41,7 @@ public class BoardController {
 	public String replyinsert(BoardRe boardre, Model model) {
 		int result = service.reply_insert(boardre);
 		if (result > 0) {
-			return "redirect:boardlist";
+			return "redirect:boardlist.do?tId="+boardre.gettId();
 		} else {
 			return "forward:writeForm.do";
 		}

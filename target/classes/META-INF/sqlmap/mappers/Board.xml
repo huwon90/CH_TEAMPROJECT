@@ -48,7 +48,8 @@
 		  null, null,'','','')
 	</select>
 	<select id="insert_schedule" parameterType="Board">
-		INSERT INTO Board
+		INSERT INTO Board 
+		(mId,tId, bId, bContent, bDate, bNo, bfId, bfName, biId, biName, bStart, bEnd, bTitle, bLoc,bMemo)
 		  VALUES(#{mId, jdbcType=VARCHAR}, #{tId, jdbcType=INTEGER}, bId_SQ.NEXTVAL, '', SYSDATE, 2, null, '', null, '', 
 		  #{bStart}, #{bEnd}, #{bTitle}, #{bLoc}, #{bMemo})
 	</select>
@@ -56,7 +57,7 @@
 	<select id="insert_reply" parameterType="com.ch.teampro1.model.BoardRe">
 		insert into BOARD_RE
 		(mId,bId,brId,bRcontent)
-		 values (#{mId},#{bId}, brId_SQ.NEXTVAL,#{bRcontent});
+		 values (#{mId, jdbcType=VARCHAR},#{bId, jdbcType=INTEGER},brId_SQ.NEXTVAL,#{bRcontent})
 	</select>
 	
 	<delete id="delete">

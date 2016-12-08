@@ -142,8 +142,9 @@
    				<tr>
 				<form action="replyinsert.do" method="post">
 					<input type="hidden" name="mId" value="user">
+					<input type="hidden" name="tId" value="${param.tId }">
 					<input type="hidden" name="bId" value="${board.bId }">
-   				<td colspan="3"><textarea  name="brContent" placeholder="댓글을 입력하세요" required="required"></textarea></td>
+   				<td colspan="3"><textarea  name="bRcontent" placeholder="댓글을 입력하세요" required="required"></textarea></td>
    				<td><input type="submit" value="댓글쓰기" class="go_right"></td></td>
    				</form>
    				   <tr>
