@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.ch.teampro1.model.Member;
 import com.ch.teampro1.model.MemberTmConn;
 import com.ch.teampro1.model.Team;
 import com.ch.teampro1.model.TeamTmConn;
@@ -59,12 +58,6 @@ public class TeamController {
 		model.addAttribute("leaderTeamList", list);
 		int requestCount = tService.requestCount(mId);
 		model.addAttribute("requestCount", requestCount);
-		
-		List<TeamTmConn> invitedlist = tService.memberInvitedList(mId);
-		System.out.println("초대받은멤버리스트 실행되니");
-		model.addAttribute("mId",mId);
-		model.addAttribute("invited", invitedlist);//초대받은 리스트
-		
 		return "team/leaderTeamList";
 	}
 	
@@ -170,55 +163,6 @@ public class TeamController {
 		int requestCount = tService.requestCount(mId);
 		model.addAttribute("requestCount", requestCount);
 		return "team/searchResult";
-	}
-	@RequestMapping(value="listMember", method=RequestMethod.GET)
-	public String listMember(String mId, Model model){
-		List<Member> memberList = tService.memberList();
-		model.addAttribute("memberList", memberList);
-		List<TeamTmConn> joinedlist = tService.jointTeamListAll(mId);
-		model.addAttribute("joinedTeam", joinedlist);
-		return "team/memberList";
-	}
-	@RequestMapping(value="invite", method=RequestMethod.GET)
-	public String inviteMember(TmConn tmConn, Model model){
-		int result = tService.chkTmConn(tmConn);
-		if(result > 0){
-			model.addAttribute("msg", "이미 팀에 속해있습니다.");
-			System.out.println("이미 팀에 속해있습니다.");
-			
-		}else{
-			System.out.println("팀에 안속해있습니다.");
-			int result2 = tService.requestTeam(tmConn);
-			if(result2>0)
-				System.out.println("프로젝트 가입초대 성공");
-			
-		}
-		return "team/listTeam";
-	}
-	
-	@RequestMapping(value="invitedOk", method=RequestMethod.GET)
-	public String invitedOk( TmConn tmConn, Model model){
-		int result = tService.okTeam(tmConn);
-		if(result>0) {
-			model.addAttribute("msg", "초대 승낙성공");
-		} else {
-			model.addAttribute("msg", "초대 승낙실패");
-		}
-		return "redirect:leaderTeamList.do?mId="+tmConn.getmId();
-	}
-	@RequestMapping(value="invitedNo", method=RequestMethod.GET)
-	public String invitedNo(TmConn tmConn, Model model){
-		System.out.println("test");
-		int result = tService.noTeam(tmConn);
-		System.out.println("거절부분 실행되니");
-		if(result>0) {
-			model.addAttribute("msg", "거절성공");
-			System.out.println("프로젝트 초대 거절성공");
-		} else {
-			model.addAttribute("msg", "거절실패");
-			System.out.println("프로젝트 초대 거절실패");
-		}
-		return "redirect:leaderTeamList?mId="+tmConn.getmId();
 	}
 
 }

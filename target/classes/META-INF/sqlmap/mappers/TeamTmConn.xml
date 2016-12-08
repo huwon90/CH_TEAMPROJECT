@@ -30,8 +30,5 @@
 	<select id="leaderTeamListAll" parameterType="String" resultMap="TeamTmConnResult">
 		SELECT T.TID, T.TNAME FROM TEAM T, TM_CONN TM WHERE T.TID=TM.TID AND TM.MID=#{mId} AND TM.TMLEADER=1
 	</select>
-	<select id="memberInvitedList" parameterType="String" resultMap="TeamTmConnResult">
-		SELECT t.tId, t.tName, tm.tmOk from TEAM t, TM_Conn tm where t.tId = tm.tId AND tm.mId=#{mId} AND tm.tmLeader=0
-	</select>
 	
 </mapper>

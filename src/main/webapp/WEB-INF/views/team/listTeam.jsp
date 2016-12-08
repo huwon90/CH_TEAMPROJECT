@@ -53,6 +53,30 @@
 		});
 	});
 
+	/* $(document).ready(function(){
+		$("#c2 .dashed").each(function(index){
+			$(this).click(function(){
+				var submenu = $(".team_out");
+	            if (submenu.is(":visible")) {
+	                submenu.slideUp();
+	            } else {
+	                submenu.slideDown();
+	            }
+			})
+		});
+	}); */
+
+	/* $(document).ready(function () {
+	    $("dashed0").click(function () {
+	        var submenu = $(".team_out");
+	        if (submenu.is(":visible")) {
+	            submenu.slideUp();
+	        } else {
+	            submenu.slideDown();
+	        }
+	    });
+	}); */
+
 	function insertTeam() {
 		var tName = prompt('생성할 팀의 이름을 입력하세요', '팀 이름');
 		if (tName) {
@@ -106,7 +130,6 @@
 	<div id="c3">
 		<ul>
 			<li>전체 팀 목록</li>
-			<li><button onclick="location.href='listMember.do?mId=${mId}'">회원가입된 멤버목록</button></li>
 		</ul>
 	</div>
 	<div id="c4">
