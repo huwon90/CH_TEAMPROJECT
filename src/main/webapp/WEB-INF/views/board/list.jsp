@@ -11,6 +11,9 @@
 	type="text/css">
 <link href="${conPath}/css/style.min.css" rel="stylesheet"
 	type="text/css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+	
 	
 <style>
 #board_content table {
@@ -71,7 +74,7 @@
 	<div id="board_content">
 		<c:forEach var="board" items="${list }">
 			<c:if test="${board.bNo==1 }">
-				<table>
+				<table class=table>
 					<tr id="chk">
 						<td colspan="3"><input type="button" value="수정" /> <input
 							type="button" value="삭제" onclick="location.href='delete.do?bId=${board.bId}'" /></td>
@@ -101,7 +104,7 @@
 			</c:if>
 
 			<c:if test="${board.bNo==2 }">
-					<table>
+    <table class="table">
 						<tr id="chk">
 							<td colspan="3"><input type="button" value="일정삭제" onclick="location.href='delete.do?bId=${board.bId}'" /></td>
 						</tr>
@@ -133,9 +136,10 @@
 			 <c:forEach var="re" items="${relist}">
                <c:if test="${re.bId == board.bId }">
     		<tr>
-   			<td>댓글 bId : ${re.bId }</td>
-    		<td>댓글 내용 : ${re.bRcontent }</td>
-    		<td>댓글 작성자 : ${re.mId }</td>
+   			<td> ${re.mId }  </td>
+    		<td width="620">댓글 내용 : ${re.bRcontent }          ${re.bRDate}</td>
+    		
+    		<td><button onclick="location.href='replydelte.do?brId=${re.brId}'" >댓글삭제</button></td>
  			</tr>
     		</c:if>
    				</c:forEach>
@@ -144,8 +148,9 @@
 					<input type="hidden" name="mId" value="${mId}">
 					<input type="hidden" name="tId" value="${param.tId }">
 					<input type="hidden" name="bId" value="${board.bId }">
-   				<td colspan="3"><textarea  name="bRcontent" placeholder="댓글을 입력하세요" required="required"></textarea></td>
-   				<td><input type="submit" value="댓글쓰기" class="go_right"></td></td>
+					
+   				<td colspan="2"><textarea  name="bRcontent"  cols="100" placeholder="댓글을 입력하세요" required="required"></textarea></td>
+   				<td><input   type="submit" value="댓글쓰기" class="btn btn-primary"></td></td>
    				</form>
    				   <tr>
 				</table>
