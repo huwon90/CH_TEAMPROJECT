@@ -11,6 +11,7 @@
 	type="text/css">
 <link href="${conPath}/css/style.min.css" rel="stylesheet"
 	type="text/css">
+	
 <style>
 #board_content table {
 	width: 860px;
@@ -65,7 +66,7 @@
 </style>
 </head>
 <body>
-
+<jsp:include page="../member/header.jsp" />
 	<jsp:include page="writeForm.jsp"></jsp:include>
 	<div id="board_content">
 		<c:forEach var="board" items="${list }">
@@ -81,7 +82,6 @@
 						<td class="name">${board.mId }</td>
 					<tr>
 						<td colspan="2" class="date">${board.bDate }</td>
-					</tr>
 					</tr>
 					<tr class="con">
 						<td colspan="3" class="con1">${board.bContent }</td>
@@ -141,9 +141,10 @@
    				</c:forEach>
    				<tr>
 				<form action="replyinsert.do" method="post">
-					<input type="hidden" name="mId" value="user">
+					<input type="hidden" name="mId" value="${mId}">
+					<input type="hidden" name="tId" value="${param.tId }">
 					<input type="hidden" name="bId" value="${board.bId }">
-   				<td colspan="3"><textarea  name="brContent" placeholder="댓글을 입력하세요" required="required"></textarea></td>
+   				<td colspan="3"><textarea  name="bRcontent" placeholder="댓글을 입력하세요" required="required"></textarea></td>
    				<td><input type="submit" value="댓글쓰기" class="go_right"></td></td>
    				</form>
    				   <tr>
