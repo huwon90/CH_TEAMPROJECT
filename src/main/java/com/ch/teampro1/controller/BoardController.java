@@ -34,14 +34,14 @@ public class BoardController {
 	public String writeForm(Board board, Model model) {
 		List<Board> boardList = service.listAll(board.gettId());
 		model.addAttribute("boardList", boardList);
-		return "board.writeForm";
+		return "board/writeForm";
 	}
 
 	@RequestMapping(value = "replyinsert", method = RequestMethod.POST)
 	public String replyinsert(BoardRe boardre, Model model) {
 		int result = service.reply_insert(boardre);
 		if (result > 0) {
-			return "redirect:list.do";
+			return "redirect:boardlist";
 		} else {
 			return "forward:writeForm.do";
 		}
@@ -51,7 +51,7 @@ public class BoardController {
 	public String write_file(MultipartHttpServletRequest mRequest) {
 		int result = service.insert_file(mRequest);
 		if (result > 0) {
-			return "redirect:list.do";
+			return "redirect:boardlist.do";
 		}else{
 			return "forward:writeForm.do";
 		}
@@ -61,7 +61,7 @@ public class BoardController {
 	public String write_schedule(Board board, Model model) {
 		int result = service.insert_schedule(board);
 		if (result > 0) {
-			return "redirect:list.do?tId="+board.gettId();
+			return "redirect:boardlist.do?tId="+board.gettId();
 		}else{
 			return "forward:writeForm.do";
 		}
