@@ -66,30 +66,22 @@
 			
 			
 			
-            $('#ee' + i).mouseenter(function () {
-                $('.team_out').children().slideToggle();
-            });
-
-            $('#ee' + i).mouseleave(function () {
-                $('.team_out').children().slideToggle();
+            $('#ee' + i).click(function () {
+                $(this).children().slideToggle();
+                $(this).css('cursor','pointer');
             });
 			
 			
 		}
 	}); 
 
-	function insertTeam() {
-		var tName = prompt('생성할 팀의 이름을 입력하세요', '팀 이름');
-		if (tName) {
-			location.href = 'insertTeam.do?mId=${mId }&tName=' + tName;
-		}
-	}
 	
     $(document).ready(function () {
         for (var i = 0; i < "${fn:length(listTeam) }"; i++) {
 
             $('#slidebottom' + i).mouseenter(function () {
                 $(this).children().slideToggle();
+                $(this).css('cursor','pointer');
             });
 
             $('#slidebottom' + i).mouseleave(function () {
@@ -98,6 +90,12 @@
         }
     });
 
+	function insertTeam() {
+		var tName = prompt('생성할 팀의 이름을 입력하세요', '팀 이름');
+		if (tName) {
+			location.href = 'insertTeam.do?mId=${mId }&tName=' + tName;
+		}
+	}
 </script>
 </head>
 <body>
