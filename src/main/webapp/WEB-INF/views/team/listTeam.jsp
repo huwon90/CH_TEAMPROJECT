@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <c:if test="${param.msg=='가입승인대기중'}">
 	<script>
@@ -42,7 +43,7 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 <script>
-	$(document).ready(function() {
+/* 	$(document).ready(function() {
 		$("#c2 .dashed").click(function() {
 			var submenu = $(".team_out");
 			if (submenu.is(":visible")) {
@@ -51,31 +52,43 @@
 				submenu.slideDown();
 			}
 		});
-	});
-
-	/* $(document).ready(function(){
-		$("#c2 .dashed").each(function(index){
-			$(this).click(function(){
-				var submenu = $(".team_out");
-	            if (submenu.is(":visible")) {
-	                submenu.slideUp();
-	            } else {
-	                submenu.slideDown();
-	            }
-			})
-		});
 	}); */
+	$(document).ready(function() {
+		for (var i = 0; i < "${fn:length(listjoinTeam) }"; i++) {
+/* 			$('#ee'+i).click(function() {
+				var submenu = $(this).sibling();
+				if (submenu.is(":visible")) {
+					submenu.slideUp();
+				} else {
+					submenu.slideDown();
+				}
+			}); */
+			
+			
+			
+            $('#ee' + i).click(function () {
+                $(this).children().slideToggle();
+                $(this).css('cursor','pointer');
+            });
+			
+			
+		}
+	}); 
 
-	/* $(document).ready(function () {
-	    $("dashed0").click(function () {
-	        var submenu = $(".team_out");
-	        if (submenu.is(":visible")) {
-	            submenu.slideUp();
-	        } else {
-	            submenu.slideDown();
-	        }
-	    });
-	}); */
+	
+    $(document).ready(function () {
+        for (var i = 0; i < "${fn:length(listTeam) }"; i++) {
+
+            $('#slidebottom' + i).mouseenter(function () {
+                $(this).children().slideToggle();
+                $(this).css('cursor','pointer');
+            });
+
+            $('#slidebottom' + i).mouseleave(function () {
+                $(this).children().slideToggle();
+            });
+        }
+    });
 
 	function insertTeam() {
 		var tName = prompt('생성할 팀의 이름을 입력하세요', '팀 이름');
@@ -83,13 +96,6 @@
 			location.href = 'insertTeam.do?mId=${mId }&tName=' + tName;
 		}
 	}
-	
-    $(document).ready(function () {
-        $('#slidebottom').hover(function () {
-            $(".requestslide").slideToggle();
-        });
-    });
-
 </script>
 </head>
 <body>
@@ -105,8 +111,8 @@
 	<div id="c2">
 		<div class="dashed" onclick="insertTeam();">새 프로젝트 생성</div>
 		<%--  <c:set var="index" value="0"></c:set> --%>
-		<c:forEach var="jointeam" items="${listjoinTeam }">
-			<div class="dashed">
+		<c:forEach var="jointeam" items="${listjoinTeam }" varStatus="status">
+			<div class="dashed"  id="ee${status.index }">
 				<%-- <a href="mainpage.do?tId=${jointeam.tId }&mId=${jointeam.mId}">팀원연락처</a> --%>
 				<a href="boardlist.do?tId=${jointeam.tId }">${jointeam.tName }</a> ▼
 				<ul class="team_out">
@@ -121,7 +127,7 @@
 						<%-- <li><a href="leaderTeamList.do?mId=${mId }">참여요청 목록</a></li> --%>
 					</c:if>
 				</ul>
-			</div>
+			</div><!-- ee -->
 			<%-- <c:set var="index" value="${index +1 }"></c:set> --%>
 		</c:forEach>
 
@@ -133,8 +139,8 @@
 		</ul>
 	</div>
 	<div id="c4">
-		<c:forEach var="team" items="${listTeam }">
-				<div id="slidebottom" class="dashed2">
+		<c:forEach var="team" items="${listTeam }" varStatus="status">
+				<div id="slidebottom${status.index }" class="dashed2">
 					<a href="boardlist.do?tId=${team.tId }">${team.tName }</a>
 					<div class="requestslide" onclick="location.href='requestTeam.do?mId=${mId }&tId=${team.tId }'">참여신청</div>
 				</div>
