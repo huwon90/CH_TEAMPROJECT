@@ -43,49 +43,25 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 <script>
-/* 	$(document).ready(function() {
-		$("#c2 .dashed").click(function() {
-			var submenu = $(".team_out");
-			if (submenu.is(":visible")) {
-				submenu.slideUp();
-			} else {
-				submenu.slideDown();
-			}
-		});
-	}); */
 	$(document).ready(function() {
 		for (var i = 0; i < "${fn:length(listjoinTeam) }"; i++) {
-/* 			$('#ee'+i).click(function() {
-				var submenu = $(this).sibling();
-				if (submenu.is(":visible")) {
-					submenu.slideUp();
-				} else {
-					submenu.slideDown();
-				}
-			}); */
-			
-			
-			
             $('#ee' + i).click(function () {
-                $(this).children().slideToggle();
+               $(this).children('.team_out').slideToggle();
                 $(this).css('cursor','pointer');
             });
-			
-			
 		}
 	}); 
 
 	
     $(document).ready(function () {
         for (var i = 0; i < "${fn:length(listTeam) }"; i++) {
-
             $('#slidebottom' + i).mouseenter(function () {
-                $(this).children().slideToggle();
+                $(this).children('.requestslide').slideToggle();
                 $(this).css('cursor','pointer');
             });
 
             $('#slidebottom' + i).mouseleave(function () {
-                $(this).children().slideToggle();
+                $(this).children('.requestslide').slideToggle();
             });
         }
     });
@@ -112,9 +88,10 @@
 		<div class="dashed" onclick="insertTeam();">새 프로젝트 생성</div>
 		<%--  <c:set var="index" value="0"></c:set> --%>
 		<c:forEach var="jointeam" items="${listjoinTeam }" varStatus="status">
-			<div class="dashed"  id="ee${status.index }">
+			<div class="dashed" id="ee${status.index }">
 				<%-- <a href="mainpage.do?tId=${jointeam.tId }&mId=${jointeam.mId}">팀원연락처</a> --%>
-				<a href="boardlist.do?tId=${jointeam.tId }">${jointeam.tName }</a> ▼
+				<a href="boardlist.do?tId=${jointeam.tId }">${jointeam.tName }</a> 
+				<span>▼</span>
 				<ul class="team_out">
 					<c:if test="${jointeam.tmLeader == 0 }">
 						<li><a href='outTeam.do?mId=${mId }&tId=${jointeam.tId }'">팀
