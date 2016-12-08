@@ -54,9 +54,9 @@
 				<div class="c-tab is-active">
 					<div class="c-tab__content">
 						<form action="write_file.do" method="post" name="frm" enctype="multipart/form-data">
-							<input type="hidden" name="mId" value="user">
+							<input type="hidden" name="mId" value="${mId }">
 							<!-- 합칠 때 이거랑 sql문도 바꿔야한다 -->
-							<input type="hidden" name="tId" value="1">
+							<input type="hidden" name="tId" value="${param.tId }">
 							<table>
 								<tr>
 									<td colspan="5"><textarea id="text_file" name="bContent"
@@ -78,9 +78,9 @@
 				<div class="c-tab">
 					<div class="c-tab__content">
 						<form action="write_schedule.do" method="post" name="frm">
-							<input type="hidden" name="mId" value="user">
+							<input type="hidden" name="mId" value="${mId }">
 							<!-- 합칠 때 이거랑 sql문도 바꿔야한다 -->
-							<input type="hidden" name="tId" value="1">
+							<input type="hidden" name="tId" value="${param.tId }">
 							<table>
 								<tr>
 									<td colspan="5"><textarea id="text_aline" name="bTitle"

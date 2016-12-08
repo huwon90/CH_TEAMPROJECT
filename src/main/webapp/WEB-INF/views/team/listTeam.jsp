@@ -128,7 +128,7 @@
 	<div id="c4">
 		<c:forEach var="team" items="${listTeam }">
 			<div class="dashed2">
-				${team.tName }
+				<a href="location.href='boardlist.do?tId=1">${team.tName }</a>
 				<button
 					onclick="location.href='requestTeam.do?mId=${mId }&tId=${team.tId }'">참여신청</button>
 			</div>
