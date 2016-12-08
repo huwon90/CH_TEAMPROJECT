@@ -53,14 +53,37 @@
 		});
 	});
 
+	/* $(document).ready(function(){
+		$("#c2 .dashed").each(function(index){
+			$(this).click(function(){
+				var submenu = $(".team_out");
+	            if (submenu.is(":visible")) {
+	                submenu.slideUp();
+	            } else {
+	                submenu.slideDown();
+	            }
+			})
+		});
+	}); */
+
+	/* $(document).ready(function () {
+	    $("dashed0").click(function () {
+	        var submenu = $(".team_out");
+	        if (submenu.is(":visible")) {
+	            submenu.slideUp();
+	        } else {
+	            submenu.slideDown();
+	        }
+	    });
+	}); */
+
 	function insertTeam() {
 		var tName = prompt('생성할 팀의 이름을 입력하세요', '팀 이름');
 		if (tName) {
 			location.href = 'insertTeam.do?mId=${mId }&tName=' + tName;
 		}
 	}
-	
-    $(document).ready(function () {
+	$(document).ready(function () {
         $('#slidebottom').hover(function () {
             $(".requestslide").slideToggle();
         });
@@ -80,7 +103,6 @@
 
 	<div id="c2">
 		<div class="dashed" onclick="insertTeam();">새 프로젝트 생성</div>
-		<%--  <c:set var="index" value="0"></c:set> --%>
 		<c:forEach var="jointeam" items="${listjoinTeam }">
 			<div class="dashed">
 				<%-- <a href="mainpage.do?tId=${jointeam.tId }&mId=${jointeam.mId}">팀원연락처</a> --%>
@@ -94,11 +116,9 @@
 						<li><a
 							href='removeTeam.do?tId=${jointeam.tId }&mId=${jointeam.mId}&tmLeader=${jointeam.tmLeader }'">팀
 								해체</a></li>
-						<%-- <li><a href="leaderTeamList.do?mId=${mId }">참여요청 목록</a></li> --%>
 					</c:if>
 				</ul>
 			</div>
-			<%-- <c:set var="index" value="${index +1 }"></c:set> --%>
 		</c:forEach>
 
 	</div>
@@ -106,7 +126,6 @@
 	<div id="c3">
 		<ul>
 			<li>전체 팀 목록</li>
-			<li><button onclick="location.href='listMember.do?mId=${mId}'">회원가입된 멤버목록</button></li>
 		</ul>
 	</div>
 	<div id="c4">
@@ -117,51 +136,6 @@
 				</div>
 		</c:forEach>
 	</div>
-	
 
-
-
-	<%-- 팀목록
-	<table border="1">
-		<tr><th>팀번호</th><th>팀이름</th><th>참여버튼</th></tr>
-		<c:forEach var="team" items="${listTeam }">
-			<tr><td>${team.tId }
-				<td>${team.tName }</td>
-				<td><button onclick="location.href='requestTeam.do?mId=${mId }&tId=${team.tId }'">참여</button></td></tr>
-		</c:forEach>
-	</table> --%>
-
-	<%-- 내가 참여한 팀목록
-	<table border="1">
-		<tr><th>팀번호</th><th>팀이름</th><th>탈퇴</th><th>팀장여부</th><th>팀해체</th><th>팀선택</th></tr>
-		<c:if test="${empty listjoinTeam}">
-			<tr><td colspan="6">참여하고 있는 팀이 없습니다</td></tr>
-		</c:if>
-		<c:forEach var="jointeam" items="${listjoinTeam }">
-			<tr><td>${jointeam.tId }
-				<td>${jointeam.tName }</td>
-				<td>
-					<c:if test="${jointeam.tmLeader == 0 }">
-						<button onclick="location.href='outTeam.do?mId=${mId }&tId=${jointeam.tId }'">탈퇴</button>
-					</c:if>
-				</td>
-				<td>
-					<c:if test="${jointeam.tmLeader == 1 }">Y</c:if>
-					<c:if test="${jointeam.tmLeader == 0 }">N</c:if>
-				</td>
-				<td>
-					<c:if test="${jointeam.tmLeader == 1 }">
-						<button onclick="location.href='removeTeam.do?tId=${jointeam.tId }&mId=${jointeam.mId}&tmLeader=${jointeam.tmLeader }'">팀해체</button>
-					</c:if>
-				</td>
-				<td>
-					<a href="mainpage.do?tId=${jointeam.tId }&mId=${jointeam.mId}">팀선택</a>
-				</td>
-			</tr>
-		</c:forEach>
-	</table> --%>
-	<%-- <a href="insertTeamForm.do?mId=${mId }">팀생성</a> <br>
-	<a href="leaderTeamList.do?mId=${mId }">팀 참여요청리스트</a> <br>
-	<button onclick="location.href='index.jsp'">홈화면으로</button> --%>
 </body>
 </html>

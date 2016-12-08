@@ -1,0 +1,1568 @@
+From fda6bdda76caec09f10feaa5cea1793219dcd5b6 Mon Sep 17 00:00:00 2001
+From: huwon90 <huwon90@gamil.com>
+Date: Thu, 8 Dec 2016 13:51:51 +0900
+Subject: [PATCH] =?UTF-8?q?=EA=B2=8C=EC=8B=9C=ED=8C=90=EC=97=90=20?=
+ =?UTF-8?q?=ED=97=A4=EB=8D=94=20=EC=9E=85=ED=9E=98?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../ch/teampro1/controller/BoardController.java    |   6 +-
+ .../ch/teampro1/controller/MemberController.java   |   1 -
+ .../com/ch/teampro1/controller/TeamController.java |  56 ++++
+ src/main/java/com/ch/teampro1/dao/ITeamDao.java    |   4 +
+ src/main/java/com/ch/teampro1/dao/TeamDaoImpl.java |  21 ++
+ .../java/com/ch/teampro1/service/BoardService.java |   4 +-
+ .../com/ch/teampro1/service/BoardServiceImpl.java  |   4 +-
+ .../java/com/ch/teampro1/service/ITeamService.java |   4 +
+ .../com/ch/teampro1/service/TeamServiceImpl.java   |  19 ++
+ .../resources/META-INF/sqlmap/mappers/Member.xml   |   4 +
+ .../META-INF/sqlmap/mappers/TeamTmConn.xml         |   3 +
+ .../resources/META-INF/sqlmap/mappers/TmConn.xml   |   3 +
+ src/main/webapp/WEB-INF/views/board/list.jsp       |   5 +-
+ src/main/webapp/WEB-INF/views/board/writeForm.jsp  |   6 +-
+ src/main/webapp/WEB-INF/views/member/header.jsp    |   1 +
+ .../webapp/WEB-INF/views/team/leaderTeamList.jsp   |  36 +++
+ src/main/webapp/WEB-INF/views/team/listTeam.jsp    |  25 +-
+ .../WEB-INF/views/team/memberInvitedList.jsp       |  42 +++
+ src/main/webapp/WEB-INF/views/team/memberList.jsp  |  61 ++++
+ src/main/webapp/css/style.min.css                  | 359 ++++++++++++++++++++-
+ target/classes/META-INF/sqlmap/mappers/Member.xml  |   4 +
+ .../classes/META-INF/sqlmap/mappers/TeamTmConn.xml |   3 +
+ target/classes/META-INF/sqlmap/mappers/TmConn.xml  |   3 +
+ .../ch/teampro1/controller/BoardController.class   | Bin 3926 -> 4048 bytes
+ .../ch/teampro1/controller/MemberController.class  | Bin 6353 -> 6353 bytes
+ .../ch/teampro1/controller/TeamController.class    | Bin 7362 -> 9086 bytes
+ target/classes/com/ch/teampro1/dao/ITeamDao.class  | Bin 1105 -> 1243 bytes
+ .../classes/com/ch/teampro1/dao/TeamDaoImpl.class  | Bin 3431 -> 3786 bytes
+ .../com/ch/teampro1/service/BoardService.class     | Bin 583 -> 615 bytes
+ .../com/ch/teampro1/service/BoardServiceImpl.class | Bin 3872 -> 3996 bytes
+ .../com/ch/teampro1/service/ITeamService.class     | Bin 1117 -> 1255 bytes
+ .../com/ch/teampro1/service/TeamServiceImpl.class  | Bin 3106 -> 3470 bytes
+ teampro1.sql                                       | 148 +++++++--
+ 33 files changed, 750 insertions(+), 72 deletions(-)
+ create mode 100644 src/main/webapp/WEB-INF/views/team/memberInvitedList.jsp
+ create mode 100644 src/main/webapp/WEB-INF/views/team/memberList.jsp
+
+diff --git a/src/main/java/com/ch/teampro1/controller/BoardController.java b/src/main/java/com/ch/teampro1/controller/BoardController.java
+index ac602ed..2061d40 100644
+--- a/src/main/java/com/ch/teampro1/controller/BoardController.java
++++ b/src/main/java/com/ch/teampro1/controller/BoardController.java
+@@ -2,6 +2,8 @@ package com.ch.teampro1.controller;
+ 
+ import java.util.List;
+ 
++import javax.servlet.http.HttpSession;
++
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Controller;
+ import org.springframework.ui.Model;
+@@ -38,8 +40,8 @@ public class BoardController {
+ 	}
+ 
+ 	@RequestMapping(value = "replyinsert", method = RequestMethod.POST)
+-	public String replyinsert(BoardRe boardre, Model model) {
+-		int result = service.reply_insert(boardre);
++	public String replyinsert(BoardRe boardre, Model model, HttpSession session) {
++		int result = service.reply_insert(boardre, session);
+ 		if (result > 0) {
+ 			return "redirect:boardlist.do?tId="+boardre.gettId();
+ 		} else {
+diff --git a/src/main/java/com/ch/teampro1/controller/MemberController.java b/src/main/java/com/ch/teampro1/controller/MemberController.java
+index 4fb424c..1a07707 100644
+--- a/src/main/java/com/ch/teampro1/controller/MemberController.java
++++ b/src/main/java/com/ch/teampro1/controller/MemberController.java
+@@ -59,7 +59,6 @@ public class MemberController {
+ 	public String login(Member member, Model model, HttpSession session){
+ 		int result = memberService.loginMember(member.getmId(), member.getmPw(), session);
+ 		if(result==1){
+-//			return "redirect:loginOk.do";
+ 			return "redirect:listTeam.do?mId="+member.getmId();
+ 		} else if(result==0){
+ 			model.addAttribute("msg", "ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤");
+diff --git a/src/main/java/com/ch/teampro1/controller/TeamController.java b/src/main/java/com/ch/teampro1/controller/TeamController.java
+index 926e167..a0162ab 100644
+--- a/src/main/java/com/ch/teampro1/controller/TeamController.java
++++ b/src/main/java/com/ch/teampro1/controller/TeamController.java
+@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
+ import org.springframework.web.bind.annotation.RequestMapping;
+ import org.springframework.web.bind.annotation.RequestMethod;
+ 
++import com.ch.teampro1.model.Member;
+ import com.ch.teampro1.model.MemberTmConn;
+ import com.ch.teampro1.model.Team;
+ import com.ch.teampro1.model.TeamTmConn;
+@@ -58,6 +59,12 @@ public class TeamController {
+ 		model.addAttribute("leaderTeamList", list);
+ 		int requestCount = tService.requestCount(mId);
+ 		model.addAttribute("requestCount", requestCount);
++		
++		List<TeamTmConn> invitedlist = tService.memberInvitedList(mId);
++		System.out.println("ì´ˆëŒ€ë°›ì€ë©¤ë²„ë¦¬ìŠ¤íŠ¸ ì‹¤í–‰ë˜ë‹ˆ");
++		model.addAttribute("mId",mId);
++		model.addAttribute("invited", invitedlist);//ì´ˆëŒ€ë°›ì€ ë¦¬ìŠ¤íŠ¸
++		
+ 		return "team/leaderTeamList";
+ 	}
+ 	
+@@ -164,5 +171,54 @@ public class TeamController {
+ 		model.addAttribute("requestCount", requestCount);
+ 		return "team/searchResult";
+ 	}
++	@RequestMapping(value="listMember", method=RequestMethod.GET)
++	public String listMember(String mId, Model model){
++		List<Member> memberList = tService.memberList();
++		model.addAttribute("memberList", memberList);
++		List<TeamTmConn> joinedlist = tService.jointTeamListAll(mId);
++		model.addAttribute("joinedTeam", joinedlist);
++		return "team/memberList";
++	}
++	@RequestMapping(value="invite", method=RequestMethod.GET)
++	public String inviteMember(TmConn tmConn, Model model){
++		int result = tService.chkTmConn(tmConn);
++		if(result > 0){
++			model.addAttribute("msg", "ì´ë¯¸ íŒ€ì— ì†í•´ìˆìŠµë‹ˆë‹¤.");
++			System.out.println("ì´ë¯¸ íŒ€ì— ì†í•´ìˆìŠµë‹ˆë‹¤.");
++			
++		}else{
++			System.out.println("íŒ€ì— ì•ˆì†í•´ìˆìŠµë‹ˆë‹¤.");
++			int result2 = tService.requestTeam(tmConn);
++			if(result2>0)
++				System.out.println("í”„ë¡œì íŠ¸ ê°€ì…ì´ˆëŒ€ ì„±ê³µ");
++			
++		}
++		return "team/listTeam";
++	}
++	
++	@RequestMapping(value="invitedOk", method=RequestMethod.GET)
++	public String invitedOk( TmConn tmConn, Model model){
++		int result = tService.okTeam(tmConn);
++		if(result>0) {
++			model.addAttribute("msg", "ì´ˆëŒ€ ìŠ¹ë‚™ì„±ê³µ");
++		} else {
++			model.addAttribute("msg", "ì´ˆëŒ€ ìŠ¹ë‚™ì‹¤íŒ¨");
++		}
++		return "redirect:leaderTeamList.do?mId="+tmConn.getmId();
++	}
++	@RequestMapping(value="invitedNo", method=RequestMethod.GET)
++	public String invitedNo(TmConn tmConn, Model model){
++		System.out.println("test");
++		int result = tService.noTeam(tmConn);
++		System.out.println("ê±°ì ˆë¶€ë¶„ ì‹¤í–‰ë˜ë‹ˆ");
++		if(result>0) {
++			model.addAttribute("msg", "ê±°ì ˆì„±ê³µ");
++			System.out.println("í”„ë¡œì íŠ¸ ì´ˆëŒ€ ê±°ì ˆì„±ê³µ");
++		} else {
++			model.addAttribute("msg", "ê±°ì ˆì‹¤íŒ¨");
++			System.out.println("í”„ë¡œì íŠ¸ ì´ˆëŒ€ ê±°ì ˆì‹¤íŒ¨");
++		}
++		return "redirect:leaderTeamList?mId="+tmConn.getmId();
++	}
+ 
+ }
+diff --git a/src/main/java/com/ch/teampro1/dao/ITeamDao.java b/src/main/java/com/ch/teampro1/dao/ITeamDao.java
+index 188c90b..c462db1 100644
+--- a/src/main/java/com/ch/teampro1/dao/ITeamDao.java
++++ b/src/main/java/com/ch/teampro1/dao/ITeamDao.java
+@@ -2,6 +2,7 @@ package com.ch.teampro1.dao;
+ 
+ import java.util.List;
+ 
++import com.ch.teampro1.model.Member;
+ import com.ch.teampro1.model.MemberTmConn;
+ import com.ch.teampro1.model.Team;
+ import com.ch.teampro1.model.TeamTmConn;
+@@ -27,4 +28,7 @@ public interface ITeamDao {
+ 	
+ 	public List<Team> searchTeam(String tName);
+ 	public int requestCount(String mId);
++	public List<Member> memberList();
++	public int chkTmConn(TmConn tmConn);
++	public List<TeamTmConn> memberInvitedList(String mId);
+ }
+diff --git a/src/main/java/com/ch/teampro1/dao/TeamDaoImpl.java b/src/main/java/com/ch/teampro1/dao/TeamDaoImpl.java
+index 659ac8e..9226335 100644
+--- a/src/main/java/com/ch/teampro1/dao/TeamDaoImpl.java
++++ b/src/main/java/com/ch/teampro1/dao/TeamDaoImpl.java
+@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Repository;
+ 
++import com.ch.teampro1.model.Member;
+ import com.ch.teampro1.model.MemberTmConn;
+ import com.ch.teampro1.model.Team;
+ import com.ch.teampro1.model.TeamTmConn;
+@@ -101,11 +102,31 @@ public class TeamDaoImpl implements ITeamDao {
+ 	
+ 	@Override
+ 	public List<Team> searchTeam(String tName) {
++		
+ 		return session.selectList("searchTeam", tName);
+ 	}
+ 	
+ 	@Override
+ 	public int requestCount(String mId) {
++		
+ 		return session.selectOne("requestCount", mId);
+ 	}
++
++	@Override
++	public List<Member> memberList() {
++		// ì „ì²´íšŒì› ë¦¬ìŠ¤íŠ¸
++		return session.selectList("memberList");
++	}
++
++	@Override
++	public int chkTmConn(TmConn tmConn) {
++		// ì´ë¯¸ íŒ€ì— ê°€ì…ë˜ì–´ìˆëŠ”ì§€ ì—¬ë¶€í™•ì¸
++		return session.selectOne("chkTmConn", tmConn);
++	}
++
++	@Override
++	public List<TeamTmConn> memberInvitedList(String mId) {
++		// ì´ˆëŒ€ë°›ì€ íŒ€ ë¦¬ìŠ¤íŠ¸
++		return session.selectList("memberInvitedList", mId);
++	}
+ }
+diff --git a/src/main/java/com/ch/teampro1/service/BoardService.java b/src/main/java/com/ch/teampro1/service/BoardService.java
+index 501879d..1d080d2 100644
+--- a/src/main/java/com/ch/teampro1/service/BoardService.java
++++ b/src/main/java/com/ch/teampro1/service/BoardService.java
+@@ -2,6 +2,8 @@ package com.ch.teampro1.service;
+ 
+ import java.util.List;
+ 
++import javax.servlet.http.HttpSession;
++
+ import org.springframework.web.multipart.MultipartHttpServletRequest;
+ 
+ import com.ch.teampro1.model.Board;
+@@ -15,7 +17,7 @@ public interface BoardService {
+     
+ 	public int insert_file(MultipartHttpServletRequest mRequest);
+ 	
+-	public int reply_insert(BoardRe boardre);
++	public int reply_insert(BoardRe boardre, HttpSession session);
+ 	
+ 	public int insert_schedule(Board board);
+ 	
+diff --git a/src/main/java/com/ch/teampro1/service/BoardServiceImpl.java b/src/main/java/com/ch/teampro1/service/BoardServiceImpl.java
+index 2595315..1756573 100644
+--- a/src/main/java/com/ch/teampro1/service/BoardServiceImpl.java
++++ b/src/main/java/com/ch/teampro1/service/BoardServiceImpl.java
+@@ -4,6 +4,8 @@ import java.io.File;
+ import java.util.Iterator;
+ import java.util.List;
+ 
++import javax.servlet.http.HttpSession;
++
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Service;
+ import org.springframework.web.multipart.MultipartFile;
+@@ -70,7 +72,7 @@ public class BoardServiceImpl implements BoardService {
+ 		return boardDao.delete(bId);
+ 	}
+ 	@Override
+-	public int reply_insert(BoardRe boardre) {
++	public int reply_insert(BoardRe boardre, HttpSession session ) {
+ 		return boardDao.reply_insert(boardre);
+ 	}
+ 
+diff --git a/src/main/java/com/ch/teampro1/service/ITeamService.java b/src/main/java/com/ch/teampro1/service/ITeamService.java
+index 617030a..319ed8c 100644
+--- a/src/main/java/com/ch/teampro1/service/ITeamService.java
++++ b/src/main/java/com/ch/teampro1/service/ITeamService.java
+@@ -2,6 +2,7 @@ package com.ch.teampro1.service;
+ 
+ import java.util.List;
+ 
++import com.ch.teampro1.model.Member;
+ import com.ch.teampro1.model.MemberTmConn;
+ import com.ch.teampro1.model.Team;
+ import com.ch.teampro1.model.TeamTmConn;
+@@ -28,4 +29,7 @@ public interface ITeamService {
+ 	
+ 	public List<Team> searchTeam(String tName);
+ 	public int requestCount(String mId);
++	public List<Member> memberList();
++	public int chkTmConn(TmConn tmConn);
++	public List<TeamTmConn> memberInvitedList(String mId);
+ }
+diff --git a/src/main/java/com/ch/teampro1/service/TeamServiceImpl.java b/src/main/java/com/ch/teampro1/service/TeamServiceImpl.java
+index 90b3ef3..c2bbcc4 100644
+--- a/src/main/java/com/ch/teampro1/service/TeamServiceImpl.java
++++ b/src/main/java/com/ch/teampro1/service/TeamServiceImpl.java
+@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Service;
+ 
+ import com.ch.teampro1.dao.ITeamDao;
++import com.ch.teampro1.model.Member;
+ import com.ch.teampro1.model.MemberTmConn;
+ import com.ch.teampro1.model.Team;
+ import com.ch.teampro1.model.TeamTmConn;
+@@ -107,4 +108,22 @@ public class TeamServiceImpl implements ITeamService {
+ 	public int requestCount(String mId) {
+ 		return teamDao.requestCount(mId);
+ 	}
++
++	@Override
++	public List<Member> memberList() {
++		// TODO Auto-generated method stub
++		return teamDao.memberList();
++	}
++
++	@Override
++	public int chkTmConn(TmConn tmConn) {
++		// TODO Auto-generated method stub
++		return teamDao.chkTmConn(tmConn);
++	}
++
++	@Override
++	public List<TeamTmConn> memberInvitedList(String mId) {
++		// TODO Auto-generated method stub
++		return teamDao.memberInvitedList(mId);
++	}
+ }
+diff --git a/src/main/resources/META-INF/sqlmap/mappers/Member.xml b/src/main/resources/META-INF/sqlmap/mappers/Member.xml
+index 5d0a287..7048b66 100644
+--- a/src/main/resources/META-INF/sqlmap/mappers/Member.xml
++++ b/src/main/resources/META-INF/sqlmap/mappers/Member.xml
+@@ -52,5 +52,9 @@
+   			FROM MEMBER
+   			WHERE MID=#{mId} and MEMAIL=#{mEmail} and MOUT=1
+ 	</select>
++	<!-- íšŒì›ê°€ì…ëœ ë©¤ë²„ëª©ë¡ -->
++	<select id="memberList" resultType="Member" >
++		SELECT * FROM MEMBER
++	</select>
+ </mapper>
+     
+\ No newline at end of file
+diff --git a/src/main/resources/META-INF/sqlmap/mappers/TeamTmConn.xml b/src/main/resources/META-INF/sqlmap/mappers/TeamTmConn.xml
+index fb5870b..9508769 100644
+--- a/src/main/resources/META-INF/sqlmap/mappers/TeamTmConn.xml
++++ b/src/main/resources/META-INF/sqlmap/mappers/TeamTmConn.xml
+@@ -30,5 +30,8 @@
+ 	<select id="leaderTeamListAll" parameterType="String" resultMap="TeamTmConnResult">
+ 		SELECT T.TID, T.TNAME FROM TEAM T, TM_CONN TM WHERE T.TID=TM.TID AND TM.MID=#{mId} AND TM.TMLEADER=1
+ 	</select>
++	<select id="memberInvitedList" parameterType="String" resultMap="TeamTmConnResult">
++		SELECT t.tId, t.tName, tm.tmOk from TEAM t, TM_Conn tm where t.tId = tm.tId AND tm.mId=#{mId} AND tm.tmLeader=0
++	</select>
+ 	
+ </mapper>
+\ No newline at end of file
+diff --git a/src/main/resources/META-INF/sqlmap/mappers/TmConn.xml b/src/main/resources/META-INF/sqlmap/mappers/TmConn.xml
+index 8f514a1..52d8ab9 100644
+--- a/src/main/resources/META-INF/sqlmap/mappers/TmConn.xml
++++ b/src/main/resources/META-INF/sqlmap/mappers/TmConn.xml
+@@ -46,4 +46,7 @@
+   			WHERE TID IN (SELECT TID FROM TM_CONN
+                 			WHERE MID=#{mId} AND TMLEADER=1) AND TMOK=0
+ 	</select>
++	<select id="chkTmConn" parameterType="TmConn" resultType="int">
++		select count(*) from TM_CONN WHERE tId=#{tId} AND mId=#{mId}
++	</select>
+ </mapper>
+\ No newline at end of file
+diff --git a/src/main/webapp/WEB-INF/views/board/list.jsp b/src/main/webapp/WEB-INF/views/board/list.jsp
+index 729894a..45f7f34 100644
+--- a/src/main/webapp/WEB-INF/views/board/list.jsp
++++ b/src/main/webapp/WEB-INF/views/board/list.jsp
+@@ -65,7 +65,7 @@
+ </style>
+ </head>
+ <body>
+-
++<jsp:include page="../member/header.jsp" />
+ 	<jsp:include page="writeForm.jsp"></jsp:include>
+ 	<div id="board_content">
+ 		<c:forEach var="board" items="${list }">
+@@ -82,7 +82,6 @@
+ 					<tr>
+ 						<td colspan="2" class="date">${board.bDate }</td>
+ 					</tr>
+-					</tr>
+ 					<tr class="con">
+ 						<td colspan="3" class="con1">${board.bContent }</td>
+ 					</tr>
+@@ -141,7 +140,7 @@
+    				</c:forEach>
+    				<tr>
+ 				<form action="replyinsert.do" method="post">
+-					<input type="hidden" name="mId" value="user">
++					<input type="hidden" name="mId" value="${mId}">
+ 					<input type="hidden" name="tId" value="${param.tId }">
+ 					<input type="hidden" name="bId" value="${board.bId }">
+    				<td colspan="3"><textarea  name="bRcontent" placeholder="ëŒ“ê¸€ì„ ì…ë ¥í•˜ì„¸ìš”" required="required"></textarea></td>
+diff --git a/src/main/webapp/WEB-INF/views/board/writeForm.jsp b/src/main/webapp/WEB-INF/views/board/writeForm.jsp
+index cf897c8..b0643df 100644
+--- a/src/main/webapp/WEB-INF/views/board/writeForm.jsp
++++ b/src/main/webapp/WEB-INF/views/board/writeForm.jsp
+@@ -7,7 +7,7 @@
+ <title>Insert title here</title>
+ <style>
+ .o-container {
+-	margin-top: 25px;
++   margin-top: 200px;
+ }
+ 
+ .o-container #text_file {
+@@ -55,7 +55,6 @@
+ 					<div class="c-tab__content">
+ 						<form action="write_file.do" method="post" name="frm" enctype="multipart/form-data">
+ 							<input type="hidden" name="mId" value="${mId }">
+-							<!-- í•©ì¹  ë•Œ ì´ê±°ë‘ sqlë¬¸ë„ ë°”ê¿”ì•¼í•œë‹¤ -->
+ 							<input type="hidden" name="tId" value="${param.tId }">
+ 							<table>
+ 								<tr>
+@@ -79,7 +78,6 @@
+ 					<div class="c-tab__content">
+ 						<form action="write_schedule.do" method="post" name="frm">
+ 							<input type="hidden" name="mId" value="${mId }">
+-							<!-- í•©ì¹  ë•Œ ì´ê±°ë‘ sqlë¬¸ë„ ë°”ê¿”ì•¼í•œë‹¤ -->
+ 							<input type="hidden" name="tId" value="${param.tId }">
+ 							<table>
+ 								<tr>
+@@ -110,7 +108,7 @@
+ 			</div>
+ 		</div>
+ 	</div>
+-	<script src="js/tabs.js"></script>
++
+ 	<script>
+ 		var myTabs = tabs({
+ 			el : '#tabs',
+diff --git a/src/main/webapp/WEB-INF/views/member/header.jsp b/src/main/webapp/WEB-INF/views/member/header.jsp
+index 8f3a2ed..6c8ef98 100644
+--- a/src/main/webapp/WEB-INF/views/member/header.jsp
++++ b/src/main/webapp/WEB-INF/views/member/header.jsp
+@@ -11,6 +11,7 @@
+ <link rel="stylesheet" href="css/loginstyle.css">
+ <script type="text/javascript"
+ 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
++		<script src="js/tabs.js"></script>
+ <script>
+ $(document).ready(function() {
+ 	$("#header .mypage").click(function() {
+diff --git a/src/main/webapp/WEB-INF/views/team/leaderTeamList.jsp b/src/main/webapp/WEB-INF/views/team/leaderTeamList.jsp
+index 6741f59..a67adf8 100644
+--- a/src/main/webapp/WEB-INF/views/team/leaderTeamList.jsp
++++ b/src/main/webapp/WEB-INF/views/team/leaderTeamList.jsp
+@@ -2,6 +2,16 @@
+     pageEncoding="UTF-8"%>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+ <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
++<c:if test="${param.msg=='ê±°ì ˆì„±ê³µ'}">
++	<script>
++		alert('í”„ë¡œì íŠ¸ ì´ˆëŒ€ê°€ ê±°ì ˆë˜ì—ˆìŠµë‹ˆë‹¤.');
++	</script>
++</c:if>
++<c:if test="${param.msg=='ì´ˆëŒ€ ìŠ¹ë‚™ì„±ê³µ'}">
++	<script>
++		alert('í”„ë¡œì íŠ¸ ì´ˆëŒ€ë¥¼ ìŠ¹ë‚™í•˜ì˜€ìŠµë‹ˆë‹¤.');
++	</script>
++</c:if>
+ <html>
+ <head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+@@ -9,8 +19,34 @@
+ </head>
+ <body>
+ 	<jsp:include page="../member/header.jsp" />
++	
+ 	<div id="c1">
+ 		<ul>
++			<li>ì´ˆëŒ€ë°›ì€ í”„ë¡œì íŠ¸ ëª©ë¡</li>
++		</ul>
++	</div>
++	<div id="c8">
++		<table border="1">
++		<tr><th>íŒ€ë²ˆí˜¸</th><th>íŒ€ì´ë¦„</th><th>ìŠ¹ì¸</th></tr>
++		<c:if test="${empty invited}">
++			<tr><td colspan="3">ì´ˆëŒ€ë°›ì€ íŒ€ì´ ì—†ìŠµë‹ˆë‹¤</td></tr>
++		</c:if>
++		
++		<c:forEach var="inList" items="${invited }">
++			<c:if test="${inList.tmOk ==0 }">
++			<tr>
++				<td>${inList.tId }</td>
++				<td>${inList.tName }</td>
++				<td><button onclick="location.href='invitedOk.do?mId=${param.mId }&tId=${inList.tId }'">Y</button>
++					<button onclick="location.href='invitedNo.do?mId=${param.mId }&tId=${inList.tId }'">N</button>
++			</tr>
++			</c:if>
++		</c:forEach>
++	</table>
++	</div>
++	
++	<div id="c3">
++		<ul>
+ 			<li>ì°¸ì—¬ìš”ì²­ ëª©ë¡</li>
+ 		</ul>
+ 	</div>
+diff --git a/src/main/webapp/WEB-INF/views/team/listTeam.jsp b/src/main/webapp/WEB-INF/views/team/listTeam.jsp
+index 597cfdd..15114ec 100644
+--- a/src/main/webapp/WEB-INF/views/team/listTeam.jsp
++++ b/src/main/webapp/WEB-INF/views/team/listTeam.jsp
+@@ -53,30 +53,6 @@
+ 		});
+ 	});
+ 
+-	/* $(document).ready(function(){
+-		$("#c2 .dashed").each(function(index){
+-			$(this).click(function(){
+-				var submenu = $(".team_out");
+-	            if (submenu.is(":visible")) {
+-	                submenu.slideUp();
+-	            } else {
+-	                submenu.slideDown();
+-	            }
+-			})
+-		});
+-	}); */
+-
+-	/* $(document).ready(function () {
+-	    $("dashed0").click(function () {
+-	        var submenu = $(".team_out");
+-	        if (submenu.is(":visible")) {
+-	            submenu.slideUp();
+-	        } else {
+-	            submenu.slideDown();
+-	        }
+-	    });
+-	}); */
+-
+ 	function insertTeam() {
+ 		var tName = prompt('ìƒì„±í•  íŒ€ì˜ ì´ë¦„ì„ ì…ë ¥í•˜ì„¸ìš”', 'íŒ€ ì´ë¦„');
+ 		if (tName) {
+@@ -130,6 +106,7 @@
+ 	<div id="c3">
+ 		<ul>
+ 			<li>ì „ì²´ íŒ€ ëª©ë¡</li>
++			<li><button onclick="location.href='listMember.do?mId=${mId}'">íšŒì›ê°€ì…ëœ ë©¤ë²„ëª©ë¡</button></li>
+ 		</ul>
+ 	</div>
+ 	<div id="c4">
+diff --git a/src/main/webapp/WEB-INF/views/team/memberInvitedList.jsp b/src/main/webapp/WEB-INF/views/team/memberInvitedList.jsp
+new file mode 100644
+index 0000000..b30217b
+--- /dev/null
++++ b/src/main/webapp/WEB-INF/views/team/memberInvitedList.jsp
+@@ -0,0 +1,42 @@
++<%@ page language="java" contentType="text/html; charset=UTF-8"
++    pageEncoding="UTF-8"%>
++<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
++<c:set var="conPath" value="<%=request.getContextPath() %>"></c:set>    
++<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
++<c:if test="${param.msg=='ê±°ì ˆì„±ê³µ'}">
++	<script>
++		alert('í”„ë¡œì íŠ¸ ì´ˆëŒ€ê°€ ê±°ì ˆë˜ì—ˆìŠµë‹ˆë‹¤.');
++	</script>
++</c:if>
++<c:if test="${param.msg=='ì´ˆëŒ€ ìŠ¹ë‚™ì„±ê³µ'}">
++	<script>
++		alert('í”„ë¡œì íŠ¸ ì´ˆëŒ€ë¥¼ ìŠ¹ë‚™í•˜ì˜€ìŠµë‹ˆë‹¤.');
++	</script>
++</c:if>
++<html>
++<head>
++<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
++<title>Insert title here</title>
++</head>
++<body>
++	
++	<table border="1">
++		<tr><th>íŒ€ë²ˆí˜¸</th><th>íŒ€ì´ë¦„</th><th>ìŠ¹ì¸</th></tr>
++		<c:if test="${empty invited}">
++			<tr><td colspan="3">ì´ˆëŒ€ë°›ì€ íŒ€ì´ ì—†ìŠµë‹ˆë‹¤</td></tr>
++		</c:if>
++		
++		<c:forEach var="inList" items="${invited }">
++			<c:if test="${inList.tmOk ==0 }">
++			<tr>
++				<td>${inList.tId }</td>
++				<td>${inList.tName }</td>
++				<td><button onclick="location.href='invitedOk.do?mId=${param.mId }&tId=${inList.tId }'">Y</button>
++					<button onclick="location.href='${conPath }/invitedNo.do?mId=${param.mId }&tId=${inList.tId }'">N</button>
++			</tr>
++			</c:if>
++		</c:forEach>
++	</table>
++	
++</body>
++</html>
+\ No newline at end of file
+diff --git a/src/main/webapp/WEB-INF/views/team/memberList.jsp b/src/main/webapp/WEB-INF/views/team/memberList.jsp
+new file mode 100644
+index 0000000..b7328c4
+--- /dev/null
++++ b/src/main/webapp/WEB-INF/views/team/memberList.jsp
+@@ -0,0 +1,61 @@
++<%@ page language="java" contentType="text/html; charset=UTF-8"
++    pageEncoding="UTF-8"%>
++<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
++<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
++<c:if test="${param.msg=='í”„ë¡œì íŠ¸ ê°€ì…ì´ˆëŒ€ ì„±ê³µ' }">
++	<script>
++		alert('í”„ë¡œì íŠ¸ ê°€ì…ì´ˆëŒ€ ì„±ê³µ');
++	</script>
++</c:if>
++<c:if test="${param.msg=='ì´ë¯¸ íŒ€ì— ì†í•´ìˆìŠµë‹ˆë‹¤.' }">
++	<script>
++		alert('ì´ë¯¸ íŒ€ì— ì†í•´ìˆìŠµë‹ˆë‹¤.');
++	</script>
++</c:if>
++
++<html>
++<head>
++<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
++<title>Insert title here</title>
++</head>
++<body>
++	<table border=1>
++		<caption>íšŒì›ëª©ë¡</caption>
++		<tr><th>ì•„ì´ë””</th><th>ì´ë¦„</th><th>ì—°ë½ì²˜</th><th>ì´ë©”ì¼</th><th>ì£¼ì†Œ</th></tr>
++		<c:forEach var="mList" items="${memberList}">
++			<tr>
++				<td>${mList.mId }</td>
++				<td>${mList.mName }</td>
++				<td>${mList.mPhone1 }-${mList.mPhone2 }-${mList.mPhone3 }</td>
++				<td>${mList.mEmail }</td>
++				<td>${mList.mAddress1 } / ${mList.mAddress2 } / ${mList.mAddress3 }</td>
++			</tr>
++		</c:forEach>
++	</table><br><br>
++	<form action="invite.do">
++		<table border=1>
++			<caption>í”„ë¡œì íŠ¸ ì´ˆëŒ€ë©¤ë²„ ì„¤ì •</caption>
++			<tr><th>íšŒì›ì•„ì´ë””</th><th>í”„ë¡œì íŠ¸ëª…</th></tr>
++			<tr><td>
++					<select id="mId" name="mId" required="required">
++						<option></option>
++						<c:forEach var="mIdList" items="${memberList }">
++							<option>${mIdList.mId }</option>
++						</c:forEach>
++					</select>
++				</td>
++				<td><select id="tId" name="tId" required="required">
++						<option></option>
++						<c:forEach var="listTeam" items="${joinedTeam }">
++							<c:if test="${listTeam.tmLeader == 1}">
++									<option value="${listTeam.tId }">${listTeam.tName }</option>
++							</c:if>
++						</c:forEach>
++					</select>
++				</td>
++				<td><input type="submit" value="ê°€ì…ì´ˆëŒ€"></td>
++			</tr>
++		</table>
++	</form>
++</body>
++</html>
+\ No newline at end of file
+diff --git a/src/main/webapp/css/style.min.css b/src/main/webapp/css/style.min.css
+index 42467e6..c67f43d 100644
+--- a/src/main/webapp/css/style.min.css
++++ b/src/main/webapp/css/style.min.css
+@@ -1 +1,358 @@
+-.carbon-poweredby,em,i{font-style:italic}@font-face{font-family:Oxygen;font-style:normal;font-weight:300;src:url(../fonts/oxygen/oxygen-v5-latin-300.eot);src:local("Oxygen Light"),local("Oxygen-Light"),url(../fonts/oxygen/oxygen-v5-latin-300.eot?#iefix) format("embedded-opentype"),url(../fonts/oxygen/oxygen-v5-latin-300.woff2) format("woff2"),url(../fonts/oxygen/oxygen-v5-latin-300.woff) format("woff"),url(../fonts/oxygen/oxygen-v5-latin-300.ttf) format("truetype"),url(../fonts/oxygen/oxygen-v5-latin-300.svg#Oxygen) format("svg")}@font-face{font-family:Oxygen;font-style:normal;font-weight:400;src:url(../fonts/oxygen/oxygen-v5-latin-regular.eot);src:local("Oxygen"),local("Oxygen-Regular"),url(../fonts/oxygen/oxygen-v5-latin-regular.eot?#iefix) format("embedded-opentype"),url(../fonts/oxygen/oxygen-v5-latin-regular.woff2) format("woff2"),url(../fonts/oxygen/oxygen-v5-latin-regular.woff) format("woff"),url(../fonts/oxygen/oxygen-v5-latin-regular.ttf) format("truetype"),url(../fonts/oxygen/oxygen-v5-latin-regular.svg#Oxygen) format("svg")}@font-face{font-family:Oxygen;font-style:normal;font-weight:700;src:url(../fonts/oxygen/oxygen-v5-latin-700.eot);src:local("Oxygen Bold"),local("Oxygen-Bold"),url(../fonts/oxygen/oxygen-v5-latin-700.eot?#iefix) format("embedded-opentype"),url(../fonts/oxygen/oxygen-v5-latin-700.woff2) format("woff2"),url(../fonts/oxygen/oxygen-v5-latin-700.woff) format("woff"),url(../fonts/oxygen/oxygen-v5-latin-700.ttf) format("truetype"),url(../fonts/oxygen/oxygen-v5-latin-700.svg#Oxygen) format("svg")}*,::after,::before{box-sizing:inherit}html{box-sizing:border-box}body,html{margin:0;padding:0;height:100%}body{color:#6d6d6d;background-color:#fff;font-family:Oxygen,Helvetica,sans-serif;font-size:14px;line-height:1.8}h1,h2,h3,h4,h5,h6{color:#3b3b3b;font-weight:700;line-height:1.2}a{color:#dc446e;text-decoration:none}a:hover{color:#9d1d41}b,strong{font-weight:700}img{max-width:100%;height:auto}.o-container{margin:0 auto;padding:0 12px;max-width:960px}@media all and (min-width:480px){.o-container{padding:0 24px}}@media all and (min-width:720px){.o-container{padding:0 48px}}.o-header{margin:0;padding:0}.o-header-nav{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;-ms-flex-pack:justify;justify-content:space-between;background-color:#dc446e}.o-header-nav__link{padding:12px;color:#fff}.o-header-nav__link:hover{color:#fff;background-color:#9d1d41}.o-header__title{margin:24px;padding:0;color:#818181;font-size:28px;font-weight:300;text-align:center}@media all and (min-width:480px){.o-header__title{margin:36px;font-size:42px}}.o-section{margin-bottom:24px}.o-section:last-child{margin-bottom:0}@media all and (min-width:720px){.o-section{margin-bottom:48px}}.o-sub-nav{margin:0;padding:0}.o-sub-nav__items{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-flow:row wrap;-ms-flex-flow:row wrap;flex-flow:row wrap;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;list-style:none;margin:0;padding:0}.o-sub-nav__item{margin:0;padding:4px}.o-sub-nav__link{display:block;margin:0;padding:4px 24px;border:2px solid #dc446e}.o-sub-nav__item.active .o-sub-nav__link,.o-sub-nav__link:hover{color:#fff;background-color:#dc446e}.o-footer{padding:12px 0;text-align:center}@media all and (min-width:480px){.o-footer{padding:24px 0}}@media all and (min-width:720px){.o-footer{padding:48px 0}}.c-tabs-nav{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;list-style:none;margin:0;padding:0}.c-tabs-nav__link{-webkit-box-flex:1;-webkit-flex:1;-ms-flex:1;flex:1;margin-right:4px;padding:12px;color:#fff;background-color:#b3b3b3;text-align:center;-webkit-transition:color .3s;transition:color .3s}.c-tabs-nav__link:last-child{margin-right:0}.c-tabs-nav__link:hover{color:#6d6d6d}.c-tabs-nav__link.is-active{color:#dc446e;background-color:#e7e7e7}.c-tabs-nav__link i,.c-tabs-nav__link span{margin:0;padding:0;line-height:1}.c-tabs-nav__link i{font-size:18px}.c-tabs-nav__link span{display:none;font-size:18px}@media all and (min-width:720px){.c-tabs-nav__link i{margin-bottom:12px;font-size:22px}.c-tabs-nav__link span{display:block}}.c-tab{display:none;background-color:#e7e7e7}.c-tab.is-active{display:block}.c-tab__content{padding:1.5rem}.c-tabs.no-js .c-tabs-nav{display:none}.c-tabs.no-js .c-tab{display:block;margin-bottom:1.5rem}.c-tabs.no-js .c-tab:last-child{margin-bottom:0}.carbon-img,.carbon-wrap{margin:0 0 4px;display:block}#carbonads{position:fixed;bottom:12px;right:12px;z-index:1000;padding:24px 12px 12px;width:154px;background-color:#fff;line-height:1.1;border:1px solid #e7e7e7}.carbon-img{padding:0;width:130px;height:100px}.carbon-text{color:#818181;font-size:12px}.carbon-poweredby{font-size:10px}.carbonad__close{display:block;position:absolute;top:0;left:12px;height:24px;font-size:11px;line-height:24px}@media all and (max-width:660px){#carbonads{display:none}}
+\ No newline at end of file
++.carbon-poweredby, em, i {
++	font-style: italic
++}
++
++@font-face {
++	font-family: Oxygen;
++	font-style: normal;
++	font-weight: 300;
++	src: url(../fonts/oxygen/oxygen-v5-latin-300.eot);
++	src: local("Oxygen Light"), local("Oxygen-Light"),
++		url(../fonts/oxygen/oxygen-v5-latin-300.eot?#iefix)
++		format("embedded-opentype"),
++		url(../fonts/oxygen/oxygen-v5-latin-300.woff2) format("woff2"),
++		url(../fonts/oxygen/oxygen-v5-latin-300.woff) format("woff"),
++		url(../fonts/oxygen/oxygen-v5-latin-300.ttf) format("truetype"),
++		url(../fonts/oxygen/oxygen-v5-latin-300.svg#Oxygen) format("svg")
++}
++
++@font-face {
++	font-family: Oxygen;
++	font-style: normal;
++	font-weight: 400;
++	src: url(../fonts/oxygen/oxygen-v5-latin-regular.eot);
++	src: local("Oxygen"), local("Oxygen-Regular"),
++		url(../fonts/oxygen/oxygen-v5-latin-regular.eot?#iefix)
++		format("embedded-opentype"),
++		url(../fonts/oxygen/oxygen-v5-latin-regular.woff2) format("woff2"),
++		url(../fonts/oxygen/oxygen-v5-latin-regular.woff) format("woff"),
++		url(../fonts/oxygen/oxygen-v5-latin-regular.ttf) format("truetype"),
++		url(../fonts/oxygen/oxygen-v5-latin-regular.svg#Oxygen) format("svg")
++}
++
++@font-face {
++	font-family: Oxygen;
++	font-style: normal;
++	font-weight: 700;
++	src: url(../fonts/oxygen/oxygen-v5-latin-700.eot);
++	src: local("Oxygen Bold"), local("Oxygen-Bold"),
++		url(../fonts/oxygen/oxygen-v5-latin-700.eot?#iefix)
++		format("embedded-opentype"),
++		url(../fonts/oxygen/oxygen-v5-latin-700.woff2) format("woff2"),
++		url(../fonts/oxygen/oxygen-v5-latin-700.woff) format("woff"),
++		url(../fonts/oxygen/oxygen-v5-latin-700.ttf) format("truetype"),
++		url(../fonts/oxygen/oxygen-v5-latin-700.svg#Oxygen) format("svg")
++}
++
++*, ::after, ::before {
++	box-sizing: inherit
++}
++
++html {
++	box-sizing: border-box
++}
++
++body, html {
++	margin: 0;
++	padding: 0;
++	height: 100%
++}
++
++body {
++	color: #6d6d6d;
++	background-color: #fff;
++	font-family: Oxygen, Helvetica, sans-serif;
++	font-size: 14px;
++	line-height: 1.8
++}
++
++h1, h2, h3, h4, h5, h6 {
++	color: #3b3b3b;
++	font-weight: 700;
++	line-height: 1.2
++}
++
++a {
++	color: #dc446e;
++	text-decoration: none
++}
++
++a:hover {
++	color: #9d1d41
++}
++
++b, strong {
++	font-weight: 700
++}
++
++img {
++	max-width: 100%;
++	height: auto
++}
++
++.o-container {
++	margin: 0 auto;
++	padding: 0 12px;
++	max-width: 960px
++}
++
++@media all and (min-width:480px) {
++	.o-container {
++		padding: 0 24px
++	}
++}
++
++@media all and (min-width:720px) {
++	.o-container {
++		padding: 0 48px
++	}
++}
++
++.o-header {
++	margin: 0;
++	padding: 0
++}
++
++.o-header-nav {
++	display: -webkit-box;
++	display: -webkit-flex;
++	display: -ms-flexbox;
++	display: flex;
++	-webkit-box-pack: justify;
++	-webkit-justify-content: space-between;
++	-ms-flex-pack: justify;
++	justify-content: space-between;
++	background-color: #dc446e
++}
++
++.o-header-nav__link {
++	padding: 12px;
++	color: #fff
++}
++
++.o-header-nav__link:hover {
++	color: #fff;
++	background-color: #9d1d41
++}
++
++.o-header__title {
++	margin: 24px;
++	padding: 0;
++	color: #818181;
++	font-size: 28px;
++	font-weight: 300;
++	text-align: center
++}
++
++@media all and (min-width:480px) {
++	.o-header__title {
++		margin: 36px;
++		font-size: 42px
++	}
++}
++
++.o-section {
++	margin-bottom: 24px
++}
++
++.o-section:last-child {
++	margin-bottom: 0
++}
++
++@media all and (min-width:720px) {
++	.o-section {
++		margin-bottom: 48px
++	}
++}
++
++.o-sub-nav {
++	margin: 0;
++	padding: 0
++}
++
++.o-sub-nav__items {
++	display: -webkit-box;
++	display: -webkit-flex;
++	display: -ms-flexbox;
++	display: flex;
++	-webkit-flex-flow: row wrap;
++	-ms-flex-flow: row wrap;
++	flex-flow: row wrap;
++	-webkit-box-pack: center;
++	-webkit-justify-content: center;
++	-ms-flex-pack: center;
++	justify-content: center;
++	list-style: none;
++	margin: 0;
++	padding: 0
++}
++
++.o-sub-nav__item {
++	margin: 0;
++	padding: 4px
++}
++
++.o-sub-nav__link {
++	display: block;
++	margin: 0;
++	padding: 4px 24px;
++	border: 2px solid #dc446e
++}
++
++.o-sub-nav__item.active .o-sub-nav__link, .o-sub-nav__link:hover {
++	color: #fff;
++	background-color: #dc446e
++}
++
++.o-footer {
++	padding: 12px 0;
++	text-align: center
++}
++
++@media all and (min-width:480px) {
++	.o-footer {
++		padding: 24px 0
++	}
++}
++
++@media all and (min-width:720px) {
++	.o-footer {
++		padding: 48px 0
++	}
++}
++
++.c-tabs-nav {
++	display: -webkit-box;
++	display: -webkit-flex;
++	display: -ms-flexbox;
++	display: flex;
++	list-style: none;
++	margin: 0;
++	padding: 0
++}
++
++.c-tabs-nav__link {
++	-webkit-box-flex: 1;
++	-webkit-flex: 1;
++	-ms-flex: 1;
++	flex: 1;
++	margin-right: 4px;
++	padding: 12px;
++	color: #fff;
++	background-color: #b3b3b3;
++	text-align: center;
++	-webkit-transition: color .3s;
++	transition: color .3s
++}
++
++.c-tabs-nav__link:last-child {
++	margin-right: 0
++}
++
++.c-tabs-nav__link:hover {
++	color: #6d6d6d
++}
++
++.c-tabs-nav__link.is-active {
++	color: #dc446e;
++	background-color: #e7e7e7
++}
++
++.c-tabs-nav__link i, .c-tabs-nav__link span {
++	margin: 0;
++	padding: 0;
++	line-height: 1
++}
++
++.c-tabs-nav__link i {
++	font-size: 18px
++}
++
++.c-tabs-nav__link span {
++	display: none;
++	font-size: 18px
++}
++
++@media all and (min-width:720px) {
++	.c-tabs-nav__link i {
++		margin-bottom: 12px;
++		font-size: 22px
++	}
++	.c-tabs-nav__link span {
++		display: block
++	}
++}
++
++.c-tab {
++	display: none;
++	background-color: #e7e7e7
++}
++
++.c-tab.is-active {
++	display: block
++}
++
++.c-tab__content {
++	padding: 1.5rem
++}
++
++.c-tabs.no-js .c-tabs-nav {
++	display: none
++}
++
++.c-tabs.no-js .c-tab {
++	display: block;
++	margin-bottom: 1.5rem
++}
++
++.c-tabs.no-js .c-tab:last-child {
++	margin-bottom: 0
++}
++
++.carbon-img, .carbon-wrap {
++	margin: 0 0 4px;
++	display: block
++}
++
++#carbonads {
++	position: fixed;
++	bottom: 12px;
++	right: 12px;
++	z-index: 1000;
++	padding: 24px 12px 12px;
++	width: 154px;
++	background-color: #fff;
++	line-height: 1.1;
++	border: 1px solid #e7e7e7
++}
++
++.carbon-img {
++	padding: 0;
++	width: 130px;
++	height: 100px
++}
++
++.carbon-text {
++	color: #818181;
++	font-size: 12px
++}
++
++.carbon-poweredby {
++	font-size: 10px
++}
++
++.carbonad__close {
++	display: block;
++	position: absolute;
++	top: 0;
++	left: 12px;
++	height: 24px;
++	font-size: 11px;
++	line-height: 24px
++}
++
++@media all and (max-width:660px) {
++	#carbonads {
++		display: none
++	}
++}
+\ No newline at end of file
+diff --git a/target/classes/META-INF/sqlmap/mappers/Member.xml b/target/classes/META-INF/sqlmap/mappers/Member.xml
+index 5d0a287..7048b66 100644
+--- a/target/classes/META-INF/sqlmap/mappers/Member.xml
++++ b/target/classes/META-INF/sqlmap/mappers/Member.xml
+@@ -52,5 +52,9 @@
+   			FROM MEMBER
+   			WHERE MID=#{mId} and MEMAIL=#{mEmail} and MOUT=1
+ 	</select>
++	<!-- íšŒì›ê°€ì…ëœ ë©¤ë²„ëª©ë¡ -->
++	<select id="memberList" resultType="Member" >
++		SELECT * FROM MEMBER
++	</select>
+ </mapper>
+     
+\ No newline at end of file
+diff --git a/target/classes/META-INF/sqlmap/mappers/TeamTmConn.xml b/target/classes/META-INF/sqlmap/mappers/TeamTmConn.xml
+index fb5870b..9508769 100644
+--- a/target/classes/META-INF/sqlmap/mappers/TeamTmConn.xml
++++ b/target/classes/META-INF/sqlmap/mappers/TeamTmConn.xml
+@@ -30,5 +30,8 @@
+ 	<select id="leaderTeamListAll" parameterType="String" resultMap="TeamTmConnResult">
+ 		SELECT T.TID, T.TNAME FROM TEAM T, TM_CONN TM WHERE T.TID=TM.TID AND TM.MID=#{mId} AND TM.TMLEADER=1
+ 	</select>
++	<select id="memberInvitedList" parameterType="String" resultMap="TeamTmConnResult">
++		SELECT t.tId, t.tName, tm.tmOk from TEAM t, TM_Conn tm where t.tId = tm.tId AND tm.mId=#{mId} AND tm.tmLeader=0
++	</select>
+ 	
+ </mapper>
+\ No newline at end of file
+diff --git a/target/classes/META-INF/sqlmap/mappers/TmConn.xml b/target/classes/META-INF/sqlmap/mappers/TmConn.xml
+index 8f514a1..52d8ab9 100644
+--- a/target/classes/META-INF/sqlmap/mappers/TmConn.xml
++++ b/target/classes/META-INF/sqlmap/mappers/TmConn.xml
+@@ -46,4 +46,7 @@
+   			WHERE TID IN (SELECT TID FROM TM_CONN
+                 			WHERE MID=#{mId} AND TMLEADER=1) AND TMOK=0
+ 	</select>
++	<select id="chkTmConn" parameterType="TmConn" resultType="int">
++		select count(*) from TM_CONN WHERE tId=#{tId} AND mId=#{mId}
++	</select>
+ </mapper>
+\ No newline at end of file
+diff --git a/target/classes/com/ch/teampro1/controller/BoardController.class b/target/classes/com/ch/teampro1/controller/BoardController.class
+index 507bc5a9ea14a447ac0d6579232fb2cce8a88736..1de5c4f9e751c9b882a47a646cb15385ad1157e7 100644
+GIT binary patch
+delta 702
+zcmaixOHUJF7=_O_9cS9<OvTbk8=yA{)fP($no5isA;wrGxG*kQmQaGm3)tEa2{*xl
+z7rgZKuJ{*(h>N-)aqC7`to#T30T)DkziAW~CTu3(H*?POp7+c~<a^Zk`s?#LfG#Yr
+z8mpQZqfR|WKeR}+?@GR$AI}sEH_KNGrOZgFG@3cfkBfz3@$!x96gL87>H9^mbnK@7
+zctH<|lwPcR1!B9=hupJT#l!*@Y14g4+@~JTZSAp%CwNL<JmU?|O;qthKs}gC=G=Hi
+zIpdQE(6+H0Zi0?x>_rQj5Jnp!NF$0YVmOXC)x2w-Hu#W02nVQaUJDUi*uxbhQ)_5%
+zPuDQ)LRPg^`e`Ny4#8r(A02GyWGHZ?E=B|P@r`Ym#1w>c%3~0UbDG8sV=WFbi!)Gh
+zhu>-tTSy4j&S9QLEnCb{#fqlxDmc;d9-9B&ihp8-g)Ytq9;)&)3onlH;BLMjqi<F)
+z{s0dd;f3L#l^wKSqL<K5AAELji4{PFS(1`)cB|nL9rmTIQ~a%mnZ0PmY3i_oH17)p
+zWl+}+tyR*hAW569I<#B7oTS;3)?C9g1t-HY_{;wUKgX8yJfx3<_dCs{>gK=A*?7$(
+eWpg&_&HY*GpBTK9g2p#2Qt+1ltWzW20lxu~`H9j1
+
+delta 574
+zcmZvYJx>&26osF6AT#XjFpFa*vkJ>1D+G2~3IoJM1!G}cW1)o!35}X)EVQyA8W&eS
+z1(cPm@?rEJNFbt#7XAP$3t~q_!JjaOyF)}{$XmSk^PF?fkL=G@_xta!-+)uR-EcQ-
+zb4{)~CuG~s$bx%RicY&}*Gk*RsuLO6YAD+i9+OPTaN@d|k+sA_`?<#p7Npl5Z4!?v
+zuMG8FrS4J#Z{)N4$pmsQ`7V>j;TS27>uaWi7K&sTpp~;^rPJF?<nTF3nhx3V?uS#<
+zQLnl>^P3b3U$|p2n321U-M8~3DJW78IePVn{Qe|O9MMd7cuW}+M>n~Jr5nwRaZxd!
+zXw}C2B4>1>!c*-!T1#sdX`CLxJfO1ZXK##KoNIZH9ZatWkJfdjP8C8Bv-K%vzp@W#
+zemYjsrhNzxRD?WZR#B6<F}L-XJE(Eb$(SESbJ~ahubr0<ez9>-dqawSUN5~MyM7@$
+z?1m~YrQ(OCDnqF-zgY9BCi?XuqAw|6NdYgb=qplAMQ4`Ol$uc?e~j7}`;Sp7)?!&_
+MELLKx)IL^W516A|8vp<R
+
+diff --git a/target/classes/com/ch/teampro1/controller/MemberController.class b/target/classes/com/ch/teampro1/controller/MemberController.class
+index 6005926c8f9f7a759e72f2d8fbf947cbf732789e..8c6046676f4ea29ba7ea932199ae6c6440bd8c40 100644
+GIT binary patch
+delta 255
+zcmca;c+qgfMnO?K20aFQ24e;X20I2vAarK%VQ`szOt6{Jb27i6=;U}IdsbftHU_`R
+zi-mGIgBZ9Of*C{^LMBTJH*!V*d67U~6p&{;`I>N;U>r~+o`IhsfkB8Ni9wbjd9tlY
+z1!D%-q|+i{f;m9>T%dd&P`(f-Uj&pFpX@1`$XE_mb3oLRu^P<c7qeun2eabDDg~Pv
+zco|w4j2K!OOc~mNZta--LM)rH7c8GCeoc2GP<|4FG{a;DErux!mJCxF!WgCjT{4}a
+al3@l==S+rvhFL%ra~S3_%$=MgkqQ8X8#}`Q
+
+delta 255
+zcmca;c+qgfMnO?~20aD`24e<C20I2PAnC&3!{9pkm|!!b*JOS{(aG^b_N;ykYz+RB
+z7YpTb1~YIogfNIQgie+eZsd#v@}hveXdusc@-^Ww!FZrZ0s}uoB7+b^GJ`Bb%4A!S
+z3dT&ZNvB1^1apD%c|iGmpnMTfz8EMkKG{<=k+A}-=76XrV-1+aFJ{Tu0A|IBRSLE+
+z@G`VA7%{Xlm@;$#-P<|&g;+LYA6Pz9{F?40p!{S8X@)5bS`1SeEE%RTgfUEKh-a9=
+bP{}Zpp@m@<LqEf8hDi)_fpFgB9Enr_oAf*K
+
+diff --git a/target/classes/com/ch/teampro1/controller/TeamController.class b/target/classes/com/ch/teampro1/controller/TeamController.class
+index 6fd066c05a9e354617e5b5a8f4fc3f2e42430337..1f962ededaeafa98542b737e5eb7c63c2b85b1c3 100644
+GIT binary patch
+literal 9086
+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
+
+delta 2448
+zcmZuy32;+Y6g@9Vli%bwZ4=TaX(4F=p>1LjJ0esngThc2ml1Jc03*br(*@gzB5G<`
+z3sox*1re$Uf~Y8k8mJozuDF03F1YVN>b?u;`9Dot7^X9w|L%S7-gD1A_vYB>T|=#V
+zjy?G-fWgAkYTaeYQgEYyGZGF}6<3BsGs3kK`8i&0SH_udQ4vMGR8kAl8U&1y@)-)|
+zDp(-PQa2A>qGA!oDQFUK9NJPJZ&?su(jH&4BR;?N(6%QO+<u~c>H3bQhZHo+e%8L`
+zWh$<LloPDW@>Zx=t_8Y>4-z2`wQe~at4{{HcbP3)tdVZpDgL!8?$fTW6Ugjns`q!y
+zTimgz&7Zvapqy&koBFVd4R}PrCwJO=rxlbd7;eL3*kZxsa*A4LY{gc&L_O1=iZ;Y7
+zctRlKn$YY}ab>8wqWGdYb&+tDitX4Tt%^VANr7}`iqBiaB#As$JdI~9ct%cD-1$2Z
+z60ppwy}CM5S*_rC0h7j`6}$1G1uqEr<=QmAN5xCpMRQ#^QdK^~idV45f>#B+^m@mt
+zcnz=9TM>?sV=_Ikpj?aari#7Tmw2W-OasdcCMkGZK#h~myBiNTuROeTu?@L+SH*kS
+zFB{W_kJ*hq8paP*?8H6=2L#es!Z|h7)rm3`d?H}gIzF*Vvnu%PxGMEVF~79iZxi3k
+z)%F#+aTOidPo`?aRW-B2T8YWGKg#pdy<>h>aS)Fv__Z@q!{+$?tCM~CJz?y)t1Z5@
+zEouDoxSO5g_*=H7ugk%IssM@vQfJMqsSc07x-McB22v)BvL<7I35qbwRT&Q#^P1?-
+z>V;hu>DmKpT{u)beWr#_5t&`*N=8tGQ`Th$<gd;up~_INLeWb$^;+Zc!ipU9B87hR
+zMiKg82z(d?|F)5?(?mgkcrgI|F%Sj(D?uUMMHq=7E<!P;Vi0OD7&oFsuFk4V-2fv}
+zwBeGO*~L-EoGtt|!p{F$x_u~Y7zP(gk%zPRemK(UD@nXT1~Pf#Yud{|3iwsZdj`H5
+zfU_}zvGRCl5c8XG4*e=`C48gk6PSyec-umc8$xAO2Dm0e)M2i4yM4oMHsHK~<JO!V
+zIK3VDMqCnb%nK&I9P_)eIv5?yVPg(A&P6^($!p!&qCqyg2ly81nHFJjccvbR7RkMC
+zU$oJHGfXa13o?U_3mr=nDK^5coo-8<p2FnI9CvKTw4503jG?kSy%%PtAIsv#vDoqK
+z%mjAiJW_u_54uXb=qg16!D@7svKg}oOICUMdY0p^lOkL$H+g&|cN1ZXE2RYvkBOjG
+zCLyNl$5kg_%q2$0YI(%t9da>oO(L#KsFq8qnadEsWF1$Tj(c<$uF+`eY~yG&$O+!T
+z;yzjL&F24=USH1r29)(CK>=oeAer5+oz}~-S$$=O*X+82EeJ98l@#H0=9@toUL`Yf
+zMi@6>qm-V0^7@?2=q9Zc!hW<Jn++Id)~cGk726!`F+3G?JXe&69`KlB*cB*>;pG_K
+z(EM-FU)TmupdIfphK0634DZMAfy>eYzjoy#J;cYnp~+<<Y?|>?8uj)~VfzA;V)#6U
+zna8zoBuM}&NmUiHQOy?CpdVXvDz2s4YpLl7b#)yZIvbbcdQ8I&sK6Y0=hAaCRUDO5
+za<ijf;7h%+&G-agv711%J`qO!>uY>NrK*_EcOyAN*^Hn~j+t@u@GWf?<^l)Ya1;??
+z!FLu$JBULk)x|+%aa6*L;wJ4{T4Pl2XhkPShm)cnu95IVCwXM|r=*rVn&TIpvI`x*
+zB{|E|tbfqjN#9?`(RUK|2D2uxDm97)RN6v#_*2`T16PPfu7o8law(TV6UN{U&PX#?
+z(Xt*2tmsl;1(F0-bP-t5NuWyA{zHmPjNBLh>I7<J*<d`15kmX}t0k8#9Kq3((se}I
+z`*@?8V3Ha-M)8?gYf(%HYAEOwCXXpWf>We)&v#-Ku3&Rk!ijsR>s4H>_x70WU{?h}
+zVG)Whfgq>6OqW2gvjQi)CG66O9=nhxS{BkGM5<ulle@5cLy1&*pih3TO_MHV>lC(x
+zc-uvqhM%Z2q{r7U-*F<~wcLXbP{HfC!Pk@e2jw(h9)Cn`^*M*QbQHtj(06l6*KW>7
+Wp>R>@CKyB($u)><9g&&%+`#{(hB!(9
+
+diff --git a/target/classes/com/ch/teampro1/dao/ITeamDao.class b/target/classes/com/ch/teampro1/dao/ITeamDao.class
+index 160941e284a2f4a48766e79a2f36f91b2031694c..cfd6f0072ed6d0f16d361e8c8bd8758fdac920f5 100644
+GIT binary patch
+delta 139
+zcmcb}ahsFt)W2Q(7#J9g7&JF>#WVBersgK47WrfrmoPFIX-pPi)|h;ciA~ws&YF>d
+zGdUwWB-c4VFOQKy5TejCuPn19H3g)8avHM+qsZib<{d^Xj10;QYz&MH>_C&57*v3K
+WRR%5w1|Y4*zz-J}0J7A<Dl`Cqk{uxc
+
+delta 40
+vcmcc3d69$b)W2Q(7#J9g7*scM#WPPn&8*5OIQb*<4lV{p24$cG6N3r>7QG6m
+
+diff --git a/target/classes/com/ch/teampro1/dao/TeamDaoImpl.class b/target/classes/com/ch/teampro1/dao/TeamDaoImpl.class
+index db115ee5ef17729e7eabb58048012a00c4936450..3161a4ae7e19e567f30f7347ed597f500a93642c 100644
+GIT binary patch
+delta 414
+zcmX|-Jx>Bb5Qg8m7;o=5RL~Ox8X5`(!zGxA2_lIf1;NUou`m`QiD)<spMFsJ7pAn)
+z+D46y7A6*2@DHrC^B33}mxYi`W}bKFo!QC$1UoZk=kMheKmzRtGop`_i{*o2b+c5f
+z6B4uR9g5GVR#F00f>Ag+$(PqEt}D<W_<Gi?+bq?Khusc=7RU4o*?g@>X_P<ooMgXP
+zryze@0d_@_!hI6_E*y#s)P&*C+&~qKB*m3_G*)SWe~lelQo3NKDZ{sBo;G9*v+Z#x
+zrz(4%ByB0WleF8v6RcSd?JJeFGIXfuM$)mQJe|rZf$e3aLGn~#L&K!}4-GYVWnPp-
+zGF#CnO!@222x+)i^)VTTRjmnM*U|IAk8!C84Sq8N)Z|Zdn%do6sl~P#*3M%5W!QAp
+TT_n_dSi`v*c>$w8^b+_7p9^A>
+
+delta 221
+zcmX>l`&^3a)W2Q(7#J9g7)m#CsjyF;$)3X~G?|S<i;-`#A%{1k$mCiM7e>j+f}HY`
+zA9Cn3$^lt^jLKksJ*PgS2AFk@)0|Nk$P%Bto{w#^GM5db(c}cKFh+B@*cC2wM!U(0
+z-13vPxlI{efGj^oFR<)!Zga*!FiVWboG~2CN(HiF!K^Jj_KeA37B{awV+NR&#B0l#
+h3p7Do+J?cFfsuiUp$O;$CWc}LP9V(&6e(d~005k<GQ0o)
+
+diff --git a/target/classes/com/ch/teampro1/service/BoardService.class b/target/classes/com/ch/teampro1/service/BoardService.class
+index 22c463030561a48c8dc4833655c67db50754ddc9..9bbb6e962b52ff1beb95a174ffe13a4c9e99a56a 100644
+GIT binary patch
+delta 52
+zcmX@k@|<Nu1|y@><OPhfN<pdCK3R!ni52?AsYPWusU`XuB_##=9zY^EwYWGlKW}me
+G<9-0`p%ae)
+
+delta 20
+ccmaFPa-3yD1|y@=<O7VdOhKuWS1|4e0829m7ytkO
+
+diff --git a/target/classes/com/ch/teampro1/service/BoardServiceImpl.class b/target/classes/com/ch/teampro1/service/BoardServiceImpl.class
+index 807c10e14e8b4a709bcd194546b1b66ef3012e9c..01b8936da23bf58130e5676fe2c3e48343f9c608 100644
+GIT binary patch
+delta 331
+zcmaiwJxhXd6vco4M>2YzlFCRUQqe3mQ+jbIwV@Ub!J(<qL9iDrdPKsZKE!{Eg8B&2
+z5EMo4Z%b1xEv>C>Ez!+BK+C!3aL(ag?!Ir=Z$5pWoCD)L9-3a$n2qS7;g1)VOZC!b
+z(k^e*SIf0zrB+){<^&eXw!O4gO-J(<{amzj#-$FJVO=y6u~z%fRRsR&>xQ|f+}dl+
+zt3G|;^5}+@Q3FTER#hzqX(L1@gY*!_!w^A+i4!43j44LQiK;NlHVJkZ<5aGHWr8;*
+zd6&+Iq&}JEi?ni*QN3hUh#9@r@uKFM>sDMTl@k_i$z$Nq&n{oKK$rX>fJ4xt8@J3~
+YcEvTS$!@rnw85PygL}CXoZ>ye4_ALpNdN!<
+
+delta 229
+zcmWlTJxfAy7{!0j1qJ`tQZqCVw7MnTie3~cEeMwgX>;-$I0b!z_SVNq8u|+1mL$EH
+zL%S_4u1-c<OY}IMbAE6*=dN&{cOQR`1E9p{!L2yGc7gNB@f_!gfp*-U&Rkbgdh0hN
+zt7E?@xn3B*lGZ9Q)=09>G67jO%x$tukqTQ>3AtdKHapxH?Xpjw13o$A%ho2=nR3Jr
+z$NW;2C^gA&A_1rRy)c%#jutQFT+@j#a)yVe^+dkhAZ1@OmceI<wCUWv@QN6Hv*a<f
+JXAm{=4*&NHE3p6o
+
+diff --git a/target/classes/com/ch/teampro1/service/ITeamService.class b/target/classes/com/ch/teampro1/service/ITeamService.class
+index 99167b58ff5450ca775e7c5caf591eede1834b46..1b64ba0bfd072ff219aee2c0a3c3be8f9f8e703a 100644
+GIT binary patch
+delta 135
+zcmcc1@tl+E)W2Q(7#J9g7&JF>r8D#8rsgK47WrfrmoPFIX-wYFsHbdgXU)jKnVgXw
+zlIxtGm&eE;2vOvjSC(0lngUWgIgeR~QDpLL<{d^Xj10;QYz&MH>_AhQ7*v3KRR%5w
+S1|Y4*zz-J}0J7A<Dl`BY4;+&K
+
+delta 40
+vcmaFPd6$Fh)W2Q(7#J9g7*scMr87^y%&f^MIQcL04lV{p24$cG6N3r>9IXo9
+
+diff --git a/target/classes/com/ch/teampro1/service/TeamServiceImpl.class b/target/classes/com/ch/teampro1/service/TeamServiceImpl.class
+index 3f072c3c0d0dd970b8e124bf933176fb6c3c6632..4a587db74f06578f100b907c98e1fcde76fe3643 100644
+GIT binary patch
+delta 464
+zcmZXQO-n*i5Qg8m!S#OiVQE<wm!L%oy09(;qL8%_-2_6bHtEf;u1ZSKrsxM$i}M4b
+z)-4iRl#4d)`W^j+w$|LExF`<HywA)#XE^6EavL>1hl6(jDRlZqSe@})@7O&n*1J7I
+zYE#@#C3n-=w23HAER+!@=;d0o<n6UvEx%f~P=!qhjt29s^Lo#%`15}E)ItMEv8r|`
+zEN;{|&5Bnw&squOXhmFWOX5z~L?w_QdqRDtjR_5zViPK84kejNw8haD-^@F*o6{Z2
+zj(ra8kCi6A^aK?p#SDiIq?$7|acLyzP|^q2kH+;3m8Ejc4ArC>m=1ZY>;k_Y3KsdZ
+z6jU(Hc^kwBFyb$Wyul?r%kCUURd%`vvbIJp%wvIxP!&Ic<xow*(;xeVT*+TT4e_9@
+YhnmX28?V^17FOWN(H3;h{;oFg3s?hV8~^|S
+
+delta 239
+zcmeB^UL?VF>ff$?3=9lL3~3v=MA;_KXUk<2n#{|t#mG0=g58r*WO5U`6Qks0Mo#g`
+z{9GK9pRnsP%E5Vt9J-9ka9$mdrvc}k<}hW{1@b}|jew;5<Wf#kMsu+2At1{Zs?L<r
+z8Oq|AoWiBc=ndwr<T7Op0JA1=b4>mR6b}RQoViUIW1!-;j7ebDQ*K+vbTG?`$CNP#
+b$dVOhVn_!1iHRYFffGoxF)%WuGB5xDPsTI_
+
+diff --git a/teampro1.sql b/teampro1.sql
+index b064ccf..69e0fd4 100644
+--- a/teampro1.sql
++++ b/teampro1.sql
+@@ -1,7 +1,7 @@
+------------------------ È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ member
++----------------------- È¸¿ø°ü¸® member
+ DROP TABLE member;
+- ìˆ˜ì •
+--- È¸ï¿½ï¿½ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½
++
++-- È¸¿øÅ×ÀÌºí »ı¼º
+ CREATE TABLE member (
+   mId VARCHAR2(20) PRIMARY KEY,
+   mPw VARCHAR2(25) NOT NULL,
+@@ -15,36 +15,36 @@ CREATE TABLE member (
+   mAddress3 VARCHAR2(100),
+   mOut NUMBER DEFAULT 1
+ );
+--- È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
++-- È¸¿ø°¡ÀÔ
+ INSERT INTO  member 
+-  VALUES ('user', '1234','È«ï¿½æµ¿', '010', '1234', '1234', 'abcd@naver.com', '05055', 'ï¿½ï¿½ï¿½ï¿½ï¿½', 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½', 1);
++  VALUES ('user', '1234','È«±æµ¿', '010', '1234', '1234', 'abcd@naver.com', '05055', '¼­¿ï½Ã', '¸¶Æ÷±¸', 1);
+   
+--- È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
++-- È¸¿øÁ¤º¸º¸±â
+ SELECT *
+   FROM MEMBER
+   WHERE MID='user' AND MOUT=1;
+ 
+--- È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
++-- È¸¿øÁ¤º¸¼öÁ¤
+ UPDATE MEMBER
+-  SET MPW='1111', MPHONE1='017', MPHONE2='3333', MPHONE3='4444', MEMAIL='a@a.com', MADDRESS1='01', MADDRESS2='ï¿½ï¿½ï¿½', MADDRESS3='ï¿½ß±ï¿½'
++  SET MPW='1111', MPHONE1='017', MPHONE2='3333', MPHONE3='4444', MEMAIL='a@a.com', MADDRESS1='01', MADDRESS2='¿ï»ê', MADDRESS3='Áß±¸'
+   WHERE MID='user';
+ 
+--- È¸ï¿½ï¿½Å»ï¿½ï¿½
++-- È¸¿øÅ»Åğ
+ UPDATE MEMBER
+-  SET MPW='1111', MPHONE1='017', MPHONE2='3333', MPHONE3='4444', MEMAIL='a@a.com', MADDRESS1='01', MADDRESS2='ï¿½ï¿½ï¿½', MADDRESS3='ï¿½ß±ï¿½', MOUT=0
++  SET MPW='1111', MPHONE1='017', MPHONE2='3333', MPHONE3='4444', MEMAIL='a@a.com', MADDRESS1='01', MADDRESS2='¿ï»ê', MADDRESS3='Áß±¸', MOUT=0
+   WHERE MID='user';
+ 
+--- ï¿½ï¿½ï¿½Ìµï¿½Ã£ï¿½ï¿½
++-- ¾ÆÀÌµğÃ£±â
+ SELECT *
+   FROM MEMBER
+   WHERE MEMAIL='abcd@naver.com' and MPHONE1='010' AND MPHONE2='1234' AND MPHONE3='1234' and MOUT=1;
+ 
+--- ï¿½ï¿½ï¿½Ã£ï¿½ï¿½
++-- ºñ¹øÃ£±â
+ SELECT *
+   FROM MEMBER
+   WHERE MID='user' and MEMAIL='abcd@naver.com' and MOUT=1;
+   
+---------------------------ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ team
++--------------------------ÆÀ°ü¸® team
+ DROP TABLE team;
+ 
+ CREATE TABLE team(
+@@ -55,7 +55,7 @@ DROP SEQUENCE tId_SQ;
+ 
+ CREATE SEQUENCE tId_SQ;
+ 
+--------------------------È¸ï¿½ï¿½_ï¿½ï¿½ tm_conn
++-------------------------È¸¿ø_ÆÀ tm_conn
+ DROP TABLE tm_conn;
+ 
+ CREATE TABLE tm_conn (
+@@ -64,76 +64,154 @@ CREATE TABLE tm_conn (
+   tmLeader NUMBER(1) DEFAULT 0,
+   tmOk NUMBER(1) DEFAULT 0); 
+ 
+---- ï¿½ï¿½Ã¼ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
++--- ÀüÃ¼ ÆÀ ¸ñ·Ï Ãâ·Â
+ SELECT * 
+   FROM TEAM
+   ORDER BY TID DESC;
+ 
+---- ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+-INSERT INTO TEAM VALUES(tId_SQ.NEXTVAL, 'ï¿½ï¿½1');
++--- ÆÀ »ı¼º
++INSERT INTO TEAM VALUES(tId_SQ.NEXTVAL, 'ÆÀ1');
+ 
+---- ï¿½ï¿½ ï¿½ï¿½Ã¼
++--- ÆÀ ÇØÃ¼
+ DELETE FROM team WHERE tId=1;
+ 
+---- ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¶ï¿½ tmConn insert
+-INSERT INTO TM_CONN VALUES ((select tId from TEAM where tName='ï¿½ï¿½1'), 'user14', 1, 1);
++--- ÆÀÀå: ÆÀ»ı¼ºÇÒ¶§ tmConn insert
++INSERT INTO TM_CONN VALUES ((select tId from TEAM where tName='ÆÀ1'), 'user14', 1, 1);
+ 
+---- mIdï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
++--- mId°¡ Âü¿©ÇÏ°í ÀÖ´Â ÆÀ ¸ñ·Ï Ãâ·Â
+ SELECT * 
+   FROM TM_CONN TM, TEAM T 
+   WHERE TM.TID=T.TID AND TM.MID='user14' AND TM.TMOK=1 
+   ORDER BY T.TID DESC;
+   
+---- ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½Ò¶ï¿½ tmConn delete
++--- ÆÀÀå: ÆÀÇØÃ¼ÇÒ¶§ tmConn delete
+ DELETE FROM TM_CONN WHERE tId=1 AND mId='user14' AND tmLeader=1;
+ 
+---- mIdï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½
++--- mId°¡ ÆÀÀåÀ¸·Î ÀÖ´Â ÆÀ ¸®½ºÆ® Ãâ·Â
+ SELECT T.TID, T.TNAME 
+   FROM TEAM T, TM_CONN TM 
+   WHERE T.TID=TM.TID AND TM.MID='user14' AND TM.TMLEADER=1;
+ 
+---- ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã» ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
++--- ÆÀ¿ø: ÆÀ Âü¿©¿äÃ» º¸³»±â 
+ INSERT INTO TM_CONN 
+   VALUES (3,'user10', 0, 0); 
+ 
+---- ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã» ï¿½ï¿½ï¿½ï¿½
++--- ÆÀÀå: ÆÀ Âü¿©¿äÃ» ½ÂÀÎ
+ UPDATE TM_CONN 
+   SET TMOK=1 
+   WHERE MID='user2' AND TID=1;
+ 
+---- ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã» ï¿½Åºï¿½ 
++--- ÆÀÀå: ÆÀ Âü¿©¿äÃ» °ÅºÎ 
+ DELETE 
+   FROM TM_CONN 
+   WHERE MID='user2' AND TID=1;
+   
+---- ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Å»ï¿½ï¿½
++--- ÆÀ¿ø ÆÀ Å»Åğ
+ DELETE FROM TM_CONN WHERE MID='user15' AND TID=1;
+ 
+---- ï¿½ï¿½ï¿½Ô¿ï¿½Ã»ï¿½ßºï¿½: ï¿½ï¿½ï¿½Ô¿ï¿½Ã»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
++--- °¡ÀÔ¿äÃ»Áßº¹: °¡ÀÔ¿äÃ»¸¸ ÇßÀ»¶§
+ SELECT COUNT(*) 
+   FROM TM_CONN 
+   WHERE MID='user15' AND TID=1 AND TMOK=0;
+ 
+---- ï¿½ï¿½ï¿½Ô¿ï¿½Ã»ï¿½ßºï¿½: ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ÔµÇ¾ï¿½ï¿½ï¿½ï¿½ï¿½ 
++--- °¡ÀÔ¿äÃ»Áßº¹: ÀÌ¹Ì °¡ÀÔµÇ¾úÀ»¶§ 
+ SELECT COUNT(*) 
+   FROM TM_CONN 
+   WHERE MID='user15' AND TID=1 AND TMOK=1;
+ 
+---- tId ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã» ï¿½ï¿½ï¿½
++--- tId ÆÀ Âü¿© ¿äÃ» ¸ñ·Ï
+ SELECT M.MID, M.MNAME, M.MEMAIL, TM.TID 
+   FROM MEMBER M, TM_CONN TM 
+   WHERE M.MID=TM.MID AND TM.TID=1 AND TM.TMOK=0;
+ 
+---- tId ï¿½ï¿½ï¿½ï¿½Ã³ï¿½ï¿½ï¿½
++--- tId ¿¬¶ôÃ³¸ñ·Ï
+ SELECT *
+   FROM member m, tm_conn TM , team t 
+   WHERE m.mId = tm.mId and t.tId = tm.tId and tmOk=1 and tm.tId=1;
+   
+---- ï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½Ë»ï¿½
+-SELECT * FROM TEAM WHERE LOWER(TNAME) LIKE (LOWER('%ï¿½ï¿½%'));
++--- ÆÀ ÀÌ¸§ °Ë»ö
++SELECT * FROM TEAM WHERE LOWER(TNAME) LIKE (LOWER('%ÆÀ%'));
+ 
+---- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã» ï¿½Ë¸ï¿½(user14ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã» ï¿½ï¿½ï¿½ï¿½)
++--- Âü¿©¿äÃ» ¾Ë¸²(user14°¡ ÆÀ¸®´õ·Î ÀÖ´Â ¸ğµç ÆÀ¿¡ µé¾î¿Â ¿äÃ» °¹¼ö)
+ SELECT COUNT(*)
+   FROM TM_CONN
+   WHERE TID IN (SELECT TID FROM TM_CONN
+-                WHERE MID='user14' AND TMLEADER=1) AND TMOK=0;
+\ No newline at end of file
++                WHERE MID='user14' AND TMLEADER=1) AND TMOK=0;
++                
++                
++                
++ -----------------------------board
++ 
++ CREATE TABLE board(
++mId varchar2(20) ,
++tId number(10) ,
++bId NUMBER(10) PRIMARY KEY NOT NULL,
++bContent VARCHAR(500),
++bDate timestamp NOT NULL,
++bNo number(2) NOT NULL,
++bfId number(10),
++bfName varchar2(50),
++biId number(10),
++biName varchar2(50),
++bStart timestamp,
++bEnd timestamp,
++bTitle varchar2(100),
++bLoc varchar2(100),
++bMemo varchar2(100));
++
++commit;
++
++ select * from BOARD_RE;
++select * from board;
++
++DROP SEQUENCE bId_SQ;
++CREATE SEQUENCE bId_SQ;
++
++
++	INSERT INTO Board (mId,tId, bId, bContent, bDate, bNo, bfId, bfName, biId, biName, bStart, bEnd, bTitle, bLoc,bMemo)
++		  VALUES('huwon90','1', bId_SQ.NEXTVAL, '°Ô½ÃÆÇ±Û³»¿ë', SYSDATE, 2, null, '', null, '', 
++		  SYSDATE+1, SYSDATE+2, '±ÛÁ¦¸ñ', 'À§Ä¡', '¸Ş¸ğ');
++      
++	INSERT INTO Board (mId,tId, bId, bContent, bDate, bNo, bfId, bfName, biId, biName, bStart, bEnd, bTitle, bLoc,bMemo)
++		  VALUES(#{mId, jdbcType=VARCHAR}, #{tId, jdbcType=INTEGER}, bId_SQ.NEXTVAL, '', SYSDATE, 2, null, '', null, '', 
++		  #{bStart}, #{bEnd}, #{bTitle}, #{bLoc}, #{bMemo});
++
++-------------------------
++COMMIT;
++
++DROP TABLE BOARD_RE;
++CREATE TABLE BOARD_RE(
++    bId NUMBER(10) REFERENCES BOARD(bId), -- °Ô½Ã¹° ¹øÈ£
++    mId varchar2(20) REFERENCES MEMBER(mId), -- ÀÛ¼ºÀÚ
++    brId NUMBER(10) PRIMARY KEY, -- ´ñ±Û¹øÈ£
++    bRcontent VARCHAR2(500) NOT NULL, -- ´ñ±Û³»¿ë
++    bRDate timestamp DEFAULT sysdate, -- ÀÛ¼ºÀÏÀÚ
++    brDeleteYN CHAR(1 BYTE) DEFAULT 'n',-- »èÁ¦¿©ºÎ  
++    brParent NUMBER(10), --ºÎ¸ğ´ñ±Û
++    brDepth number(10) DEFAULT 0, --±íÀÌ
++    brOrder number(10) DEFAULT 1 --¼ø¼­
++    ); 
++ select * from BOARD_RE;
++ 
++ DROP SEQUENCE brId_SQ;
++ CREATE SEQUENCE brId_SQ; --brId_SQ ½ÃÄı½º
++ 
++insert into BOARD_RE(mId,bId,brId,bRcontent) values ('user',1, brId_SQ.NEXTVAL,'´ñ±Û1');
++insert into BOARD_RE(mId,bId,brId,bRcontent) values ('user',23, brId_SQ.NEXTVAL,'´ñ±Û1');
++insert into BOARD_RE(mId,bId,brId,bRcontent) values ('user',3, brId_SQ.NEXTVAL,'´ñ±Û1');
++commit;
++
++	SELECT * FROM board, board_re WHERE board.bId = board_re.bId;
++
++commit;    
++ select * from board where tId= 1 order by bId desc;
++    
++select * from BOARD_RE 
++		order by brId desc;
++                
++                
++                
++                
++                            
++                
++                
+\ No newline at end of file
+-- 
+2.10.0.windows.1
+

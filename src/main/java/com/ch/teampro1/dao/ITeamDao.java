@@ -2,7 +2,6 @@ package com.ch.teampro1.dao;
 
 import java.util.List;
 
-import com.ch.teampro1.model.Member;
 import com.ch.teampro1.model.MemberTmConn;
 import com.ch.teampro1.model.Team;
 import com.ch.teampro1.model.TeamTmConn;
@@ -28,7 +27,4 @@ public interface ITeamDao {
 	
 	public List<Team> searchTeam(String tName);
 	public int requestCount(String mId);
-	public List<Member> memberList();
-	public int chkTmConn(TmConn tmConn);
-	public List<TeamTmConn> memberInvitedList(String mId);
 }

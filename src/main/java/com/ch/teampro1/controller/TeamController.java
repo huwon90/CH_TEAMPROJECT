@@ -59,12 +59,12 @@ public class TeamController {
 		model.addAttribute("leaderTeamList", list);
 		int requestCount = tService.requestCount(mId);
 		model.addAttribute("requestCount", requestCount);
-		
-		List<TeamTmConn> invitedlist = tService.memberInvitedList(mId);
+
+		List<TeamTmConn> invitedlist = tService.memberInvitedLis(mId);
 		System.out.println("초대받은멤버리스트 실행되니");
-		model.addAttribute("mId",mId);
+		//model.addAttribute("mId",mId);
 		model.addAttribute("invited", invitedlist);//초대받은 리스트
-		
+
 		return "team/leaderTeamList";
 	}
 	
@@ -122,7 +122,6 @@ public class TeamController {
 			
 			System.out.println("실행되니");
 			int result3 = tService.insertTeamTmConn(teamTmConn);
-			System.out.println(teamTmConn.gettId());
 			if( result3 > 0){
 				System.out.println("팀Conn생성");
 				model.addAttribute("teamTmConn", teamTmConn);
@@ -171,6 +170,7 @@ public class TeamController {
 		model.addAttribute("requestCount", requestCount);
 		return "team/searchResult";
 	}
+<<<<<<< HEAD
 	@RequestMapping(value="listMember", method=RequestMethod.GET)
 	public String listMember(String mId, Model model){
 		List<Member> memberList = tService.memberList();
@@ -218,7 +218,7 @@ public class TeamController {
 			model.addAttribute("msg", "거절실패");
 			System.out.println("프로젝트 초대 거절실패");
 		}
-		return "redirect:leaderTeamList?mId="+tmConn.getmId();
+		return "redirect:leaderTeamList.do?mId="+tmConn.getmId();
 	}
 
 }
