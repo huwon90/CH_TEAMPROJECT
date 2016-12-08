@@ -45,5 +45,15 @@ public class BoardDaoImpl implements BoardDao{
 	public int reply_insert(BoardRe boardre) {
 		return session.insert("insert_reply", boardre);
 	}
+	
+	@Override
+	public int update_file(Board board) {
+		return session.update("update_file", board);
+	}
+
+	@Override
+	public Board detail(int bId) {
+		return session.selectOne("detail", bId);
+	}
 
 }

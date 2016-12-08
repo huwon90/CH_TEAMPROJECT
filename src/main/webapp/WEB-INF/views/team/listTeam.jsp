@@ -43,26 +43,15 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 <script>
-<<<<<<< HEAD
 	$(document).ready(function() {
-		for (var i = 0; i < "${fn:length(listjoinTeam) }"; i++) {
-=======
-   $(document).ready(function() {
-      for (var i = 0; i < "${fn:length(listjoinTeam) }"; i++) {
->>>>>>> face97c5e35fe2810335766c00b5bf6a6c03127c
-            $('#ee' + i).click(function () {
-               $(this).children('.team_out').slideToggle();
-                $(this).css('cursor','pointer');
-            });
-<<<<<<< HEAD
-		}
-	}); 
-=======
-      }
-   }); 
->>>>>>> face97c5e35fe2810335766c00b5bf6a6c03127c
-
-   
+	    for (var i = 0; i < "${fn:length(listjoinTeam) }"; i++) {
+			$('#ee' + i).click(function () {
+			   $(this).children('.team_out').slideToggle();
+			    $(this).css('cursor','pointer');
+			});
+	    }
+	});
+	
     $(document).ready(function () {
         for (var i = 0; i < "${fn:length(listTeam) }"; i++) {
             $('#slidebottom' + i).mouseenter(function () {
@@ -88,61 +77,12 @@
 
 <jsp:include page="../member/header.jsp" />
 
-<<<<<<< HEAD
-	<div id="c1">
-		<ul>
-			<li>내가 가입한 팀</li>
-		</ul>
-	</div>
 
-	<div id="c2">
-		<div class="dashed" onclick="insertTeam();">새 프로젝트 생성</div>
-		<%--  <c:set var="index" value="0"></c:set> --%>
-		<c:forEach var="jointeam" items="${listjoinTeam }" varStatus="status">
-			<div class="dashed" id="ee${status.index }">
-				<%-- <a href="mainpage.do?tId=${jointeam.tId }&mId=${jointeam.mId}">팀원연락처</a> --%>
-				<a href="boardlist.do?tId=${jointeam.tId }">${jointeam.tName }</a> 
-				<span>▼</span>
-				<ul class="team_out">
-					<c:if test="${jointeam.tmLeader == 0 }">
-						<li><a href='outTeam.do?mId=${mId }&tId=${jointeam.tId }'">팀
-								탈퇴</a></li>
-					</c:if>
-					<c:if test="${jointeam.tmLeader == 1 }">
-						<li><a
-							href='removeTeam.do?tId=${jointeam.tId }&mId=${jointeam.mId}&tmLeader=${jointeam.tmLeader }'">팀
-								해체</a></li>
-						<%-- <li><a href="leaderTeamList.do?mId=${mId }">참여요청 목록</a></li> --%>
-					</c:if>
-				</ul>
-			</div><!-- ee -->
-			<%-- <c:set var="index" value="${index +1 }"></c:set> --%>
-		</c:forEach>
-
-	</div>
-
-	<div id="c3">
-		<ul>
-			<li>전체 팀 목록</li>
-		</ul>
-	</div>
-	<div id="c4">
-		<c:forEach var="team" items="${listTeam }" varStatus="status">
-				<div id="slidebottom${status.index }" class="dashed2">
-					<a href="boardlist.do?tId=${team.tId }">${team.tName }</a>
-					<div class="requestslide" onclick="location.href='requestTeam.do?mId=${mId }&tId=${team.tId }'">참여신청</div>
-				</div>
-		</c:forEach>
-	</div>
-	
-
-=======
    <div id="c1">
       <ul>
          <li>내가 가입한 팀</li>
       </ul>
    </div>
->>>>>>> face97c5e35fe2810335766c00b5bf6a6c03127c
 
    <div id="c2">
       <div class="dashed" onclick="insertTeam();">새 프로젝트 생성</div>
