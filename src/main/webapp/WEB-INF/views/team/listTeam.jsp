@@ -43,16 +43,15 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 <script>
-   $(document).ready(function() {
-      for (var i = 0; i < "${fn:length(listjoinTeam) }"; i++) {
-            $('#ee' + i).click(function () {
-               $(this).children('.team_out').slideToggle();
-                $(this).css('cursor','pointer');
-            });
-      }
-   }); 
-
-   
+	$(document).ready(function() {
+	    for (var i = 0; i < "${fn:length(listjoinTeam) }"; i++) {
+			$('#ee' + i).click(function () {
+			   $(this).children('.team_out').slideToggle();
+			    $(this).css('cursor','pointer');
+			});
+	    }
+	});
+	
     $(document).ready(function () {
         for (var i = 0; i < "${fn:length(listTeam) }"; i++) {
             $('#slidebottom' + i).mouseenter(function () {
@@ -77,6 +76,7 @@
 <body>
 
 <jsp:include page="../member/header.jsp" />
+
 
    <div id="c1">
       <ul>

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <c:set var="conPath" value="<%=request.getContextPath()%>" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -13,7 +14,6 @@
 	type="text/css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-	
 	
 <style>
 #board_content table {
@@ -109,12 +109,12 @@
 			<c:if test="${board.bNo==1 }">
 				<table class=table>
 					<tr id="chk">
-						<td colspan="3"><input type="button" value="수정" /> <input
-							type="button" value="삭제" onclick="location.href='delete.do?bId=${board.bId}'" /></td>
+						<td colspan="3"><input type="button" value="수정" onclick="location.href='updateForm.do?bId=${board.bId}&tId=${param.tId }'" class="go_right"/> <input
+							type="button" value="삭제" onclick="location.href='delete.do?bId=${board.bId}&tId=${param.tId }'" /></td>
 					</tr>
 					<tr id="profile">
 						<td rowspan="2" class="profile1">프로필사진</td>
-						<td class="id" data-bId="${board.bId }">${board.bId }</td>
+						<td class="id">${board.bId }</td>
 						<td class="name">${board.mId }</td>
 					<tr>
 						<td colspan="2" class="date">${board.bDate }</td>
@@ -124,22 +124,22 @@
 					</tr>
 					<c:if test="${board.bfName!=null }">
 						<tr>
-							<td colspan="3" class="file1"><a href="${conPath}/upload/${board.bfName }">${board.bfName }</a></td>
+							<td>첨부된 파일</td>
+					<td colspan="2" class="file1"><a href="${conPath}/upload/${board.bfName }">${board.bfName }</a></td>
 
 						</tr>
 					</c:if>
 					<c:if test="${board.biName!=null }">
-						<tr>
-							<td colspan="3" class="image1">${board.biName }</td>
+						<tr><td>첨부된 이미지</td>
+					<td colspan="2" class="image1"><a href="${conPath}/upload/${board.biName }"><img src="${conPath}/upload/${board.biName }"></a></td>
 						</tr>
 					</c:if>
-				</table>
 			</c:if>
 
 			<c:if test="${board.bNo==2 }">
-    <table class="table">
+    			<table>
 						<tr id="chk">
-							<td colspan="3"><input type="button" value="일정삭제" onclick="location.href='delete.do?bId=${board.bId}'" /></td>
+							<td colspan="3"><input type="button" value="일정삭제" onclick="location.href='delete.do?bId=${board.bId}'" class="go_right" /></td>
 						</tr>
 						<tr id="profile">
 							<td rowspan="2" class="profile1">프로필사진</td>
@@ -154,7 +154,10 @@
 						</tr>
 						<tr>
 							<td>일정</td>
-							<td colspan="2">${board.bStart }~ ${board.bEnd }</td>
+							<td colspan="2">
+							<fmt:parseDate value="${board.bStart }" pattern="yyyy-MM-dd HH:mm:ss" var="myDate"></fmt:parseDate>
+							<fmt:parseDate value="${board.bEnd }" pattern="yyyy-MM-dd HH:mm:ss" var="myDate2"></fmt:parseDate>
+							<fmt:formatDate value="${myDate }" pattern="yyyy-MM-dd"/> ~ <fmt:formatDate value="${myDate2 }" pattern="yyyy-MM-dd"/></td>
 						</tr>
 						<tr>
 							<td>장소</td>
@@ -166,22 +169,20 @@
 						</tr>
 			</c:if>
 			<!-- 댓글 집어넣기 로직 -->
-			 <c:forEach var="re" items="${relist}">
+			<c:forEach var="re" items="${relist}">
                <c:if test="${re.bId == board.bId }">
-    		<tr>
-   			<td> ${re.mId }  </td>
-    		<td width="620">댓글 내용 : ${re.bRcontent }          ${re.bRDate}</td>
-    		
-    		<td><button onclick="location.href='replydelte.do?brId=${re.brId}'" >댓글삭제</button></td>
- 			</tr>
-    		</c:if>
-   				</c:forEach>
-   				<tr>
+    				<tr><td> ${re.mId }  </td>
+    					<td width="620">댓글 내용 : ${re.bRcontent }          ${re.bRDate}</td>
+    					<td><button onclick="location.href='replydelte.do?brId=${re.brId}'" >댓글삭제</button></td>
+ 					</tr>
+    			</c:if>
+			</c:forEach>
 				<form action="replyinsert.do" method="post">
 					<input type="hidden" name="mId" value="${mId}">
 					<input type="hidden" name="tId" value="${param.tId }">
 					<input type="hidden" name="bId" value="${board.bId }">
 					
+   				<tr>
    				<td colspan="2"><textarea  name="bRcontent"  cols="100" placeholder="댓글을 입력하세요" required="required"></textarea></td>
    				<td><input   type="submit" value="댓글쓰기" class="btn btn-primary"></td></td>
    				</form>
