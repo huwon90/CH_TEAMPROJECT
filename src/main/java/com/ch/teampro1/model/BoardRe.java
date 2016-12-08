@@ -3,10 +3,10 @@ package com.ch.teampro1.model;
 import java.sql.Timestamp;
 
 public class BoardRe {
+	private String mId;
 	private int tId;
     private int bId;
     private int brId;
-	private String mId;
     private String bRcontent;
     private Timestamp bRDate;
     private String brDeleteYN;    

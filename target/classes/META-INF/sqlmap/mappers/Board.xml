@@ -57,7 +57,7 @@
 	<select id="insert_reply" parameterType="com.ch.teampro1.model.BoardRe">
 		insert into BOARD_RE
 		(mId,bId,brId,bRcontent)
-		 values (#{mId, jdbcType=VARCHAR},#{bId, jdbcType=INTEGER}, brId_SQ.NEXTVAL,#{bRcontent});
+		 values (#{mId, jdbcType=VARCHAR},#{bId, jdbcType=INTEGER},brId_SQ.NEXTVAL,#{bRcontent})
 	</select>
 	
 	<delete id="delete">
