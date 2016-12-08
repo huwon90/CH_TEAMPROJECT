@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ch.teampro1.model.Board;
 import com.ch.teampro1.model.BoardRe;
+import com.ch.teampro1.model.MemberTmConn;
 
 public interface BoardDao {
 	//게시글 목록
@@ -14,4 +15,5 @@ public interface BoardDao {
 	public int insert_schedule(Board board);
 	public int reply_insert(BoardRe boardre);
 	public int delete(int bId);
+	public List<MemberTmConn> phoneList(int tId);
 }

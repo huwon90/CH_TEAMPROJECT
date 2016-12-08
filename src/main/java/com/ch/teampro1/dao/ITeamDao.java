@@ -24,7 +24,6 @@ public interface ITeamDao {
 	public int insertTeamTmConn(TeamTmConn teamTmConn);
 	public int removeTeam(Team team);
 	public int removeTeamTmConn(TeamTmConn teamTmConn);
-	public List<MemberTmConn> phoneList(String tId);
 	
 	public List<Team> searchTeam(String tName);
 	public int requestCount(String mId);

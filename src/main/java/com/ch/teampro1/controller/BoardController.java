@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ch.teampro1.model.Board;
 import com.ch.teampro1.model.BoardRe;
+import com.ch.teampro1.model.MemberTmConn;
 import com.ch.teampro1.service.BoardService;
 
 @Controller
@@ -20,11 +21,12 @@ public class BoardController {
 	private BoardService service;
 
 	@RequestMapping(value="boardlist", method=RequestMethod.GET)
-	public ModelAndView boardlist(int tId) throws Exception{
-		System.out.println(tId);
+	public ModelAndView boardlist(MemberTmConn memberTmConn, int tId, Model model) throws Exception{
         ModelAndView modelandview = new ModelAndView();
         List<Board> list = service.listAll(tId);
         List<BoardRe> relist =service.boardreList();
+        List<MemberTmConn> phoneList = service.phoneList(tId);
+		modelandview.addObject("phoneList",phoneList);
         modelandview.addObject("list", list);
         modelandview.addObject("relist", relist);
         modelandview.setViewName("board/list"); 

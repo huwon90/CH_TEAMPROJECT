@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.ch.teampro1.model.Board;
 import com.ch.teampro1.model.BoardRe;
+import com.ch.teampro1.model.MemberTmConn;
 
 public interface BoardService {
 	
@@ -20,6 +21,8 @@ public interface BoardService {
 	public int insert_schedule(Board board);
 	
 	public int delete(int bId);
+
+	public List<MemberTmConn> phoneList(int tId);
 	
 
 }

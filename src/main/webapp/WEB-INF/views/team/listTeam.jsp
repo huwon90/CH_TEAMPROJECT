@@ -89,7 +89,7 @@
       <%--  <c:set var="index" value="0"></c:set> --%>
       <c:forEach var="jointeam" items="${listjoinTeam }" varStatus="status">
          <div class="dashed" id="ee${status.index }">
-            <%-- <a href="mainpage.do?tId=${jointeam.tId }&mId=${jointeam.mId}">팀원연락처</a> --%>
+            
             <a href="boardlist.do?tId=${jointeam.tId }">${jointeam.tName }</a> 
             <span>▼</span>
             <ul class="team_out">

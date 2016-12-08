@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<table border="1">
+<%-- <table border="1">
 
 		<tr><th>팀명</th><th>회원ID</th><th>회원이름</th><th>연락처</th></tr>
 		<c:forEach var="phone" items="${phoneList }">
@@ -22,7 +22,7 @@
 			
 		</c:forEach>
 		
-</table>
+</table> --%>
 
 
 </body>

@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.ch.teampro1.dao.BoardDao;
 import com.ch.teampro1.model.Board;
 import com.ch.teampro1.model.BoardRe;
+import com.ch.teampro1.model.MemberTmConn;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -72,6 +73,11 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public int reply_insert(BoardRe boardre) {
 		return boardDao.reply_insert(boardre);
+	}
+	@Override
+	public List<MemberTmConn> phoneList(int tId) {
+		// TODO Auto-generated method stub
+		return boardDao.phoneList(tId);
 	}
 
 }

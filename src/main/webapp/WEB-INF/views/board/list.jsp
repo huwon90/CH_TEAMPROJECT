@@ -66,12 +66,44 @@
 #board_content #chk {
 	height: 10px;
 }
+#board_banner{
+    	width:200px;
+    }
+    
+#board_banner table tr{
+		margin:20px;
+		padding :20px;
+		text-align:center;
+	}
+#board_banner table tr td{
+		margin:10px;
+		padding :10px;
+		text-align:center;
+	}
+
 </style>
 </head>
 <body>
 <jsp:include page="../member/header.jsp" />
-	<div id="board_banner"></div>
+
 	<jsp:include page="writeForm.jsp"></jsp:include>
+	
+	<div id="board_banner">
+		<table border="1">
+			<caption>참여인원</caption>
+			<tr><th>직책</th><th>회원ID</th><th>회원이름</th><th>연락처</th></tr>
+			<c:forEach var="phone" items="${phoneList }">
+				<tr>
+					<c:if test="${phone.tmLeader==1 }"><td>팀장</td></c:if>
+					<c:if test="${phone.tmLeader==0 }"><td>팀원</td></c:if>
+					<td>${phone.mId}</td>
+					<td>${phone.mName }</td>
+					<td>${phone.mPhone1 }-${phone.mPhone2 }-${phone.mPhone3 }</td>
+				</tr>
+			</c:forEach>
+		</table>
+	</div>
+	
 	<div id="board_content">
 		<c:forEach var="board" items="${list }">
 			<c:if test="${board.bNo==1 }">
