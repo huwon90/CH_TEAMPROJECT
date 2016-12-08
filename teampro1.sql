@@ -1,7 +1,7 @@
------------------------ È¸¿ø°ü¸® member
+----------------------- È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ member
 DROP TABLE member;
-
--- È¸¿øÅ×ÀÌºí »ý¼º
+11
+-- È¸ï¿½ï¿½ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½
 CREATE TABLE member (
   mId VARCHAR2(20) PRIMARY KEY,
   mPw VARCHAR2(25) NOT NULL,
@@ -15,36 +15,36 @@ CREATE TABLE member (
   mAddress3 VARCHAR2(100),
   mOut NUMBER DEFAULT 1
 );
--- È¸¿ø°¡ÀÔ
+-- È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 INSERT INTO  member 
-  VALUES ('user', '1234','È«±æµ¿', '010', '1234', '1234', 'abcd@naver.com', '05055', '¼­¿ï½Ã', '¸¶Æ÷±¸', 1);
+  VALUES ('user', '1234','È«ï¿½æµ¿', '010', '1234', '1234', 'abcd@naver.com', '05055', 'ï¿½ï¿½ï¿½ï¿½ï¿½', 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½', 1);
   
--- È¸¿øÁ¤º¸º¸±â
+-- È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 SELECT *
   FROM MEMBER
   WHERE MID='user' AND MOUT=1;
 
--- È¸¿øÁ¤º¸¼öÁ¤
+-- È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 UPDATE MEMBER
-  SET MPW='1111', MPHONE1='017', MPHONE2='3333', MPHONE3='4444', MEMAIL='a@a.com', MADDRESS1='01', MADDRESS2='¿ï»ê', MADDRESS3='Áß±¸'
+  SET MPW='1111', MPHONE1='017', MPHONE2='3333', MPHONE3='4444', MEMAIL='a@a.com', MADDRESS1='01', MADDRESS2='ï¿½ï¿½ï¿½', MADDRESS3='ï¿½ß±ï¿½'
   WHERE MID='user';
 
--- È¸¿øÅ»Åð
+-- È¸ï¿½ï¿½Å»ï¿½ï¿½
 UPDATE MEMBER
-  SET MPW='1111', MPHONE1='017', MPHONE2='3333', MPHONE3='4444', MEMAIL='a@a.com', MADDRESS1='01', MADDRESS2='¿ï»ê', MADDRESS3='Áß±¸', MOUT=0
+  SET MPW='1111', MPHONE1='017', MPHONE2='3333', MPHONE3='4444', MEMAIL='a@a.com', MADDRESS1='01', MADDRESS2='ï¿½ï¿½ï¿½', MADDRESS3='ï¿½ß±ï¿½', MOUT=0
   WHERE MID='user';
 
--- ¾ÆÀÌµðÃ£±â
+-- ï¿½ï¿½ï¿½Ìµï¿½Ã£ï¿½ï¿½
 SELECT *
   FROM MEMBER
   WHERE MEMAIL='abcd@naver.com' and MPHONE1='010' AND MPHONE2='1234' AND MPHONE3='1234' and MOUT=1;
 
--- ºñ¹øÃ£±â
+-- ï¿½ï¿½ï¿½Ã£ï¿½ï¿½
 SELECT *
   FROM MEMBER
   WHERE MID='user' and MEMAIL='abcd@naver.com' and MOUT=1;
   
---------------------------ÆÀ°ü¸® team
+--------------------------ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ team
 DROP TABLE team;
 
 CREATE TABLE team(
@@ -55,7 +55,7 @@ DROP SEQUENCE tId_SQ;
 
 CREATE SEQUENCE tId_SQ;
 
--------------------------È¸¿ø_ÆÀ tm_conn
+-------------------------È¸ï¿½ï¿½_ï¿½ï¿½ tm_conn
 DROP TABLE tm_conn;
 
 CREATE TABLE tm_conn (
@@ -64,75 +64,75 @@ CREATE TABLE tm_conn (
   tmLeader NUMBER(1) DEFAULT 0,
   tmOk NUMBER(1) DEFAULT 0); 
 
---- ÀüÃ¼ ÆÀ ¸ñ·Ï Ãâ·Â
+--- ï¿½ï¿½Ã¼ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 SELECT * 
   FROM TEAM
   ORDER BY TID DESC;
 
---- ÆÀ »ý¼º
-INSERT INTO TEAM VALUES(tId_SQ.NEXTVAL, 'ÆÀ1');
+--- ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+INSERT INTO TEAM VALUES(tId_SQ.NEXTVAL, 'ï¿½ï¿½1');
 
---- ÆÀ ÇØÃ¼
+--- ï¿½ï¿½ ï¿½ï¿½Ã¼
 DELETE FROM team WHERE tId=1;
 
---- ÆÀÀå: ÆÀ»ý¼ºÇÒ¶§ tmConn insert
-INSERT INTO TM_CONN VALUES ((select tId from TEAM where tName='ÆÀ1'), 'user14', 1, 1);
+--- ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¶ï¿½ tmConn insert
+INSERT INTO TM_CONN VALUES ((select tId from TEAM where tName='ï¿½ï¿½1'), 'user14', 1, 1);
 
---- mId°¡ Âü¿©ÇÏ°í ÀÖ´Â ÆÀ ¸ñ·Ï Ãâ·Â
+--- mIdï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 SELECT * 
   FROM TM_CONN TM, TEAM T 
   WHERE TM.TID=T.TID AND TM.MID='user14' AND TM.TMOK=1 
   ORDER BY T.TID DESC;
   
---- ÆÀÀå: ÆÀÇØÃ¼ÇÒ¶§ tmConn delete
+--- ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½Ò¶ï¿½ tmConn delete
 DELETE FROM TM_CONN WHERE tId=1 AND mId='user14' AND tmLeader=1;
 
---- mId°¡ ÆÀÀåÀ¸·Î ÀÖ´Â ÆÀ ¸®½ºÆ® Ãâ·Â
+--- mIdï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½
 SELECT T.TID, T.TNAME 
   FROM TEAM T, TM_CONN TM 
   WHERE T.TID=TM.TID AND TM.MID='user14' AND TM.TMLEADER=1;
 
---- ÆÀ¿ø: ÆÀ Âü¿©¿äÃ» º¸³»±â 
+--- ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã» ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 INSERT INTO TM_CONN 
   VALUES (3,'user10', 0, 0); 
 
---- ÆÀÀå: ÆÀ Âü¿©¿äÃ» ½ÂÀÎ
+--- ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã» ï¿½ï¿½ï¿½ï¿½
 UPDATE TM_CONN 
   SET TMOK=1 
   WHERE MID='user2' AND TID=1;
 
---- ÆÀÀå: ÆÀ Âü¿©¿äÃ» °ÅºÎ 
+--- ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã» ï¿½Åºï¿½ 
 DELETE 
   FROM TM_CONN 
   WHERE MID='user2' AND TID=1;
   
---- ÆÀ¿ø ÆÀ Å»Åð
+--- ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Å»ï¿½ï¿½
 DELETE FROM TM_CONN WHERE MID='user15' AND TID=1;
 
---- °¡ÀÔ¿äÃ»Áßº¹: °¡ÀÔ¿äÃ»¸¸ ÇßÀ»¶§
+--- ï¿½ï¿½ï¿½Ô¿ï¿½Ã»ï¿½ßºï¿½: ï¿½ï¿½ï¿½Ô¿ï¿½Ã»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 SELECT COUNT(*) 
   FROM TM_CONN 
   WHERE MID='user15' AND TID=1 AND TMOK=0;
 
---- °¡ÀÔ¿äÃ»Áßº¹: ÀÌ¹Ì °¡ÀÔµÇ¾úÀ»¶§ 
+--- ï¿½ï¿½ï¿½Ô¿ï¿½Ã»ï¿½ßºï¿½: ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ÔµÇ¾ï¿½ï¿½ï¿½ï¿½ï¿½ 
 SELECT COUNT(*) 
   FROM TM_CONN 
   WHERE MID='user15' AND TID=1 AND TMOK=1;
 
---- tId ÆÀ Âü¿© ¿äÃ» ¸ñ·Ï
+--- tId ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã» ï¿½ï¿½ï¿½
 SELECT M.MID, M.MNAME, M.MEMAIL, TM.TID 
   FROM MEMBER M, TM_CONN TM 
   WHERE M.MID=TM.MID AND TM.TID=1 AND TM.TMOK=0;
 
---- tId ¿¬¶ôÃ³¸ñ·Ï
+--- tId ï¿½ï¿½ï¿½ï¿½Ã³ï¿½ï¿½ï¿½
 SELECT *
   FROM member m, tm_conn TM , team t 
   WHERE m.mId = tm.mId and t.tId = tm.tId and tmOk=1 and tm.tId=1;
   
---- ÆÀ ÀÌ¸§ °Ë»ö
-SELECT * FROM TEAM WHERE LOWER(TNAME) LIKE (LOWER('%ÆÀ%'));
+--- ï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½Ë»ï¿½
+SELECT * FROM TEAM WHERE LOWER(TNAME) LIKE (LOWER('%ï¿½ï¿½%'));
 
---- Âü¿©¿äÃ» ¾Ë¸²(user14°¡ ÆÀ¸®´õ·Î ÀÖ´Â ¸ðµç ÆÀ¿¡ µé¾î¿Â ¿äÃ» °¹¼ö)
+--- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã» ï¿½Ë¸ï¿½(user14ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã» ï¿½ï¿½ï¿½ï¿½)
 SELECT COUNT(*)
   FROM TM_CONN
   WHERE TID IN (SELECT TID FROM TM_CONN
