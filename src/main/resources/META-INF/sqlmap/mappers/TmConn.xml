@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TmConn">
+	<resultMap type="TmConn" id="TmConnResult">
+		<result property="tId" column="tId"/>
+		<result property="mId" column="mId"/>
+		<result property="tmLeader" column="tmLeader"/>
+		<result property="tmOk" column="tmOk"/>
+	</resultMap>
+	
+	<!-- 팀원: 팀 참여요청 보내기  -->
+	<insert id="requestTeam" parameterType="TmConn">
+		INSERT INTO TM_CONN(tId, mId) VALUES (#{tId}, #{mId})
+	</insert>
+	
+	<!-- 팀장: 팀 참여요청 승인 -->
+	<update id="okTeam" parameterType="TmConn">
+		UPDATE TM_CONN SET TMOK=1 WHERE MID=#{mId, jdbcType=VARCHAR} AND TID=#{tId, jdbcType=INTEGER}
+	</update>
+	
+	<!-- 팀장: 팀 참여요청 거부  -->
+	<delete id="noTeam" parameterType="TmConn">
+		DELETE FROM TM_CONN WHERE MID=#{mId, jdbcType=VARCHAR} AND TID=#{tId, jdbcType=INTEGER}
+	</delete>
+	
+	<!-- 팀원 팀 탈퇴 -->
+	<delete id="outTeam" parameterType="TmConn">
+		DELETE FROM TM_CONN WHERE MID=#{mId, jdbcType=VARCHAR} AND TID=#{tId, jdbcType=INTEGER}
+	</delete>
+	
+	<!-- 가입요청중복: 가입요청만 했을때 -->
+	<select id="chkTeam_ok0" parameterType="TmConn" resultType="int">
+		SELECT COUNT(*) FROM TM_CONN WHERE MID=#{mId} AND TID=#{tId} AND TMOK=0
+	</select>
+	
+	<!-- 가입요청중복: 이미 가입되었을때  -->
+	<select id="chkTeam_ok1" parameterType="TmConn" resultType="int">
+		SELECT COUNT(*) FROM TM_CONN WHERE MID=#{mId} AND TID=#{tId} AND TMOK=1
+	</select>
+	
+	<!-- 참여요청 알림(user14가 팀리더로 있는 모든 팀에 들어온 요청 갯수) -->
+	<select id="requestCount" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM TM_CONN
+  			WHERE TID IN (SELECT TID FROM TM_CONN
+                			WHERE MID=#{mId} AND TMLEADER=1) AND TMOK=0
+	</select>
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Team">
+	<resultMap type="Team" id="TeamResult">
+		<result property="tId" column="tId"/>
+		<result property="tName" column="tName"/>
+	</resultMap>
+	<!-- 전체 팀 목록 출력 -->
+	<select id="teamListAll" resultMap="TeamResult">
+		SELECT * FROM TEAM
+	</select>
+	<!-- 팀 생성 -->
+	<insert id="insertTeam"  parameterType="Team">
+		INSERT INTO TEAM VALUES(tId_SQ.NEXTVAL, #{tName})
+	</insert>
+	<!-- 팀 해체 -->
+	<delete id="removeTeam" parameterType="Team">
+		DELETE FROM team WHERE tId = #{tId, jdbcType=INTEGER}
+	</delete>
+	
+	<!-- 팀 이름 검색 -->
+	<select id="searchTeam" parameterType="String" resultMap="TeamResult">
+		SELECT * FROM TEAM WHERE LOWER(TNAME) LIKE (LOWER(#{tName}))
+	</select>
+</mapper>

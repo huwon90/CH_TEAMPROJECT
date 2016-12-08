@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Member">
+	<!-- 회원가입 sql문, 회원가입시 데이터베이스의 mOut 열을 1로 설정 -->
+	<resultMap type="Member" id="MemberResult">
+		<result property="mId" column="mId"/>
+		<result property="mPw" column="mPw"/>
+		<result property="mName" column="mName"/>
+		<result property="mPhone1" column="mPhone1"/>
+		<result property="mPhone2" column="mPhone2"/>
+		<result property="mPhone3" column="mPhone3"/>
+		<result property="mEmail" column="mEmail"/>
+		<result property="mAddress1" column="mAddress1"/>
+		<result property="mAddress2" column="mAddress2"/>
+		<result property="mAddress3" column="mAddress3"/>
+		<result property="mOut" column="mOut"/>
+	</resultMap>
+<!-- 회원가입 sql문, 회원가입시 데이터베이스의 mOut 열을 1로 설정 -->
+	<insert id="joinMember" parameterType="Member">
+		INSERT INTO MEMBER 
+			VALUES (#{mId}, #{mPw}, #{mName}, #{mPhone1}, #{mPhone2}, #{mPhone3}, #{mEmail}, #{mAddress1}, #{mAddress2}, #{mAddress3}, 1)
+	</insert>
+	<!-- 회원정보보기 sql문 -->
+	<select id="detailMember" parameterType="String" resultType="Member">
+		SELECT *
+  			FROM MEMBER
+  			WHERE MID=#{mId} AND MOUT=1
+	</select>
+	<!-- 회원정보수정 sql문 --> 
+	<update id="modifyMember" parameterType="Member">
+		UPDATE MEMBER
+  			SET MPW= #{mPw}, MPHONE1= #{mPhone1}, MPHONE2= #{mPhone2}, MPHONE3= #{mPhone3}, MEMAIL= #{mEmail}, MADDRESS1= #{mAddress1}, MADDRESS2= #{mAddress2}, MADDRESS3= #{mAddress3}
+  			WHERE MID=#{mId}
+	</update>
+	<!-- 회원탈퇴 sql문, 회원탈퇴시 데이터베이스의  mOut 열을 0으로 변경 -->
+	<update id="deleteMember" parameterType="Member">
+		UPDATE MEMBER
+  			SET MOUT=0
+ 			WHERE MID=#{mId}
+	</update>
+	<!-- 아이디찾기 sql문 이메일과 폰번호를 통해 가입시 입력한 아이디를 얻음 -->
+	<select id="findId" parameterType="Member" resultMap="MemberResult">
+		SELECT *
+  			FROM MEMBER
+  			WHERE MEMAIL=#{mEmail} and MPHONE1=#{mPhone1} AND MPHONE2=#{mPhone2} AND MPHONE3=#{mPhone3} and MOUT=1
+	</select>
+	<!-- 비번찾기 sql문 아이디와 이메일을 통해 가입시 입력한 이메일 주소를 얻음 -->
+	<select id="findPw" parameterType="Member" resultMap="MemberResult">
+		SELECT *
+  			FROM MEMBER
+  			WHERE MID=#{mId} and MEMAIL=#{mEmail} and MOUT=1
+	</select>
+</mapper>
+    

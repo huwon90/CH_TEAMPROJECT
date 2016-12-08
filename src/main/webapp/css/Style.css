@@ -1,0 +1,125 @@
+﻿
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+	
+@import url(http://fonts.googleapis.com/earlyaccess/jejugothic.css);
+* {
+    margin: 0;
+    padding: 0;
+    letter-spacing: -0.5px;
+}
+
+    #header {
+        z-index:99999;
+        top: 0px;
+        width: 100%;
+        overflow: hidden;
+        position:fixed;
+        line-height: 130px;
+        height: 250px;
+        display: block;
+        vertical-align: middle;
+        text-align: center;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    #header2{
+        position:absolute;
+        background-color: #28296B;
+        height: 70px; width: 100%;
+    }
+    #header ul li {
+        float: left;
+        text-align: center;
+        list-style: none;
+        line-height: 70px;
+    }
+
+    #header #logo {
+        font-family: 'Jeju Gothic', serif;
+        margin-top:8px;
+        color: white;
+        text-align: center;
+        font-size: 30px;
+        font-weight: bold;
+        margin-left: 300px;
+        
+    }
+
+    #header #text {
+        float: right;
+        margin-right: 200px;
+        line-height:70px;
+        cursor: pointer;
+        font-family: "10X10";
+    }
+    #header #text li{
+        line-height:60px;
+    }
+    #header #text a {
+        margin-right: 15px;
+        color: white;
+        font-size:18px;
+        text-decoration: none;
+        letter-spacing: -1px;
+         font-family: 'Jeju Gothic', serif;
+    }
+    #header .alert1 img{
+        text-align: center;
+        margin-top: 15px;
+        margin-right:20px;
+        margin-left:0px;
+    }
+
+    #header #text .mypage{
+        color:#DDE0ED;
+        font-size:23px;
+
+    }
+    #header #text .mypage:active{
+        color: #3B352B;
+    }
+        #header #text .mypage_list {
+            background-color:white;
+            display: none;
+            position: absolute;
+            top: 70px;
+            overflow: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 99999;
+            max-width:100px;
+            box-sizing:border-box;
+        }
+       #header #text .mypage_list li{
+           padding:10px;
+           line-height:100%;
+       }
+       #header #text .mypage_list a {
+             color: black;
+             text-decoration: none;
+             display: block;
+             font-size: medium;
+             letter-spacing: -1px;
+             padding: 0 0 0 10px;
+             max-height:50px;
+             margin:0 auto;
+       }
+
+       #header #text .mypage_list li a:hover {
+             color: red;
+       }
+       #search li{
+           text-align:center;
+       }
+       #search li:first-child{
+           line-height:60px;
+           margin-left:30px;
+           margin-right:10px;
+           font-family: 'Jeju Gothic', serif;
+       }
+       #search img{
+           margin-top:15px;
+       }
+       #search .input_text{
+           padding:5px;
+           width:350px;
+       }

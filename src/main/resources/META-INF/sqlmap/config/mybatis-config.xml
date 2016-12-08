@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 알리아스로 별칭을 사용 -->
+	<typeAliases>
+		<typeAlias alias="Member" type="com.ch.teampro1.model.Member"/>
+		<typeAlias alias="Team" type="com.ch.teampro1.model.Team"/>
+		<typeAlias alias="TmConn" type="com.ch.teampro1.model.TmConn"/>
+		<typeAlias alias="MemberTmConn" type="com.ch.teampro1.model.MemberTmConn"/>
+		<typeAlias alias="TeamTmConn" type="com.ch.teampro1.model.TeamTmConn"/>
+		<typeAlias alias="Board" type="com.ch.teampro1.model.Board"/>
+		<typeAlias alias="BoardRe" type="com.ch.teampro1.model.BoardRe"/>
+	</typeAliases>
+	<!-- 매퍼로 sql문을 찾을 위치를 지정 -->
+	<mappers>
+		<mapper resource="META-INF/sqlmap/mappers/Member.xml"/>
+		<mapper resource="META-INF/sqlmap/mappers/TmConn.xml"/>
+		<mapper resource="META-INF/sqlmap/mappers/Team.xml"/>
+		<mapper resource="META-INF/sqlmap/mappers/MemberTmConn.xml"/>
+		<mapper resource="META-INF/sqlmap/mappers/TeamTmConn.xml"/>
+		<mapper resource="META-INF/sqlmap/mappers/Board.xml"/>
+	</mappers>
+</configuration>

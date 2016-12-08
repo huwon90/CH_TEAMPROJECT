@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Board">
+
+	<resultMap id="BoardResult" type="Board" >
+		<result property="mId" column="mId" />
+		<result property="tId" column="tId" />
+		<result property="bId" column="bId" />
+		<result property="bContent" column="bContent" />
+		<result property="bDate" column="bDate" />
+		<result property="bNo" column="bNo" />
+		<result property="bfId" column="bfId" />
+		<result property="bfName" column="bfName" />
+		<result property="biId" column="biId" />
+		<result property="biName" column="biName" />
+		<result property="bStart" column="bStart" />
+		<result property="bEnd" column="bEnd" />
+		<result property="bTitle" column="bTitle" />
+		<result property="bLoc" column="bLoc" />
+		<result property="bMemo" column="bMemo" />
+	</resultMap>
+	
+	<select id="listAll" parameterType="int" resultMap="BoardResult">
+	   SELECT * FROM BOARD WHERE tId = #{tId}  ORDER BY bId DESC
+	</select>
+	
+	<select id="boardreList"  resultType="com.ch.teampro1.model.BoardRe">
+        select * from BOARD_RE
+    </select>
+    
+	<select id="insert_file" parameterType="Board">
+		INSERT INTO Board
+		  VALUES(#{mId, jdbcType=VARCHAR}, #{tId, jdbcType=INTEGER}, bId_SQ.NEXTVAL, #{bContent, jdbcType=VARCHAR}, SYSDATE, 1, 
+		  <if test='bfName!=null'>
+			  bfId_SQ.NEXTVAL, #{bfName}, 
+		  </if>
+		  <if test='bfName==null'>
+			  null, null, 
+		  </if>
+ 		  <if test='biName!=null'>
+		  	  biId_SQ.NEXTVAL, #{biName},
+		  </if>
+		  <if test='biName==null'>
+		      null, null, 
+ 		  </if>
+		  null, null,'','','')
+	</select>
+	<select id="insert_schedule" parameterType="Board">
+		INSERT INTO Board
+		  VALUES(#{mId, jdbcType=VARCHAR}, #{tId, jdbcType=INTEGER}, bId_SQ.NEXTVAL, '', SYSDATE, 2, null, '', null, '', 
+		  #{bStart}, #{bEnd}, #{bTitle}, #{bLoc}, #{bMemo})
+	</select>
+	
+	<select id="insert_reply" parameterType="com.ch.teampro1.model.BoardRe">
+		insert into BOARD_RE
+		(mId,bId,brId,bRcontent)
+		 values (#{mId},#{bId}, brId_SQ.NEXTVAL,#{bRcontent});
+	</select>
+	
+	<delete id="delete">
+		DELETE FROM Board WHERE bId=#{bId}
+	</delete>
+	
+	
+</mapper>

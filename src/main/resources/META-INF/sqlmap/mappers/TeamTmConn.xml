@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TeamTmConn">
+	<resultMap type="TeamTmConn" id="TeamTmConnResult">
+		<result property="tId" column="tId"/>
+		<result property="tName" column="tName"/>
+		<result property="mId" column="mId"/>
+		<result property="tmLeader" column="tmLeader"/>
+		<result property="tmOk" column="tmOk"/>
+	</resultMap>
+	
+	<!-- 팀장: 팀생성할때 tmConn insert -->
+	<insert id="insertTmConn" parameterType="TeamTmConn">
+		INSERT INTO TM_CONN VALUES ((select tId from TEAM where tName=#{tName}), #{mId}, 1, 1)
+	</insert>
+	
+	<!-- mId가 참여하고 있는 팀 목록 출력 -->
+	<select id="joinTeamListAll" parameterType="String" resultMap="TeamTmConnResult">
+		SELECT * FROM TM_CONN TM, TEAM T WHERE TM.TID=T.TID AND TM.MID=#{mId, jdbcType=VARCHAR} AND TMOK=1
+	</select>
+	
+	<!-- 팀장: 팀해체할때 tmConn delete -->
+	<delete id="removeTeamTmConn" parameterType="TeamTmConn">
+		DELETE FROM TM_CONN WHERE tId=#{tId, jdbcType=INTEGER} AND mId=#{mId, jdbcType=VARCHAR} AND tmLeader=1
+	</delete>
+	
+	<!-- mId가 팀장으로 있는 팀 리스트 출력 -->
+	<select id="leaderTeamListAll" parameterType="String" resultMap="TeamTmConnResult">
+		SELECT T.TID, T.TNAME FROM TEAM T, TM_CONN TM WHERE T.TID=TM.TID AND TM.MID=#{mId} AND TM.TMLEADER=1
+	</select>
+	
+</mapper>

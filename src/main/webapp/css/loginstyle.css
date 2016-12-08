@@ -1,0 +1,95 @@
+﻿#c1 ul {
+    
+    margin-top: 80px;
+    padding: 40px;
+}
+    #c1 ul li {
+        
+        margin-left: 230px;
+        list-style: none;
+        color: black;
+        font-size: 20px;
+    }
+    #c2{
+        margin-left: 230px;
+        text-align:center;
+        width: 80%;
+    }
+    #c2 .dashed{
+        float: left;
+        margin-left: 30px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        width: 150px;
+        height: 100px;
+        padding: 50px;
+        border:2px dashed  #667292;
+        margin-left: 30px;
+        list-style: none;
+        line-height: 100px;
+    }
+     #c2 .team_out:active{
+        color: #3B352B;
+    }
+        #c2 .team_out {
+        	margin-bottom: 50px;
+            background-color:white;
+            display: none;
+            overflow: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 99999;
+            min-width:120px;
+            box-sizing:border-box;
+        }
+       #c2 .team_out li{
+           padding:10px;
+           line-height:100%;
+           list-style: none;
+       }
+            #c2 .team_out a {
+                color: black;
+                text-decoration: none;
+                display: block;
+                font-size: medium;
+                letter-spacing: -1px;
+                padding: 0 0 0 10px;
+                max-height:50px;
+                margin:0 auto;
+            }
+
+            #c2 .team_out li a:hover {
+                color: red;
+            }
+    #c3 ul {
+        
+        margin-top: 550px;
+        padding: 40px;
+    }
+
+    #c3 ul li {
+        margin-left: 230px;
+        list-style: none;
+        color: black;
+        font-size: 20px;
+    }
+
+    #c4{
+        margin-left: 230px;
+        text-align:center;
+        width: 80%;
+    }
+    #c4 .dashed2{
+        float: left;
+        margin-left: 30px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        width: 150px;
+        height: 100px;
+        padding: 50px;
+        border:2px dashed  #667292;
+        margin-left: 30px;
+        list-style: none;
+        line-height: 100px;
+    }
+    
+    

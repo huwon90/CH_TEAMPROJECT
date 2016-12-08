@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MemberTmConn">
+	<resultMap type="MemberTmConn" id="MemberTmConnResult">
+		<result property="mId" column="mId"/>
+		<result property="mPw" column="mPw"/>
+		<result property="mName" column="mName"/>
+		<result property="mPhone1" column="mPhone1"/>
+		<result property="mPhone2" column="mPhone2"/>
+		<result property="mPhone3" column="mPhone3"/>
+		<result property="mEmail" column="mEmail"/>
+		<result property="mAddress" column="mAddress"/>
+		<result property="tId" column="tId"/>
+		<result property="tName" column="tName"/>
+	</resultMap>
+	
+	<!-- tId 팀 참여 요청목록 -->
+	<select id="requestListAll" parameterType="int" resultMap="MemberTmConnResult">
+		SELECT M.MID, M.MNAME, M.MEMAIL, TM.TID FROM MEMBER M, TM_CONN TM WHERE M.MID=TM.MID AND TM.TID=#{tId} AND TM.TMOK=0
+	</select>
+	
+	<!-- tId 연락처목록 -->
+	<select id="phoneList" parameterType="String" resultMap="MemberTmConnResult">
+		SELECT *
+			FROM member m, tm_conn TM , team t 
+				WHERE m.mId = tm.mId and t.tId = tm.tId and tmOk=1 and tm.tId=#{tId, jdbcType=INTEGER}
+	</select>
+</mapper>
