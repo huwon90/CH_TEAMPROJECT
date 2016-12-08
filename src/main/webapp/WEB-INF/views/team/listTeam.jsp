@@ -101,7 +101,7 @@
 		<c:forEach var="jointeam" items="${listjoinTeam }">
 			<div class="dashed">
 				<%-- <a href="mainpage.do?tId=${jointeam.tId }&mId=${jointeam.mId}">팀원연락처</a> --%>
-				${jointeam.tName } ▼
+				<a href="boardlist.do?tId=${jointeam.tId }">${jointeam.tName }</a> ▼
 				<ul class="team_out">
 					<c:if test="${jointeam.tmLeader == 0 }">
 						<li><a href='outTeam.do?mId=${mId }&tId=${jointeam.tId }'">팀
@@ -128,7 +128,7 @@
 	<div id="c4">
 		<c:forEach var="team" items="${listTeam }">
 			<div class="dashed2">
-				<a href="location.href='boardlist.do?tId=1">${team.tName }</a>
+				<a href="boardlist.do?tId=${team.tId }">${team.tName }</a>
 				<button
 					onclick="location.href='requestTeam.do?mId=${mId }&tId=${team.tId }'">참여신청</button>
 			</div>
