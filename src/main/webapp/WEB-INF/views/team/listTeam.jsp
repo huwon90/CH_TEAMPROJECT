@@ -43,150 +43,86 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 <script>
-/* 	$(document).ready(function() {
-		$("#c2 .dashed").click(function() {
-			var submenu = $(".team_out");
-			if (submenu.is(":visible")) {
-				submenu.slideUp();
-			} else {
-				submenu.slideDown();
-			}
-		});
-	}); */
-	$(document).ready(function() {
-		for (var i = 0; i < "${fn:length(listjoinTeam) }"; i++) {
-/* 			$('#ee'+i).click(function() {
-				var submenu = $(this).sibling();
-				if (submenu.is(":visible")) {
-					submenu.slideUp();
-				} else {
-					submenu.slideDown();
-				}
-			}); */
-			
-			
-			
+   $(document).ready(function() {
+      for (var i = 0; i < "${fn:length(listjoinTeam) }"; i++) {
             $('#ee' + i).click(function () {
-                $(this).children().slideToggle();
+               $(this).children('.team_out').slideToggle();
                 $(this).css('cursor','pointer');
             });
-			
-			
-		}
-	}); 
+      }
+   }); 
 
-	
+   
     $(document).ready(function () {
         for (var i = 0; i < "${fn:length(listTeam) }"; i++) {
-
             $('#slidebottom' + i).mouseenter(function () {
-                $(this).children().slideToggle();
+                $(this).children('.requestslide').slideToggle();
                 $(this).css('cursor','pointer');
             });
 
             $('#slidebottom' + i).mouseleave(function () {
-                $(this).children().slideToggle();
+                $(this).children('.requestslide').slideToggle();
             });
         }
     });
 
-	/* $(document).ready(function(){
-		$("#c2 .dashed").each(function(index){
-			$(this).click(function(){
-				var submenu = $(".team_out");
-	            if (submenu.is(":visible")) {
-	                submenu.slideUp();
-	            } else {
-	                submenu.slideDown();
-	            }
-			})
-		});
-	}); */
-
-	/* $(document).ready(function () {
-	    $("dashed0").click(function () {
-	        var submenu = $(".team_out");
-	        if (submenu.is(":visible")) {
-	            submenu.slideUp();
-	        } else {
-	            submenu.slideDown();
-	        }
-	    });
-	}); */
-
-	function insertTeam() {
-		var tName = prompt('생성할 팀의 이름을 입력하세요', '팀 이름');
-		if (tName) {
-			location.href = 'insertTeam.do?mId=${mId }&tName=' + tName;
-		}
-	}
-<<<<<<< HEAD
-	$(document).ready(function () {
-        $('#slidebottom').hover(function () {
-            $(".requestslide").slideToggle();
-        });
-    });
-
-=======
->>>>>>> 4e994a27f83189ee24e8b5851a204ed585e729b9
+   function insertTeam() {
+      var tName = prompt('생성할 팀의 이름을 입력하세요', '팀 이름');
+      if (tName) {
+         location.href = 'insertTeam.do?mId=${mId }&tName=' + tName;
+      }
+   }
 </script>
 </head>
 <body>
 
 <jsp:include page="../member/header.jsp" />
 
-	<div id="c1">
-		<ul>
-			<li>내가 가입한 팀</li>
-		</ul>
-	</div>
+   <div id="c1">
+      <ul>
+         <li>내가 가입한 팀</li>
+      </ul>
+   </div>
 
-	<div id="c2">
-		<div class="dashed" onclick="insertTeam();">새 프로젝트 생성</div>
-<<<<<<< HEAD
-		<c:forEach var="jointeam" items="${listjoinTeam }">
-			<div class="dashed">
-=======
-		<%--  <c:set var="index" value="0"></c:set> --%>
-		<c:forEach var="jointeam" items="${listjoinTeam }" varStatus="status">
-			<div class="dashed"  id="ee${status.index }">
->>>>>>> 4e994a27f83189ee24e8b5851a204ed585e729b9
-				<%-- <a href="mainpage.do?tId=${jointeam.tId }&mId=${jointeam.mId}">팀원연락처</a> --%>
-				<a href="boardlist.do?tId=${jointeam.tId }">${jointeam.tName }</a> ▼
-				<ul class="team_out">
-					<c:if test="${jointeam.tmLeader == 0 }">
-						<li><a href='outTeam.do?mId=${mId }&tId=${jointeam.tId }'">팀
-								탈퇴</a></li>
-					</c:if>
-					<c:if test="${jointeam.tmLeader == 1 }">
-						<li><a
-							href='removeTeam.do?tId=${jointeam.tId }&mId=${jointeam.mId}&tmLeader=${jointeam.tmLeader }'">팀
-								해체</a></li>
-					</c:if>
-				</ul>
-<<<<<<< HEAD
-			</div>
-=======
-			</div><!-- ee -->
-			<%-- <c:set var="index" value="${index +1 }"></c:set> --%>
->>>>>>> 4e994a27f83189ee24e8b5851a204ed585e729b9
-		</c:forEach>
+   <div id="c2">
+      <div class="dashed" onclick="insertTeam();">새 프로젝트 생성</div>
+      <%--  <c:set var="index" value="0"></c:set> --%>
+      <c:forEach var="jointeam" items="${listjoinTeam }" varStatus="status">
+         <div class="dashed" id="ee${status.index }">
+            <%-- <a href="mainpage.do?tId=${jointeam.tId }&mId=${jointeam.mId}">팀원연락처</a> --%>
+            <a href="boardlist.do?tId=${jointeam.tId }">${jointeam.tName }</a> 
+            <span>▼</span>
+            <ul class="team_out">
+               <c:if test="${jointeam.tmLeader == 0 }">
+                  <li><a href='outTeam.do?mId=${mId }&tId=${jointeam.tId }'">팀
+                        탈퇴</a></li>
+               </c:if>
+               <c:if test="${jointeam.tmLeader == 1 }">
+                  <li><a
+                     href='removeTeam.do?tId=${jointeam.tId }&mId=${jointeam.mId}&tmLeader=${jointeam.tmLeader }'">팀
+                        해체</a></li>
+                  <%-- <li><a href="leaderTeamList.do?mId=${mId }">참여요청 목록</a></li> --%>
+               </c:if>
+            </ul>
+         </div><!-- ee -->
+         <%-- <c:set var="index" value="${index +1 }"></c:set> --%>
+      </c:forEach>
 
-	</div>
+   </div>
 
-	<div id="c3">
-		<ul>
-			<li>전체 팀 목록</li>
-		</ul>
-	</div>
-	<div id="c4">
-		<c:forEach var="team" items="${listTeam }" varStatus="status">
-				<div id="slidebottom${status.index }" class="dashed2">
-					<a href="boardlist.do?tId=${team.tId }">${team.tName }</a>
-					<div class="requestslide" onclick="location.href='requestTeam.do?mId=${mId }&tId=${team.tId }'">참여신청</div>
-				</div>
-		</c:forEach>
-	</div>
-
+   <div id="c3">
+      <ul>
+         <li>전체 팀 목록</li>
+         <li><button onclick="location.href='listMember.do?mId=${mId}'">회원가입된 멤버목록</button></li>
+      </ul>
+   </div>
+   <div id="c4">
+      <c:forEach var="team" items="${listTeam }" varStatus="status">
+            <div id="slidebottom${status.index }" class="dashed2">
+               <a href="boardlist.do?tId=${team.tId }">${team.tName }</a>
+               <div class="requestslide" onclick="location.href='requestTeam.do?mId=${mId }&tId=${team.tId }'">참여신청</div>
+            </div>
+      </c:forEach>
+   </div>
 </body>
 </html>
