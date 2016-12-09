@@ -1,7 +1,7 @@
------------------------ È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ member
+----------------------- È¸¿ø°ü¸® member
 DROP TABLE member;
- ìˆ˜ì •ghhhh
--- È¸ï¿½ï¿½ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½
+
+-- È¸¿øÅ×ÀÌºí »ý¼º
 CREATE TABLE member (
   mId VARCHAR2(20) PRIMARY KEY,
   mPw VARCHAR2(25) NOT NULL,
@@ -15,36 +15,36 @@ CREATE TABLE member (
   mAddress3 VARCHAR2(100),
   mOut NUMBER DEFAULT 1
 );
--- È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+-- È¸¿ø°¡ÀÔ
 INSERT INTO  member 
-  VALUES ('user', '1234','È«ï¿½æµ¿', '010', '1234', '1234', 'abcd@naver.com', '05055', 'ï¿½ï¿½ï¿½ï¿½ï¿½', 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½', 1);
+  VALUES ('user', '1234','È«±æµ¿', '010', '1234', '1234', 'abcd@naver.com', '05055', '¼­¿ï½Ã', '¸¶Æ÷±¸', 1);
   
--- È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+-- È¸¿øÁ¤º¸º¸±â
 SELECT *
   FROM MEMBER
   WHERE MID='user' AND MOUT=1;
 
--- È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+-- È¸¿øÁ¤º¸¼öÁ¤
 UPDATE MEMBER
-  SET MPW='1111', MPHONE1='017', MPHONE2='3333', MPHONE3='4444', MEMAIL='a@a.com', MADDRESS1='01', MADDRESS2='ï¿½ï¿½ï¿½', MADDRESS3='ï¿½ß±ï¿½'
+  SET MPW='1111', MPHONE1='017', MPHONE2='3333', MPHONE3='4444', MEMAIL='a@a.com', MADDRESS1='01', MADDRESS2='¿ï»ê', MADDRESS3='Áß±¸'
   WHERE MID='user';
 
--- È¸ï¿½ï¿½Å»ï¿½ï¿½
+-- È¸¿øÅ»Åð
 UPDATE MEMBER
-  SET MPW='1111', MPHONE1='017', MPHONE2='3333', MPHONE3='4444', MEMAIL='a@a.com', MADDRESS1='01', MADDRESS2='ï¿½ï¿½ï¿½', MADDRESS3='ï¿½ß±ï¿½', MOUT=0
+  SET MPW='1111', MPHONE1='017', MPHONE2='3333', MPHONE3='4444', MEMAIL='a@a.com', MADDRESS1='01', MADDRESS2='¿ï»ê', MADDRESS3='Áß±¸', MOUT=0
   WHERE MID='user';
 
--- ï¿½ï¿½ï¿½Ìµï¿½Ã£ï¿½ï¿½
+-- ¾ÆÀÌµðÃ£±â
 SELECT *
   FROM MEMBER
   WHERE MEMAIL='abcd@naver.com' and MPHONE1='010' AND MPHONE2='1234' AND MPHONE3='1234' and MOUT=1;
 
--- ï¿½ï¿½ï¿½Ã£ï¿½ï¿½
+-- ºñ¹øÃ£±â
 SELECT *
   FROM MEMBER
   WHERE MID='user' and MEMAIL='abcd@naver.com' and MOUT=1;
   
---------------------------ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ team
+-----------------------------ÆÀ°ü¸® team
 DROP TABLE team;
 
 CREATE TABLE team(
@@ -55,7 +55,7 @@ DROP SEQUENCE tId_SQ;
 
 CREATE SEQUENCE tId_SQ;
 
--------------------------È¸ï¿½ï¿½_ï¿½ï¿½ tm_conn
+----------------------------È¸¿ø_ÆÀ tm_conn
 DROP TABLE tm_conn;
 
 CREATE TABLE tm_conn (
@@ -64,76 +64,120 @@ CREATE TABLE tm_conn (
   tmLeader NUMBER(1) DEFAULT 0,
   tmOk NUMBER(1) DEFAULT 0); 
 
---- ï¿½ï¿½Ã¼ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+--- ÀüÃ¼ ÆÀ ¸ñ·Ï Ãâ·Â
 SELECT * 
   FROM TEAM
   ORDER BY TID DESC;
 
---- ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-INSERT INTO TEAM VALUES(tId_SQ.NEXTVAL, 'ï¿½ï¿½1');
+--- ÆÀ »ý¼º
+INSERT INTO TEAM VALUES(tId_SQ.NEXTVAL, 'ÆÀ1');
 
---- ï¿½ï¿½ ï¿½ï¿½Ã¼
+--- ÆÀ ÇØÃ¼
 DELETE FROM team WHERE tId=1;
 
---- ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¶ï¿½ tmConn insert
-INSERT INTO TM_CONN VALUES ((select tId from TEAM where tName='ï¿½ï¿½1'), 'user14', 1, 1);
+--- ÆÀÀå: ÆÀ»ý¼ºÇÒ¶§ tmConn insert
+INSERT INTO TM_CONN VALUES ((select tId from TEAM where tName='ÆÀ1'), 'user14', 1, 1);
 
---- mIdï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+--- mId°¡ Âü¿©ÇÏ°í ÀÖ´Â ÆÀ ¸ñ·Ï Ãâ·Â
 SELECT * 
   FROM TM_CONN TM, TEAM T 
   WHERE TM.TID=T.TID AND TM.MID='user14' AND TM.TMOK=1 
   ORDER BY T.TID DESC;
   
---- ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½Ò¶ï¿½ tmConn delete
+--- ÆÀÀå: ÆÀÇØÃ¼ÇÒ¶§ tmConn delete
 DELETE FROM TM_CONN WHERE tId=1 AND mId='user14' AND tmLeader=1;
 
---- mIdï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½
+--- mId°¡ ÆÀÀåÀ¸·Î ÀÖ´Â ÆÀ ¸®½ºÆ® Ãâ·Â
 SELECT T.TID, T.TNAME 
   FROM TEAM T, TM_CONN TM 
   WHERE T.TID=TM.TID AND TM.MID='user14' AND TM.TMLEADER=1;
 
---- ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã» ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+--- ÆÀ¿ø: ÆÀ Âü¿©¿äÃ» º¸³»±â 
 INSERT INTO TM_CONN 
   VALUES (3,'user10', 0, 0); 
 
---- ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã» ï¿½ï¿½ï¿½ï¿½
+--- ÆÀÀå: ÆÀ Âü¿©¿äÃ» ½ÂÀÎ
 UPDATE TM_CONN 
   SET TMOK=1 
   WHERE MID='user2' AND TID=1;
 
---- ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã» ï¿½Åºï¿½ 
+--- ÆÀÀå: ÆÀ Âü¿©¿äÃ» °ÅºÎ 
 DELETE 
   FROM TM_CONN 
   WHERE MID='user2' AND TID=1;
   
---- ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Å»ï¿½ï¿½
+--- ÆÀ¿ø ÆÀ Å»Åð
 DELETE FROM TM_CONN WHERE MID='user15' AND TID=1;
 
---- ï¿½ï¿½ï¿½Ô¿ï¿½Ã»ï¿½ßºï¿½: ï¿½ï¿½ï¿½Ô¿ï¿½Ã»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+--- °¡ÀÔ¿äÃ»Áßº¹: °¡ÀÔ¿äÃ»¸¸ ÇßÀ»¶§
 SELECT COUNT(*) 
   FROM TM_CONN 
   WHERE MID='user15' AND TID=1 AND TMOK=0;
 
---- ï¿½ï¿½ï¿½Ô¿ï¿½Ã»ï¿½ßºï¿½: ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ÔµÇ¾ï¿½ï¿½ï¿½ï¿½ï¿½ 
+--- °¡ÀÔ¿äÃ»Áßº¹: ÀÌ¹Ì °¡ÀÔµÇ¾úÀ»¶§ 
 SELECT COUNT(*) 
   FROM TM_CONN 
   WHERE MID='user15' AND TID=1 AND TMOK=1;
 
---- tId ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã» ï¿½ï¿½ï¿½
+--- tId ÆÀ Âü¿© ¿äÃ» ¸ñ·Ï
 SELECT M.MID, M.MNAME, M.MEMAIL, TM.TID 
   FROM MEMBER M, TM_CONN TM 
   WHERE M.MID=TM.MID AND TM.TID=1 AND TM.TMOK=0;
 
---- tId ï¿½ï¿½ï¿½ï¿½Ã³ï¿½ï¿½ï¿½
+--- tId ¿¬¶ôÃ³¸ñ·Ï
 SELECT *
   FROM member m, tm_conn TM , team t 
   WHERE m.mId = tm.mId and t.tId = tm.tId and tmOk=1 and tm.tId=1;
   
---- ï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½Ë»ï¿½
-SELECT * FROM TEAM WHERE LOWER(TNAME) LIKE (LOWER('%ï¿½ï¿½%'));
+--- ÆÀ ÀÌ¸§ °Ë»ö
+SELECT * FROM TEAM WHERE LOWER(TNAME) LIKE (LOWER('%ÆÀ%'));
 
---- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã» ï¿½Ë¸ï¿½(user14ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã» ï¿½ï¿½ï¿½ï¿½)
+--- Âü¿©¿äÃ» ¾Ë¸²(user14°¡ ÆÀ¸®´õ·Î ÀÖ´Â ¸ðµç ÆÀ¿¡ µé¾î¿Â ¿äÃ» °¹¼ö)
 SELECT COUNT(*)
   FROM TM_CONN
   WHERE TID IN (SELECT TID FROM TM_CONN
                 WHERE MID='user14' AND TMLEADER=1) AND TMOK=0;
+                
+------------------------------------- °Ô½ÃÆÇ °ü¸®(Board)
+DROP TABLE Board;
+CREATE TABLE Board(
+  mId varchar2(20) REFERENCES MEMBER(mId),
+  tId number(10) REFERENCES TEAM(tId),
+  bId NUMBER(10) PRIMARY KEY NOT NULL,
+  bContent VARCHAR(500),
+  bDate timestamp NOT NULL,
+  bNo number(2) NOT NULL,
+  bfId number(10),
+  bfName varchar2(50),
+  biId number(10),
+  biName varchar2(50),
+  bStart timestamp,
+  bEnd timestamp,
+  bTitle varchar2(100),
+  bLoc varchar2(100),
+  bMemo varchar2(100));
+
+DROP SEQUENCE bId_sq;
+CREATE SEQUENCE bId_SQ;
+
+DROP SEQUENCE bfId_SQ;
+CREATE SEQUENCE bfId_SQ;
+
+DROP SEQUENCE biId_SQ;
+CREATE SEQUENCE biId_SQ;
+
+DROP TABLE BOARD_RE;
+CREATE TABLE BOARD_RE(
+  bId NUMBER(10) REFERENCES BOARD(bId), -- °Ô½Ã¹° ¹øÈ£
+  mId varchar2(20) REFERENCES MEMBER(mId), -- ÀÛ¼ºÀÚ
+  brId NUMBER(10) PRIMARY KEY, -- ´ñ±Û¹øÈ£
+  bRcontent VARCHAR2(500), -- ´ñ±Û³»¿ë
+  bRDate timestamp DEFAULT sysdate, -- ÀÛ¼ºÀÏÀÚ
+  brDeleteYN CHAR(1 BYTE) DEFAULT 'n',-- »èÁ¦¿©ºÎ  
+  brParent NUMBER(10), --ºÎ¸ð´ñ±Û
+  brDepth number(10) DEFAULT 0, --±íÀÌ
+  brOrder number(10) DEFAULT 1 --¼ø¼­
+); 
+
+DROP SEQUENCE brId_SQ;
+CREATE SEQUENCE brId_SQ; --brId_SQ ½ÃÄý½º

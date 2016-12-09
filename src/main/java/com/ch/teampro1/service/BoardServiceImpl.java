@@ -78,13 +78,13 @@ public class BoardServiceImpl implements BoardService {
 	public int reply_insert(BoardRe boardre) {
 		return boardDao.reply_insert(boardre);
 	}
-<<<<<<< HEAD
+
 	@Override
 	public List<MemberTmConn> phoneList(int tId) {
 		// TODO Auto-generated method stub
 		return boardDao.phoneList(tId);
 	}
-=======
+
 	
 	@Override
 	public int update_file(MultipartHttpServletRequest mRequest) {
@@ -96,8 +96,6 @@ public class BoardServiceImpl implements BoardService {
 			String uploadFile = iterator.next();
 			MultipartFile mFile = mRequest.getFile(uploadFile);
 			String originalFile = mFile.getOriginalFilename();
->>>>>>> fcbe2c50120db79b829138ec9d44d4e5316b4f89
-
 			saveFileName[i] = originalFile;
 			if (saveFileName[i] != null && !saveFileName[i].equals("")) {
 				if (new File(upPath + saveFileName[i]).exists()) {
