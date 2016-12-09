@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <c:set var="conPath" value="<%=request.getContextPath()%>" />
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -12,9 +12,6 @@
 	type="text/css">
 <link href="${conPath}/css/style.min.css" rel="stylesheet"
 	type="text/css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-	
 <style>
 #board_content table {
 	width: 860px;
@@ -184,9 +181,9 @@
 					
    				<tr>
    				<td colspan="2"><textarea  name="bRcontent"  cols="100" placeholder="댓글을 입력하세요" required="required"></textarea></td>
-   				<td><input   type="submit" value="댓글쓰기" class="btn btn-primary"></td></td>
+   				<td><input   type="submit" value="댓글쓰기" class="btn btn-primary"></td></tr>
    				</form>
-   				   <tr>
+   				   
 				</table>
 				
 		</c:forEach>
