@@ -19,6 +19,8 @@ public class Board {
 	private String bTitle;
 	private String bLoc;
 	private String bMemo;
+	
+	
 	public String getmId() {
 		return mId;
 	}

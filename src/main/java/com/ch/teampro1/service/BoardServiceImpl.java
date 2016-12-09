@@ -19,6 +19,15 @@ public class BoardServiceImpl implements BoardService {
 	private BoardDao boardDao;
 
 	@Override
+	public List<Board> infiniteScroll(Board infi) {
+		return boardDao.infiniteScroll(infi);
+	}
+	@Override
+	public int replydelete(int brId) {
+		return boardDao.replydelete(brId);
+	}
+	
+	@Override
 	public List<Board> listAll(int tId) {
 		return boardDao.listAll(tId);
 	}
@@ -69,9 +78,21 @@ public class BoardServiceImpl implements BoardService {
 	public int delete(int bId) {
 		return boardDao.delete(bId);
 	}
+
 	@Override
 	public int reply_insert(BoardRe boardre) {
 		return boardDao.reply_insert(boardre);
 	}
+
+	
+	
+
+	
+/*	@Override
+	public List<Board> listAll(int tId) {
+		return boardDao.listAll(tId);
+	}*/
+	
+
 
 }

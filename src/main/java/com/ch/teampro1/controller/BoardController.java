@@ -1,12 +1,15 @@
 package com.ch.teampro1.controller;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,7 +21,30 @@ import com.ch.teampro1.service.BoardService;
 public class BoardController {
 	@Autowired
 	private BoardService service;
-
+	
+	@RequestMapping(value="test", method=RequestMethod.GET)
+	public String test() throws Exception{
+		return "board/test";
+	}
+	
+	@RequestMapping(value="infiniteScrollDown", method=RequestMethod.POST)
+	public @ResponseBody List<Board> InfiniteScrollDown(@RequestBody Board board) throws Exception{
+		int bId = board.getbId()-1;
+		int tId = board.gettId();
+		Board infi = new Board();
+		infi.setbId(bId);
+		infi.settId(tId);
+		return service.infiniteScroll(infi);
+	}
+	
+	
+/*	@RequestMapping(value="infiniteScrollUp", method=RequestMethod.POST)
+	public @ResponseBody List<Board> 
+	infiniteScrollUp(@RequestBody Board board) throws Exception{
+		Integer bIdToStart = board.getbId()-1;
+		return service.infiniteScroll(bIdToStart);
+	}*/
+	
 	@RequestMapping(value="boardlist", method=RequestMethod.GET)
 	public ModelAndView boardlist(int tId) throws Exception{
 		System.out.println(tId);

@@ -22,10 +22,21 @@
 		<result property="bMemo" column="bMemo" />
 	</resultMap>
 	
-	<select id="listAll" parameterType="int" resultMap="BoardResult">
-	   SELECT * FROM BOARD WHERE tId = #{tId}  ORDER BY bId DESC
+	<!-- 스크롤 아래로 내리면 나오는 리스트 -->	
+	<select id="infidown"  parameterType="Board" resultMap="BoardResult">
+<!-- 	SELECT * FROM (
+		SELECT ROWNUM RN, A.* from 
+	   (SELECT * FROM BOARD WHERE tId = #{tId} ORDER BY bId DESC) A)
+     WHERE RN > 10 -->
+          SELECT  * from board WHERE bId = #{bId}
 	</select>
 	
+	<select id="listAll" parameterType="int" resultMap="BoardResult">
+	  SELECT * from 
+	   (SELECT * FROM BOARD WHERE tId = #{tId}  ORDER BY bId DESC) 
+	   WHERE rownum between 1 and 10
+	</select>
+
 	<select id="boardreList"  resultType="com.ch.teampro1.model.BoardRe">
         select * from BOARD_RE
     </select>

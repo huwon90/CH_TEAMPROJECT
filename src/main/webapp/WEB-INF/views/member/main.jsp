@@ -13,6 +13,7 @@
 		<input type="submit" value="로그인">
 		<input type="button" value="회원가입" onclick="location.href='joinMemberForm.do'">
 		<input type="button" value="게시판" onclick="location.href='boardlist.do?tId=1'">
+		<input type="button" value="테스트" onclick="location.href='test.do'">
 	</form>
 </body>
 </html>

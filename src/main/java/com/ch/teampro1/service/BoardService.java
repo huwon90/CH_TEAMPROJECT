@@ -13,6 +13,8 @@ public interface BoardService {
 	
     public List<BoardRe> boardreList();
     
+	public  List<Board> infiniteScroll(Board infi);
+    
 	public int insert_file(MultipartHttpServletRequest mRequest);
 	
 	public int reply_insert(BoardRe boardre);
@@ -20,6 +22,8 @@ public interface BoardService {
 	public int insert_schedule(Board board);
 	
 	public int delete(int bId);
+	
+	public int replydelete(int brId);
 	
 
 }
