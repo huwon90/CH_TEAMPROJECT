@@ -44,7 +44,7 @@
 	<select id="requestCount" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM TM_CONN
   			WHERE TID IN (SELECT TID FROM TM_CONN
-                			WHERE MID=#{mId} AND TMLEADER=1) AND TMOK=0
+                			WHERE MID=#{mId} ) AND TMOK=0
 	</select>
 	<select id="chkTmConn" parameterType="TmConn" resultType="int">
 		select count(*) from TM_CONN WHERE tId=#{tId} AND mId=#{mId}

@@ -94,12 +94,6 @@ public class TeamServiceImpl implements ITeamService {
 	}
 
 	@Override
-	public List<MemberTmConn> phoneList(String tId) {
-		// TODO Auto-generated method stub
-		return teamDao.phoneList(tId);
-	}
-
-	@Override
 	public List<Team> searchTeam(String tName) {
 		return teamDao.searchTeam(tName);
 	}

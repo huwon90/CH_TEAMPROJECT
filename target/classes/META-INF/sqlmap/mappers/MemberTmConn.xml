@@ -22,9 +22,9 @@
 	</select>
 	
 	<!-- tId 연락처목록 -->
-	<select id="phoneList" parameterType="String" resultMap="MemberTmConnResult">
+	<select id="phoneList" parameterType="int" resultMap="MemberTmConnResult">
 		SELECT *
 			FROM member m, tm_conn TM , team t 
-				WHERE m.mId = tm.mId and t.tId = tm.tId and tmOk=1 and tm.tId=#{tId, jdbcType=INTEGER}
+				WHERE m.mId = tm.mId and t.tId = tm.tId and tmOk=1 and tm.tId=#{tId, jdbcType=INTEGER} ORDER BY tmLeader desc
 	</select>
 </mapper>

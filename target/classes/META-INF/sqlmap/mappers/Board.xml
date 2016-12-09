@@ -59,8 +59,7 @@
 		  null, null,'','','')
 	</select>
 	<select id="insert_schedule" parameterType="Board">
-		INSERT INTO Board 
-		(mId,tId, bId, bContent, bDate, bNo, bfId, bfName, biId, biName, bStart, bEnd, bTitle, bLoc,bMemo)
+		INSERT INTO Board
 		  VALUES(#{mId, jdbcType=VARCHAR}, #{tId, jdbcType=INTEGER}, bId_SQ.NEXTVAL, '', SYSDATE, 2, null, '', null, '', 
 		  #{bStart}, #{bEnd}, #{bTitle}, #{bLoc}, #{bMemo})
 	</select>
@@ -75,5 +74,23 @@
 		DELETE FROM Board WHERE bId=#{bId}
 	</delete>
 	
+	<update id="update_file" parameterType="Board">
+		UPDATE board SET BCONTENT=#{bContent}
+
+		<if test='bfName!=null'>
+		 ,BFNAME=#{bfName}
+		</if>
+		<if test='bfName!=null and biName!=null'>
+		,
+		</if>
+		<if test='biName!=null'>
+		 BINAME=#{biName}
+		</if>
+		 WHERE BID=#{bId}
+	</update>
+	
+	<select id="detail" parameterType="int" resultType="Board">
+		SELECT * FROM BOARD WHERE bId = #{bId, jdbcType=INTEGER}
+	</select>
 	
 </mapper>

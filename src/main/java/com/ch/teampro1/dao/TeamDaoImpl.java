@@ -93,12 +93,6 @@ public class TeamDaoImpl implements ITeamDao {
 		// TODO Auto-generated method stub
 		return session.delete("removeTeamTmConn", teamTmConn);
 	}
-
-	@Override
-	public List<MemberTmConn> phoneList(String tId) {
-		// TODO Auto-generated method stub
-		return session.selectList("phoneList", tId);
-	}
 	
 	@Override
 	public List<Team> searchTeam(String tName) {

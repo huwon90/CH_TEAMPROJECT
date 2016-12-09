@@ -152,14 +152,14 @@ public class TeamController {
 		return "redirect:listTeam.do?mId="+teamTmConn.getmId();
 	}
 	
-	@RequestMapping(value="mainpage", method=RequestMethod.GET)
+	/*@RequestMapping(value="mainpage", method=RequestMethod.GET)
 	public String mainpage(MemberTmConn memberTmConn, String tId, Model model){
 		System.out.println(tId);
 		List<MemberTmConn> phoneList = tService.phoneList(tId);
 		System.out.println(memberTmConn.gettId());
 		model.addAttribute("phoneList", phoneList);
 		return "team/mainpage";
-	}
+	}*/
 	
 	
 	@RequestMapping(value="search", method=RequestMethod.GET)

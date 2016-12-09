@@ -17,6 +17,7 @@
 	<resources mapping="/js/**" location="/js/" />
 	<resources mapping="/fonts/**" location="/fonts/" />
 	<resources mapping="/image/**" location="/image/" />
+	<resources mapping="/upload/**" location="/upload/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -44,5 +45,9 @@
 	<beans:bean id="email" class="com.ch.teampro1.model.Email"></beans:bean>
 	<beans:bean id="emailSender" class="com.ch.teampro1.service.EmailSender"></beans:bean>
 	
+	<!-- 웹과 관련된 부분은 servlet-context.xml에 설정 -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="10485760"/><!-- 10MB / 최대업로드가능한 크기(-1의 경우: 무제한) -->
+	</beans:bean>
 	
 </beans:beans>

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ch.teampro1.model.Board;
 import com.ch.teampro1.model.BoardRe;
+import com.ch.teampro1.model.MemberTmConn;
 
 @Repository
 public class BoardDaoImpl implements BoardDao{
@@ -54,6 +55,22 @@ public class BoardDaoImpl implements BoardDao{
 	@Override
 	public int reply_insert(BoardRe boardre) {
 		return session.insert("insert_reply", boardre);
+	}
+	
+	@Override
+	public int update_file(Board board) {
+		return session.update("update_file", board);
+	}
+
+	@Override
+	public Board detail(int bId) {
+		return session.selectOne("detail", bId);
+	}
+
+	@Override
+	public List<MemberTmConn> phoneList(int tId) {
+		// TODO Auto-generated method stub
+		return session.selectList("phoneList", tId);
 	}
 
 

@@ -60,14 +60,14 @@
 							<table>
 								<tr>
 									<td colspan="5"><textarea id="text_file" name="bContent"
-											placeholder="글을 작성해보세요."></textarea></td>
+											placeholder="글을 작성해보세요." required="required"></textarea></td>
 								</tr>
 								<tr>
 									<td><img src="" alt="파일" /></td>
 									<td><input type="file" name="bfName" value="파일첨부">
 									</td>
 									<td><img src="" alt="사진" /></td>
-									<td>이미지첨부할거얀<!-- <input type="file" name="biName" value="이미지첨부"> --></td>
+									<td><input type="file" name="biName" value="이미지첨부"></td>
 									<td class="big_write"><input type="submit" value="글쓰기"
 										class="go_right"></td>
 								</tr>

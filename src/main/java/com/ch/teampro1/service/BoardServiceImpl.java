@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.ch.teampro1.dao.BoardDao;
 import com.ch.teampro1.model.Board;
 import com.ch.teampro1.model.BoardRe;
+import com.ch.teampro1.model.MemberTmConn;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -40,29 +41,32 @@ public class BoardServiceImpl implements BoardService {
 		// upload
 		String upPath = mRequest.getRealPath("upload/");
 		Iterator<String> iterator = mRequest.getFileNames();
-		String saveFileName = "";
+		String[] saveFileName = new String[2];
+		int i =0;
 		while (iterator.hasNext()) {
 			String uploadFile = iterator.next();
 			MultipartFile mFile = mRequest.getFile(uploadFile);
 			String originalFile = mFile.getOriginalFilename();
 
-			saveFileName = originalFile;
-			if (saveFileName != null && !saveFileName.equals("")) {
-				if (new File(upPath + saveFileName).exists()) {
-					saveFileName = System.currentTimeMillis() + saveFileName;
-					System.out.println("업로드된 파일 : "+upPath+saveFileName);	//업로드된 파일 : 
+			saveFileName[i] = originalFile;
+			if (saveFileName[i] != null && !saveFileName[i].equals("")) {
+				if (new File(upPath + saveFileName[i]).exists()) {
+					saveFileName[i] = System.currentTimeMillis() + saveFileName[i];
+					System.out.println("업로드된 파일 : "+upPath+saveFileName[i]);	//업로드된 파일 : 
 				}
 				try {
-					mFile.transferTo(new File(upPath+saveFileName));
-					System.out.println("업로드된 파일 : "+upPath+saveFileName);
+					mFile.transferTo(new File(upPath+saveFileName[i]));
+					System.out.println("업로드된 파일 : "+upPath+saveFileName[i]);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}//try
 			}//if
+			i++;
 		}//while
 
 		Board board = new Board();
-		board.setBfName(saveFileName);
+		board.setBfName(saveFileName[0]);
+		board.setBiName(saveFileName[1]);
 		board.setbContent(mRequest.getParameter("bContent"));
 		board.settId(Integer.parseInt(mRequest.getParameter("tId")));
 		board.setmId(mRequest.getParameter("mId"));
@@ -78,12 +82,17 @@ public class BoardServiceImpl implements BoardService {
 	public int delete(int bId) {
 		return boardDao.delete(bId);
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> 80ef0023d75601ecb6fc6b46b58a9dd724663075
 	@Override
 	public int reply_insert(BoardRe boardre) {
 		return boardDao.reply_insert(boardre);
 	}
 
+<<<<<<< HEAD
 	
 	
 
@@ -95,4 +104,51 @@ public class BoardServiceImpl implements BoardService {
 	
 
 
+=======
+	@Override
+	public List<MemberTmConn> phoneList(int tId) {
+		// TODO Auto-generated method stub
+		return boardDao.phoneList(tId);
+	}
+
+	
+	@Override
+	public int update_file(MultipartHttpServletRequest mRequest) {
+		String upPath = mRequest.getRealPath("upload/");
+		Iterator<String> iterator = mRequest.getFileNames();
+		String[] saveFileName = new String[2];
+		int i =0;
+		while (iterator.hasNext()) {
+			String uploadFile = iterator.next();
+			MultipartFile mFile = mRequest.getFile(uploadFile);
+			String originalFile = mFile.getOriginalFilename();
+			saveFileName[i] = originalFile;
+			if (saveFileName[i] != null && !saveFileName[i].equals("")) {
+				if (new File(upPath + saveFileName[i]).exists()) {
+					saveFileName[i] = System.currentTimeMillis() + saveFileName[i];
+					System.out.println("업로드된 파일 : "+upPath+saveFileName[i]);	//업로드된 파일 : 
+				}
+				try {
+					mFile.transferTo(new File(upPath+saveFileName[i]));
+					System.out.println("업로드된 파일 : "+upPath+saveFileName[i]);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}//try
+			}//if
+			i++;
+		}//while
+
+		Board board = new Board();
+		board.setbId(Integer.parseInt(mRequest.getParameter("bId")));
+		board.setBfName(saveFileName[0]);
+		board.setBiName(saveFileName[1]);
+		board.setbContent(mRequest.getParameter("bContent"));
+		return boardDao.update_file(board);
+	}
+
+	@Override
+	public Board detail(int bId) {
+		return boardDao.detail(bId);
+	}
+>>>>>>> 80ef0023d75601ecb6fc6b46b58a9dd724663075
 }

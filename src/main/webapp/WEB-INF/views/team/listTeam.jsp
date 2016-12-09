@@ -43,16 +43,15 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 <script>
-   $(document).ready(function() {
-      for (var i = 0; i < "${fn:length(listjoinTeam) }"; i++) {
-            $('#ee' + i).click(function () {
-               $(this).children('.team_out').slideToggle();
-                $(this).css('cursor','pointer');
-            });
-      }
-   }); 
-
-   
+	$(document).ready(function() {
+	    for (var i = 0; i < "${fn:length(listjoinTeam) }"; i++) {
+			$('#ee' + i).click(function () {
+			   $(this).children('.team_out').slideToggle();
+			    $(this).css('cursor','pointer');
+			});
+	    }
+	});
+	
     $(document).ready(function () {
         for (var i = 0; i < "${fn:length(listTeam) }"; i++) {
             $('#slidebottom' + i).mouseenter(function () {
@@ -78,6 +77,7 @@
 
 <jsp:include page="../member/header.jsp" />
 
+
    <div id="c1">
       <ul>
          <li>내가 가입한 팀</li>
@@ -89,7 +89,7 @@
       <%--  <c:set var="index" value="0"></c:set> --%>
       <c:forEach var="jointeam" items="${listjoinTeam }" varStatus="status">
          <div class="dashed" id="ee${status.index }">
-            <%-- <a href="mainpage.do?tId=${jointeam.tId }&mId=${jointeam.mId}">팀원연락처</a> --%>
+            
             <a href="boardlist.do?tId=${jointeam.tId }">${jointeam.tName }</a> 
             <span>▼</span>
             <ul class="team_out">

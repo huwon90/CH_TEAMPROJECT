@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ch.teampro1.model.Board;
 import com.ch.teampro1.model.BoardRe;
+import com.ch.teampro1.model.MemberTmConn;
 import com.ch.teampro1.service.BoardService;
 
 @Controller
@@ -46,11 +47,12 @@ public class BoardController {
 	}*/
 	
 	@RequestMapping(value="boardlist", method=RequestMethod.GET)
-	public ModelAndView boardlist(int tId) throws Exception{
-		System.out.println(tId);
+	public ModelAndView boardlist(MemberTmConn memberTmConn, int tId, Model model) throws Exception{
         ModelAndView modelandview = new ModelAndView();
         List<Board> list = service.listAll(tId);
         List<BoardRe> relist =service.boardreList();
+        List<MemberTmConn> phoneList = service.phoneList(tId);
+		modelandview.addObject("phoneList",phoneList);
         modelandview.addObject("list", list);
         modelandview.addObject("relist", relist);
         modelandview.setViewName("board/list"); 
@@ -74,10 +76,10 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "write_file", method=RequestMethod.POST)
-	public String write_file(MultipartHttpServletRequest mRequest) {
+	public String write_file(int tId, MultipartHttpServletRequest mRequest) {
 		int result = service.insert_file(mRequest);
 		if (result > 0) {
-			return "redirect:boardlist.do";
+			return "redirect:boardlist.do?tId="+tId;
 		}else{
 			return "forward:writeForm.do";
 		}
@@ -93,14 +95,29 @@ public class BoardController {
 		}
 	}
 
-	@RequestMapping(value = "delete")
-	public String delete(int bId, Model model) {
+	@RequestMapping(value = "delete")   //tId 필요할거가튼데...
+	public String delete(int tId, int bId, Model model) {
 		int result = service.delete(bId);
 		if (result > 0) {
-			return "redirect:list.do";
+			return "redirect:boardlist.do?tId="+tId;
 		} else {
 			return "forward:writeForm.do";
 		}
 	}
 
+	@RequestMapping(value = "updateForm")
+	public String updateForm(int bId, Model model){
+		Board board = service.detail(bId);
+		model.addAttribute("updateForm", board);
+		return "board/updateForm";
+	}
+	@RequestMapping(value = "updateFile")
+	public String updateFile(int tId, MultipartHttpServletRequest mRequest){
+		int result = service.update_file(mRequest);
+		if (result > 0) {
+			return "redirect:boardlist.do?tId="+tId;
+		}else{
+			return "forward:writeForm.do";
+		}
+	}
 }
