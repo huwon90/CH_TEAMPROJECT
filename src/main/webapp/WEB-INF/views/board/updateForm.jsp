@@ -75,6 +75,7 @@
 	<form action="updateFile.do" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="bId" value="${updateForm.bId }">
 		<input type="hidden" name="tId" value="${param.tId }">
+		<input type="hidden" name="mId" value="${mId }">
 		<table>
 			<tr id="profile">
 				<td rowspan="2" class="profile1">프로필사진</td>

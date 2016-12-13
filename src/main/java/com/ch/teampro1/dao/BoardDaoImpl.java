@@ -23,16 +23,6 @@ public class BoardDaoImpl implements BoardDao{
 	}
 	
 	@Override
-	public List<Board> infiniteScroll(Board infi) {
-		return session.selectList("infidown", infi);
-	}
-
-	@Override
-	public int replydelete(int brId) {
-		return session.delete("replydelte", brId);
-	}
-	
-	@Override
 	public List<BoardRe> boardreList()  {
 		return session.selectList("boardreList");
 	}
@@ -49,12 +39,17 @@ public class BoardDaoImpl implements BoardDao{
 
 	@Override
 	public int delete(int bId) {
-		return session.delete("delete", bId);
+		return session.update("delete", bId);
 	}
 
 	@Override
 	public int reply_insert(BoardRe boardre) {
 		return session.insert("insert_reply", boardre);
+	}
+	
+	@Override
+	public int delete_reply(int brId) {
+		return session.delete("delete_reply", brId);
 	}
 	
 	@Override
@@ -73,6 +68,13 @@ public class BoardDaoImpl implements BoardDao{
 		return session.selectList("phoneList", tId);
 	}
 
+	@Override
+	public int delete_boardreply(int bId) {
+		return session.delete("delete_boardreply", bId);
+	}
 
-
+	@Override
+	public int memberCount(int tId) {
+		return session.selectOne("memberCount", tId);
+	}
 }

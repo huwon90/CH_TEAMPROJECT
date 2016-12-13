@@ -1,0 +1,160 @@
+﻿ @import url(http://fonts.googleapis.com/earlyaccess/jejugothic.css);
+
+        #content {
+            margin-top: 30px;
+            width: 2000px;
+            height: 1000px;
+            overflow-x: hidden;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-size: cover;
+            filter: alpha(opacity=70);
+        }
+
+            #content p {
+                margin: 0 auto;
+                margin-top:400px;
+                font-size: 50px;
+                text-align: center;
+                background-color: #C9CCD4;
+                color: #333333;
+                width: 710px;
+                height: 70px;
+                text-align: center;
+                line-height: 70px;
+            }
+
+            #content a {
+                margin-top: 5px;
+                position: absolute;
+                margin-left: 1250px;
+                color: white;
+                text-decoration: none;
+            }
+
+                #content a:hover {
+                    color: inherit;
+                }
+
+        table {
+            margin-top: 40px;
+            margin-bottom: 50px;
+        }
+
+        #content1 {
+            width: 1900px;
+            height: 350px;
+        }
+
+            #content1 td {
+                text-align: center;
+                font-size: 20px;
+            }
+        /* demo layout */
+        h3 {
+            font-size: 14px;
+            border: 1px solid #CCC;
+            background-color: #EEE;
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+        }
+
+        h4 {
+            font-size: 14px;
+            font-weight: normal;
+            border: 1px solid #CCC;
+            background-color: #EEE;
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+        }
+
+            h4 a {
+                text-decoration: none;
+                color: #69F;
+                font-weight: bold;
+            }
+
+        pre {
+            display: block;
+            margin: 20px 0 0;
+            padding: 0;
+            color: #333;
+            font-size: 12px;
+        }
+
+            pre .property {
+                color: #39F;
+                font-weight: bold;
+            }
+
+            pre .value {
+                color: #F90;
+                font-weight: bold;
+            }
+
+        /* override styles */
+        .banner02 {
+            float: right;
+            width: 600px;
+            height: 400px;
+        }
+
+            .banner02 ul li a {
+                display: block;
+                text-shadow: 0 0 2px #666;
+                text-decoration: none;
+                color: #FFF;
+                font-size: 24px;
+                font-weight: bold;
+                letter-spacing: -1px;
+                text-align: center;
+                line-height: 200px;
+            }
+
+        #intro ul {
+            float: left;
+        }
+
+        #intro #intro_ul {
+            margin-top: 10px;
+            margin-left: 30px;
+            margin-right: 60px;
+            width: 1000px;
+        }
+
+            #intro #intro_ul #intro_ul_con {
+                margin-left: 200px;
+                list-style: none;
+                color: black;
+                font-size: 20px;
+            }
+
+        #intro_ul_title {
+            margin-left: 260px;
+            list-style: none;
+            color: black;
+            font-size: 30px;
+        }
+
+        #footer {
+            width: 2000px;
+            height: 250px;
+            background-color: lightgray;
+        }
+
+        #footer td {
+             color: black;
+             font-size: 20px;
+             width: 1000px;
+             color: #3B3B3B;
+        }
+        #footer li{
+            margin-left:200px;
+            list-style:none;
+        }
+        #footer img{
+            margin-left:400px;
+        }

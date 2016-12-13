@@ -28,6 +28,11 @@
 		alert('팀이 해체되었습니다.');
 	</script>
 </c:if>
+<c:if test="${param.msg=='참여팀아님' }">
+	<script>
+		alert('참여하시는 팀이 아닙니다. 참여신청을 해주세요!');
+	</script>
+</c:if>
 <%
 	if (session.getAttribute("ValidMem") == null) {
 		response.sendRedirect("joinOk.do");
@@ -37,7 +42,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
-<title>Team Project</title>
+<title>BUS</title>
 <link rel="stylesheet" href="css/Style.css">
 <link rel="stylesheet" href="css/loginstyle.css">
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
@@ -50,10 +55,7 @@
 			    $(this).css('cursor','pointer');
 			});
 	    }
-	});
-	
-    $(document).ready(function () {
-        for (var i = 0; i < "${fn:length(listTeam) }"; i++) {
+	    for (var i = 0; i < "${fn:length(listTeam) }"; i++) {
             $('#slidebottom' + i).mouseenter(function () {
                 $(this).children('.requestslide').slideToggle();
                 $(this).css('cursor','pointer');
@@ -63,8 +65,8 @@
                 $(this).children('.requestslide').slideToggle();
             });
         }
-    });
-
+	});
+	
    function insertTeam() {
       var tName = prompt('생성할 팀의 이름을 입력하세요', '팀 이름');
       if (tName) {
@@ -75,7 +77,7 @@
 </head>
 <body>
 
-<jsp:include page="../member/header.jsp" />
+<jsp:include page="../member/headerloginOk.jsp" />
 
 
    <div id="c1">
@@ -90,7 +92,7 @@
       <c:forEach var="jointeam" items="${listjoinTeam }" varStatus="status">
          <div class="dashed" id="ee${status.index }">
             
-            <a href="boardlist.do?tId=${jointeam.tId }">${jointeam.tName }</a> 
+            <a href="boardlist.do?tId=${jointeam.tId }&mId=${mId }">${jointeam.tName }</a> 
             <span>▼</span>
             <ul class="team_out">
                <c:if test="${jointeam.tmLeader == 0 }">
@@ -113,13 +115,12 @@
    <div id="c3">
       <ul>
          <li>전체 팀 목록</li>
-         <li><button onclick="location.href='listMember.do?mId=${mId}'">회원가입된 멤버목록</button></li>
       </ul>
    </div>
    <div id="c4">
       <c:forEach var="team" items="${listTeam }" varStatus="status">
             <div id="slidebottom${status.index }" class="dashed2">
-               <a href="boardlist.do?tId=${team.tId }">${team.tName }</a>
+               <a href="boardlist.do?tId=${team.tId }&mId=${mId }">${team.tName }</a>
                <div class="requestslide" onclick="location.href='requestTeam.do?mId=${mId }&tId=${team.tId }'">참여신청</div>
             </div>
       </c:forEach>

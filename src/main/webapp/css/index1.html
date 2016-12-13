@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+
+    <title>Team Project</title>
+    <link rel="stylesheet" href="css/Style.css">
+    <link rel="stylesheet" href="css/loginstyle.css">
+    <script type="text/javascript"
+            src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#header .mypage").click(function () {
+                var submenu = $(".mypage_list");
+                if (submenu.is(":visible")) {
+                    submenu.slideUp();
+                } else {
+                    submenu.slideDown();
+                }
+            });
+        });
+
+    </script>
+</head>
+
+<body>
+    <div id="header">
+        <div id="header2">
+            <ul id="logo">
+                <li><img src="image/4.png" alt="로고2" width="50" height="50" /> BUS </li>
+            </ul>
+            <ul id="search">
+                <li><input type="text" alt="검색창" class="input_text" /></li>
+                <li><a href="#"><img src="image/search.png" alt="검색" width="30" height="30" /></a></li>
+            </ul>
+            <ul id="text">
+                <li><a href="#">홍길동</a></li>
+                <li class="alert1"><img src="image/5.png" alt="로고2" width="35" height="35" /></li>
+              
+                <li class="mypage">
+                    ▼
+                    <ul class="mypage_list">
+                        <li><a href="#">정보수정</a></li>
+                        <li><a href="#">로그아웃</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+       </div>
+    <div id="c1">
+        <ul>
+            <li>내가 가입한 팀</li>
+        </ul>
+    </div>
+    <div id="c2">
+        <div class="dashed">
+            새 프로젝트 생성
+        </div>
+        <div class="dashed">
+            A 프로젝트
+        </div>
+        <div class="dashed">
+            B 프로젝트
+        </div>
+        <div class="dashed">
+            C 프로젝트
+        </div>
+        <div class="dashed">
+            D 프로젝트
+        </div>
+        <div class="dashed">
+            E 프로젝트
+        </div>
+       
+    </div>
+    <div id="c3">
+        <ul>
+            <li>전체 팀 목록</li>
+        </ul>
+    </div>
+    <div id="c4">
+        <div class="dashed2">
+            A 프로젝트
+        </div>
+        <div class="dashed2">
+            B 프로젝트
+        </div>
+        <div class="dashed2">
+            C 프로젝트
+        </div>
+        <div class="dashed2">
+            D 프로젝트
+        </div>
+        <div class="dashed2">
+            E 프로젝트
+        </div>
+        <div class="dashed2">
+            F 프로젝트
+        </div>
+        <div class="dashed2">
+            G 프로젝트
+        </div>
+        <div class="dashed2">
+            H 프로젝트
+        </div>
+        <div class="dashed2">
+            I 프로젝트
+        </div>
+     </div>
+</body>
+</html>

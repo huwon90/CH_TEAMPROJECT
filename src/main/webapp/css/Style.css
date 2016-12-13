@@ -6,6 +6,7 @@
     margin: 0;
     padding: 0;
     letter-spacing: -0.5px;
+    font-family: 'Jeju Gothic', serif;
 }
 
     #header {
@@ -32,16 +33,23 @@
         text-align: center;
         list-style: none;
         line-height: 70px;
+        margin-left:10px;
     }
 
     #header #logo {
-        font-family: 'Jeju Gothic', serif;
+    	color: white;
+        text-align: center;
+        font-size: 30px;
+        font-weight: bold;
+        margin-left: 200px;
+        width:600px;
+        /* font-family: 'Jeju Gothic', serif;
         margin-top:8px;
         color: white;
         text-align: center;
         font-size: 30px;
         font-weight: bold;
-        margin-left: 300px;
+        margin-left: 300px; */
         
     }
 
@@ -51,6 +59,12 @@
         line-height:70px;
         cursor: pointer;
         font-family: "10X10";
+        /* color: white;
+        text-align: center;
+        font-size: 30px;
+        font-weight: bold;
+        margin-left: 200px;
+        width:600px; */
     }
     #header #text li{
         line-height:60px;
@@ -61,7 +75,7 @@
         font-size:18px;
         text-decoration: none;
         letter-spacing: -1px;
-         font-family: 'Jeju Gothic', serif;
+        /* font-family: 'Jeju Gothic', serif; */
     }
     #header .alert1 img{
         text-align: center;

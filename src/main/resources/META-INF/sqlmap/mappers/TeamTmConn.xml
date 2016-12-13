@@ -23,14 +23,16 @@
 	
 	<!-- 팀장: 팀해체할때 tmConn delete -->
 	<delete id="removeTeamTmConn" parameterType="TeamTmConn">
-		DELETE FROM TM_CONN WHERE tId=#{tId, jdbcType=INTEGER} AND mId=#{mId, jdbcType=VARCHAR} AND tmLeader=1
+		DELETE FROM TM_CONN WHERE tId=#{tId, jdbcType=INTEGER} 
 	</delete>
 	
 	<!-- mId가 팀장으로 있는 팀 리스트 출력 -->
 	<select id="leaderTeamListAll" parameterType="String" resultMap="TeamTmConnResult">
 		SELECT T.TID, T.TNAME FROM TEAM T, TM_CONN TM WHERE T.TID=TM.TID AND TM.MID=#{mId} AND TM.TMLEADER=1
 	</select>
+	
+	<!-- 팀 초대받은 목록 -->
 	<select id="memberInvitedList" parameterType="String" resultMap="TeamTmConnResult">
-		SELECT t.tId, t.tName, tm.tmOk from TEAM t, TM_Conn tm where t.tId = tm.tId AND tm.mId=#{mId} AND tm.tmOk=0 AND tm.tmLeader=0
+		SELECT t.tId, t.tName, tm.tmOk from TEAM t, TM_Conn tm where t.tId = tm.tId AND tm.mId=#{mId} AND tm.tmOk=2 AND tm.tmLeader=0
 	</select>
 </mapper>

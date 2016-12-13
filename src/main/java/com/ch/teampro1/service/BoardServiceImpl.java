@@ -20,15 +20,6 @@ public class BoardServiceImpl implements BoardService {
 	private BoardDao boardDao;
 
 	@Override
-	public List<Board> infiniteScroll(Board infi) {
-		return boardDao.infiniteScroll(infi);
-	}
-	@Override
-	public int replydelete(int brId) {
-		return boardDao.replydelete(brId);
-	}
-	
-	@Override
 	public List<Board> listAll(int tId) {
 		return boardDao.listAll(tId);
 	}
@@ -82,29 +73,17 @@ public class BoardServiceImpl implements BoardService {
 	public int delete(int bId) {
 		return boardDao.delete(bId);
 	}
-<<<<<<< HEAD
-
-=======
 	
->>>>>>> 80ef0023d75601ecb6fc6b46b58a9dd724663075
 	@Override
 	public int reply_insert(BoardRe boardre) {
 		return boardDao.reply_insert(boardre);
 	}
-
-<<<<<<< HEAD
 	
-	
+	@Override
+	public int delete_reply(int brId) {
+		return boardDao.delete_reply(brId);
+	}
 
-	
-/*	@Override
-	public List<Board> listAll(int tId) {
-		return boardDao.listAll(tId);
-	}*/
-	
-
-
-=======
 	@Override
 	public List<MemberTmConn> phoneList(int tId) {
 		// TODO Auto-generated method stub
@@ -150,5 +129,14 @@ public class BoardServiceImpl implements BoardService {
 	public Board detail(int bId) {
 		return boardDao.detail(bId);
 	}
->>>>>>> 80ef0023d75601ecb6fc6b46b58a9dd724663075
+	
+	@Override
+	public int delete_boardreply(int bId) {
+		return boardDao.delete_boardreply(bId);
+	}
+	@Override
+	public int memberCount(int tId) {
+		// TODO Auto-generated method stub
+		return boardDao.memberCount(tId);
+	}
 }

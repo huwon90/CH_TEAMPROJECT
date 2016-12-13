@@ -22,24 +22,10 @@
 		<result property="bMemo" column="bMemo" />
 	</resultMap>
 	
-	<!-- 스크롤 아래로 내리면 나오는 리스트 -->	
-	<select id="infidown"  parameterType="Board" resultMap="BoardResult">
-<!-- 	SELECT * FROM (
-		SELECT ROWNUM RN, A.* from 
-	   (SELECT * FROM BOARD WHERE tId = #{tId} ORDER BY bId DESC) A)
-     WHERE RN > 10 -->
-          SELECT  * from board WHERE bId = #{bId}
+	<select id="listAll" parameterType="int" resultMap="BoardResult">
+	   SELECT * FROM BOARD WHERE tId = #{tId}  ORDER BY bId DESC
 	</select>
 	
-	<select id="listAll" parameterType="int" resultMap="BoardResult">
-	  SELECT * from 
-	   (SELECT * FROM BOARD WHERE tId = #{tId}  ORDER BY bId DESC) 
-	   WHERE rownum between 1 and 10
-	</select>
-
-	<select id="boardreList"  resultType="com.ch.teampro1.model.BoardRe">
-        select * from BOARD_RE
-    </select>
     
 	<select id="insert_file" parameterType="Board">
 		INSERT INTO Board
@@ -64,11 +50,6 @@
 		  #{bStart}, #{bEnd}, #{bTitle}, #{bLoc}, #{bMemo})
 	</select>
 	
-	<select id="insert_reply" parameterType="com.ch.teampro1.model.BoardRe">
-		insert into BOARD_RE
-		(mId,bId,brId,bRcontent)
-		 values (#{mId, jdbcType=VARCHAR},#{bId, jdbcType=INTEGER},brId_SQ.NEXTVAL,#{bRcontent})
-	</select>
 	
 	<delete id="delete">
 		DELETE FROM Board WHERE bId=#{bId}
@@ -92,5 +73,32 @@
 	<select id="detail" parameterType="int" resultType="Board">
 		SELECT * FROM BOARD WHERE bId = #{bId, jdbcType=INTEGER}
 	</select>
+
+	<!-- BOARD_RE 테이블 -->	
+	<select id="boardreList"  resultType="com.ch.teampro1.model.BoardRe">
+        select * from BOARD_RE
+    </select>
 	
+	<select id="insert_reply" parameterType="com.ch.teampro1.model.BoardRe">
+		insert into BOARD_RE
+		(mId,bId,brId,bRcontent)
+		 values (#{mId, jdbcType=VARCHAR},#{bId, jdbcType=INTEGER},brId_SQ.NEXTVAL,#{bRcontent})
+	</select>
+
+	<delete id="delete_boardreply" parameterType="int">
+		DELETE FROM BOARD_RE WHERE bId=#{bId}
+	</delete>
+	<!-- 팀해체를 위한 boardRe삭제 -->
+	<delete id="removeBoardRe">
+		DELETE FROM BOARD_RE WHERE bId IN ( SELECT bId from board where tId=#{tId} )
+	</delete>
+	
+	<!-- 팀해체를 위한 board삭제 -->
+	<delete id="removeBoard">
+		DELETE FROM Board WHERE tId=#{tId}
+	</delete>
+	
+	<delete id="delete_reply" parameterType="int">
+		DELETE FROM BOARD_RE WHERE brId=#{brId}
+	</delete>
 </mapper>

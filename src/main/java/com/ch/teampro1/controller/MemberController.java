@@ -11,11 +11,14 @@ import com.ch.teampro1.model.Email;
 import com.ch.teampro1.model.Member;
 import com.ch.teampro1.service.EmailSender;
 import com.ch.teampro1.service.IMemberService;
+import com.ch.teampro1.service.ITeamService;
 
 @Controller
 public class MemberController {
 	@Autowired
 	private IMemberService memberService;
+	@Autowired
+	private ITeamService tService;
 	@Autowired
 	private EmailSender emailSender;
 	@Autowired
@@ -82,6 +85,8 @@ public class MemberController {
 	public String detailMember(String mId, Model model){
 		Member member = memberService.detailMember(mId);
 		model.addAttribute("detailMember", member);
+		int requestCount = tService.requestCount(mId);
+		model.addAttribute("requestCount", requestCount);
 		return "member/detailMemberForm";
 	}
 	@RequestMapping("modifyMemberForm")

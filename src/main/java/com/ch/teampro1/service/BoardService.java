@@ -10,26 +10,19 @@ import com.ch.teampro1.model.MemberTmConn;
 
 public interface BoardService {
 	public List<Board> listAll(int tId);
-    public List<BoardRe> boardreList();
-<<<<<<< HEAD
-    
-	public  List<Board> infiniteScroll(Board infi);
-    
-=======
->>>>>>> 80ef0023d75601ecb6fc6b46b58a9dd724663075
-	public int insert_file(MultipartHttpServletRequest mRequest);
-	public int reply_insert(BoardRe boardre);
 	public int insert_schedule(Board board);
 	public int delete(int bId);
-
-
-	public List<MemberTmConn> phoneList(int tId);
-	
-	public int replydelete(int brId);
-	
-
-
+	public int insert_file(MultipartHttpServletRequest mRequest);
 	public int update_file(MultipartHttpServletRequest mRequest);
 	public Board detail(int bId);
 
+
+	public List<MemberTmConn> phoneList(int tId);
+	public int memberCount(int tId);
+
+	public List<BoardRe> boardreList();
+	public int reply_insert(BoardRe boardre);
+	public int delete_reply(int brId);   // 댓글 삭제
+	public int delete_boardreply(int bId); //게시글 삭제에 필요한 댓글 삭제
+	
 }

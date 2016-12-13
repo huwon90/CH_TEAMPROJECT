@@ -5,8 +5,42 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<style>
+	body{
+		background-color:#F2F2F2;
+	}
+	table{
+		overflow:fixed;
+		margin-top:150px;
+		margin-left:550px;
+		width:860px;
+		height:600px;
+		border:1px solid #ACACAD;
+	}
+	caption{
+		font-size:20px;
+		color:black;
+		margin-bottom:20px;
+		text-align:left;
+		padding-bottom:5px;
+		border-bottom:2px solid black;
+	}
+	.detail_b{
+		margin-top:20px;
+		width:80px;
+		height:40px;
+		font-size:15px;
+	 }
+	 #detail_btd{
+	 	text-align:center;
+	 }
+	 td{
+	 	font-size:20px;
+	 }
+</style>
 </head>
 <body>
+<jsp:include page="headerloginOk.jsp" />
 	<div>
   		<table>
   			<caption>정보보기화면</caption>
@@ -46,10 +80,10 @@
   				</td>
   			</tr>
   			<tr>
-				<td colspan="2">
-					<input type="button" value="정보수정" onclick="location.href='modifyMemberForm.do?mId=${detailMember.mId }'">
-					<input type="button" value="로그아웃" onclick="location.href='logout.do'">
-					<input type="button" value="회원탈퇴" onclick="location.href='deleteForm.do'">
+				<td colspan="2" id="detail_btd">
+					<input type="button" class="detail_b" value="정보수정" onclick="location.href='modifyMemberForm.do?mId=${detailMember.mId }'">
+					<input type="button" class="detail_b" value="로그아웃" onclick="location.href='logout.do'">
+					<input type="button" class="detail_b" value="회원탈퇴" onclick="location.href='deleteOk.do'">
 				</td>
   			</tr>
   		</table>	
