@@ -32,8 +32,11 @@ import com.ch.teampro1.model.MemberTmConn;
 import com.ch.teampro1.model.TmConn;
 import com.ch.teampro1.service.BoardService;
 import com.ch.teampro1.service.ITeamService;
+<<<<<<< HEAD
 import com.ch.teampro1.util.MediaUtils;
 import com.ch.teampro1.util.UploadFileUtils;
+=======
+>>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 
 @Controller
 public class BoardController {
@@ -41,6 +44,7 @@ public class BoardController {
 	private BoardService bService;
 	@Autowired
 	private ITeamService tService;
+<<<<<<< HEAD
 	
 	 @Resource(name = "uploadPath")
 	  private String uploadPath;
@@ -51,6 +55,9 @@ public class BoardController {
 	}
 	  
 	 
+=======
+
+>>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 	@RequestMapping(value="boardlist", method=RequestMethod.GET)
 	public ModelAndView boardlist(String mId, TmConn tmConn, MemberTmConn memberTmConn, int tId, Model model) throws Exception{
         ModelAndView modelandview = new ModelAndView();
@@ -59,8 +66,11 @@ public class BoardController {
 	        List<Board> list = bService.listAll(tId);
 	        List<BoardRe> relist =bService.boardreList();
 	        List<MemberTmConn> phoneList = bService.phoneList(tId);
+<<<<<<< HEAD
 	        List<Boardfile> fileList = bService.getAttach2();
 	        modelandview.addObject("fileList", fileList);
+=======
+>>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 			modelandview.addObject("phoneList",phoneList);
 			int memberCount = bService.memberCount(tId);
 			modelandview.addObject("memberCount", memberCount);
@@ -120,11 +130,18 @@ public class BoardController {
 			return "forward:writeForm.do";
 		}
 	}
+<<<<<<< HEAD
 	
 	
 	@RequestMapping(value = "delete")  
 	public String delete(String mId, int tId, int bId, Model model) {
 		int result = bService.delete_reply(bId);
+=======
+
+	@RequestMapping(value = "delete")  
+	public String delete(String mId, int tId, int bId, Model model) {
+		int result = bService.delete_boardreply(bId);
+>>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 		if(result > 0) { 
 			result = bService.delete(bId);
 			if(result > 0) {
@@ -154,6 +171,7 @@ public class BoardController {
 		}
 	}
 	
+<<<<<<< HEAD
 	@RequestMapping(value="infiniteScrollDown", method=RequestMethod.POST)
 	public @ResponseBody List<Board> InfiniteScrollDown(@RequestBody Board board) throws Exception{
 		int bId = board.getbId()-1;
@@ -293,4 +311,17 @@ public class BoardController {
 	  } 
 	  
 
+=======
+	@RequestMapping(value = "replydelete")  
+	public String replyDelete(int brId, String mId, int tId, Model model) {
+		int result = bService.delete_reply(brId);
+		if(result > 0) {
+			model.addAttribute("msg", "댓글삭제성공");
+			return "redirect:boardlist.do?tId="+tId+"&mId="+mId;
+		} else {
+			model.addAttribute("msg", "댓글삭제실패");
+			return "redirect:boardlist.do?tId="+tId+"&mId="+mId;
+		}
+	}
+>>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 }

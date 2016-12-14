@@ -174,6 +174,8 @@ public class TeamController {
 		model.addAttribute("memberList", memberList);
 		List<TeamTmConn> joinedlist = tService.jointTeamListAll(leaderId);
 		model.addAttribute("joinedTeam", joinedlist);
+		int requestCount = tService.requestCount(leaderId);
+		model.addAttribute("requestCount", requestCount);
 		return "team/memberList";
 	}
 	@RequestMapping(value="invite", method=RequestMethod.GET)

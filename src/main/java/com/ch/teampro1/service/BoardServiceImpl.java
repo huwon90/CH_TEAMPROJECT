@@ -81,6 +81,14 @@ public class BoardServiceImpl implements BoardService {
 	public int reply_insert(BoardRe boardre) {
 		return boardDao.reply_insert(boardre);
 	}
+<<<<<<< HEAD
+=======
+	
+	@Override
+	public int delete_reply(int brId) {
+		return boardDao.delete_reply(brId);
+	}
+>>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 
 	@Override
 	public List<MemberTmConn> phoneList(int tId) {
@@ -129,14 +137,20 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
+<<<<<<< HEAD
 	public int delete_reply(int bId) {
 		return boardDao.delete_reply(bId);
+=======
+	public int delete_boardreply(int bId) {
+		return boardDao.delete_boardreply(bId);
+>>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 	}
 	@Override
 	public int memberCount(int tId) {
 		// TODO Auto-generated method stub
 		return boardDao.memberCount(tId);
 	}
+<<<<<<< HEAD
 	
 	@Override
 	public List<Board> viewfile(int tId) {
@@ -195,4 +209,6 @@ public class BoardServiceImpl implements BoardService {
 
 	
 
+=======
+>>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 }

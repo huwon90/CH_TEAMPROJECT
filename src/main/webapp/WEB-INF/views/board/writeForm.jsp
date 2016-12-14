@@ -19,6 +19,7 @@
 .o-container #text_aline {
 	width: 800px;
 	height: 30px;
+	margin-bottom:10px;
 	border-style: none;
 }
 
@@ -45,6 +46,23 @@ small {
   margin: auto;
   
 }
+.mainpanimage{
+	margin-bottom:8px;
+}
+.subpanimage{
+	margin-right:10px;
+}
+.subpanimage2{
+	margin-top:9px;
+	margin-right:10px;
+}
+#date_1{
+	margin-bottom:17px;
+	height:30px;
+}
+span{
+	text-decoration:none;
+}
 </style>
 </head>
 <body>
@@ -57,11 +75,10 @@ small {
 		<div class="o-section">
 			<div id="tabs" class="c-tabs no-js">
 				<div class="c-tabs-nav">
-					<a href="#" class="c-tabs-nav__link is-active"> <i
-						class="fa fa-home"></i> <span>글 작성</span>
-					</a> <a href="#" class="c-tabs-nav__link"> <i class="fa fa-book"></i>
-						<span>일정 작성</span>
-					</a>
+					<a href="#" class="c-tabs-nav__link is-active"><img src="image/board_mainfile.png" class="mainpanimage" alt="image" width="25" height="25">
+					<span>글 작성</span></a> 
+					<a href="#" class="c-tabs-nav__link"><img src="image/board_calendar.png" class="mainpanimage" alt="image" width="25" height="25">
+					<span>일정 작성</span></a>
 				</div>
 
 
@@ -79,6 +96,7 @@ small {
 											placeholder="글을 작성해보세요." required="required"></textarea></td>
 								</tr>
 								<tr>
+<<<<<<< HEAD
 									<td><img src="" alt="파일" /></td>
 									 <td><div class='uploadedList'style="width: 300px; height: 150px; background-color: greenblue;">여기에 파일을 넣으세요</div></td> 
 
@@ -86,6 +104,15 @@ small {
                      <!-- 		    <td><input type="file" name="biName" value="이미지첨부"></td> -->
 									<td class="big_write">
 									<input type="submit" value="글쓰기" class="go_right"></td>
+=======
+									<td><img src="image/board_file.png" class="subpanimage" width="25" height="25" alt="파일" /></td>
+									<td><input type="file" name="bfName" value="파일첨부">
+									</td>
+									<td><img src="image/board_picture.png" class="subpanimage" width="25" height="25" alt="사진" /></td>
+									<td><input type="file" name="biName" value="이미지첨부"></td>
+									<td class="big_write"><input type="submit" value="글쓰기"
+										class="go_right"></td>
+>>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 								</tr>
 							</table>
 							<ul class="uploadedList"> <!-- 파일업로드 하면 여기로 들어간다 -->
@@ -105,9 +132,8 @@ small {
 											placeholder="일정 제목을 입력하세요." required="required"></textarea></td>
 								</tr>
 								<tr>
-									<td colspan="5"><img src="" alt="아이콘" /> <input
-										type="date" name="bStart" required="required"> ~ <input
-										type="date" name="bEnd" required="required"></td>
+									<td colspan="5"><img src="image/board_date.png" class="subpanimage2" alt="아이콘" width="20" height="20" />
+									<input type="date" id="date_1" name="bStart" required="required"> ~ <input type="date" id="date_1" name="bEnd" required="required"></td>
 								</tr>
 								<tr>
 									<td colspan="5"><textarea id="text_aline" name="bLoc"

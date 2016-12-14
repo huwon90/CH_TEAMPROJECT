@@ -59,7 +59,11 @@ $(document).ready(function() {
 	left: 20px;
 }
 </style>
+<<<<<<< HEAD:src/main/webapp/WEB-INF/views/member/headerloginOk.jsp
 <title>Insert title here</title>
+=======
+<title>BUS</title>
+>>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2:src/main/webapp/WEB-INF/views/member/headerloginOk.jsp
 </head>
 <body>
 	<div id="header">

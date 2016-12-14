@@ -17,6 +17,7 @@ public interface BoardDao {
 	public List<MemberTmConn> phoneList(int tId);
 	public int update_file(Board board);
 	public Board detail(int bId);
+<<<<<<< HEAD
 	public int delete_reply(int bId);  //게시글 삭제에 필요한 댓글삭제
 	public int memberCount(int tId);
 	
@@ -33,4 +34,9 @@ public interface BoardDao {
 	public void deleteAttach(Integer bId)throws Exception;
 	
 	public void replaceAttach(String fullName, Integer bno)throws Exception;
+=======
+	public int delete_boardreply(int bId);  //게시글 삭제에 필요한 댓글삭제
+	public int delete_reply(int brId);   // 댓글 삭제
+	public int memberCount(int tId);
+>>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 }

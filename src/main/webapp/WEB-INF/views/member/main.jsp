@@ -107,12 +107,21 @@
     <div id="footer">
         <table>
             <tr>
+<<<<<<< HEAD
                 <td class="bus_footer"><img src="image/footer1.png" alt="로고2" width="150" height="150" />BUS</td>
                 <td>
                     <ul>
                         <li> Google Chrome에 최적화된 홈페이지입니다.</li> <br />
                         <li> Copyright © 2jo check All Rights Reserved</li> <br />
                         <li> footer는 미완성이에양</li> 
+=======
+                <td class="bus_footer"><img src="image/footer1.png" alt="로고2" width="170" height="170" /></td>
+                <td>
+                    <ul>
+                    	<li> BUS는 Business Useful Scheduler의 줄임말입니다</li><br>
+                        <li> Google Chrome에 최적화된 홈페이지입니다</li> <br />
+                        <li> Copyright © BUS All Rights Reserved</li> <br />
+>>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
                     </ul>
                 </td>
             </tr>

@@ -25,6 +25,21 @@
 		padding-bottom:5px;
 		border-bottom:2px solid black;
 	}
+<<<<<<< HEAD
+=======
+	.detail_b{
+		margin-top:20px;
+		width:80px;
+		height:40px;
+		font-size:15px;
+	 }
+	 #detail_btd{
+	 	text-align:center;
+	 }
+	 td{
+	 	font-size:20px;
+	 }
+>>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 </style>
 </head>
 <body>
@@ -68,10 +83,17 @@
   				</td>
   			</tr>
   			<tr>
+<<<<<<< HEAD
 				<td colspan="2">
 					<input type="button" value="정보수정" onclick="location.href='modifyMemberForm.do?mId=${detailMember.mId }'">
 					<input type="button" value="로그아웃" onclick="location.href='logout.do'">
 					<input type="button" value="회원탈퇴" onclick="location.href='deleteOk.do'">
+=======
+				<td colspan="2" id="detail_btd">
+					<input type="button" class="detail_b" value="정보수정" onclick="location.href='modifyMemberForm.do?mId=${detailMember.mId }'">
+					<input type="button" class="detail_b" value="로그아웃" onclick="location.href='logout.do'">
+					<input type="button" class="detail_b" value="회원탈퇴" onclick="location.href='deleteOk.do'">
+>>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 				</td>
   			</tr>
   		</table>	
