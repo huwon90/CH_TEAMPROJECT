@@ -30,23 +30,31 @@
 		DELETE FROM TM_CONN WHERE MID=#{mId, jdbcType=VARCHAR} AND TID=#{tId, jdbcType=INTEGER}
 	</delete>
 	
-	<!-- 가입요청중복: 가입요청만 했을때 -->
+	<!-- 가입요청중복: 가입요청만 했을때 --> 
 	<select id="chkTeam_ok0" parameterType="TmConn" resultType="int">
-		SELECT COUNT(*) FROM TM_CONN WHERE MID=#{mId} AND TID=#{tId} AND TMOK=0
+		SELECT COUNT(*) FROM TM_CONN WHERE MID=#{mId, jdbcType=VARCHAR} AND TID=#{tId, jdbcType=INTEGER} AND TMOK=0
 	</select>
 	
-	<!-- 가입요청중복: 이미 가입되었을때  -->
+	<!-- 가입요청중복: 이미 가입되었을때  --> <!-- 팀 게시판 입장할때 가입되어있는지 -->
 	<select id="chkTeam_ok1" parameterType="TmConn" resultType="int">
-		SELECT COUNT(*) FROM TM_CONN WHERE MID=#{mId} AND TID=#{tId} AND TMOK=1
+		SELECT COUNT(*) FROM TM_CONN WHERE MID=#{mId, jdbcType=VARCHAR} AND TID=#{tId, jdbcType=INTEGER} AND TMOK=1
 	</select>
 	
 	<!-- 참여요청 알림(user14가 팀리더로 있는 모든 팀에 들어온 요청 갯수) -->
 	<select id="requestCount" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM TM_CONN
-  			WHERE TID IN (SELECT TID FROM TM_CONN
-                			WHERE MID=#{mId} ) AND TMOK=0
+  			WHERE (MID=#{mId} AND TMOK=2)
+  			OR (TID IN (SELECT TID FROM TM_CONN WHERE MID='user14' AND TMLEADER=1) AND TMOK=0)
 	</select>
 	<select id="chkTmConn" parameterType="TmConn" resultType="int">
 		select count(*) from TM_CONN WHERE tId=#{tId} AND mId=#{mId}
 	</select>
+<!-- 	
+	<select id="chkTmokBoard" parameterType="TmConn" resultType="int">
+		SELECT TMOK FROM TM_CONN WHERE MID=#{mId} AND TID=#{tId}
+	</select> -->
+	<!-- 초대요청 보내기  -->
+	<insert id="inviteTeam" parameterType="TmConn">
+		INSERT INTO TM_CONN(tId, mId, tmOk) VALUES (#{tId}, #{mId}, 2)
+	</insert>
 </mapper>

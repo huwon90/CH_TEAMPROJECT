@@ -18,7 +18,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<jsp:include page="../member/header.jsp" />
+	<jsp:include page="../member/headerloginOk.jsp" />
 	<div id="c5">
 		<ul>
 			<li>초대받은 프로젝트 목록</li>
@@ -26,13 +26,13 @@
 	</div>
 	
 	<div id="c6">
-		<table border="1">
-			<tr><td>팀번호</td><td>팀이름</td><td>승인</td></tr>
+		<table>
+			<tr><th>팀번호</th><th>팀이름</th><th>승인</th></th>
 			<c:if test="${empty invited}">
 				<tr><td colspan="3">초대받은 팀이 없습니다</td></tr>
 			</c:if>
 			<c:forEach var="inList" items="${invited }">
-				<c:if test="${inList.tmOk ==0 }">
+				<c:if test="${inList.tmOk ==2 }">
 				<tr>
 					<td>${inList.tId }</td>
 					<td>${inList.tName }</td>
@@ -50,17 +50,20 @@
 		</ul>
 	</div>
 	<div id="c4">
-		<c:if test="${empty leaderTeamList}">
-			<div class="dashed2">
-				생성한 팀이 없습니다
-			</div>
+		<table>
+		<tr><th>회원아이디</th><th>회원이름</th><th>회원이메일</th><th>팀 번호</th><th>승인</th></tr>
+		<c:if test="${empty listRequest}">
+			<tr><td colspan="5">참여요청이 없습니다</td></tr>
 		</c:if>
-		<c:forEach var="team" items="${leaderTeamList }">
-			<div class="dashed2">
-				${team.tName }
-				<button onclick="location.href='listRequest.do?tId=${team.tId }&leaderId=${param.mId }'">참여요청리스트</button>
-			</div>
-		</c:forEach>
+		<c:forEach var="member" items="${listRequest }">
+			<tr><td>${member.mId }</td>
+				<td>${member.mName }</td>
+				<td>${member.mEmail }</td>
+				<td>${member.tId }</td>
+				<td><button onclick="location.href='okTeam.do?mId=${member.mId }&tId=${member.tId }&leaderId=${mId }'">Y</button>  
+					<button onclick="location.href='noTeam.do?mId=${member.mId }&tId=${member.tId }&leaderId=${mId }'">N</button></td></tr>
+		</c:forEach> 
+		</table>
 	</div>
 	
 	

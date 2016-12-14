@@ -6,6 +6,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.ch.teampro1.model.Board;
+import com.ch.teampro1.model.BoardRe;
 import com.ch.teampro1.model.Member;
 import com.ch.teampro1.model.MemberTmConn;
 import com.ch.teampro1.model.Team;
@@ -47,8 +49,8 @@ public class TeamDaoImpl implements ITeamDao {
 	}
 	
 	@Override
-	public List<MemberTmConn> requestListAll(int tId) {		//팀가입요청리스트 뿌리기 listAll
-		return session.selectList("requestListAll", tId);
+	public List<MemberTmConn> requestListAll(String mId) {		//팀가입요청리스트 뿌리기 listAll
+		return session.selectList("requestListAll", mId);
 	}
 	
 	@Override
@@ -121,4 +123,23 @@ public class TeamDaoImpl implements ITeamDao {
 		// 이미 팀에 가입되어있는지 여부확인
 		return session.selectOne("chkTmConn", tmConn);
 	}
+
+	@Override
+	public int removeBoardRe(BoardRe boardRe) {
+		// TODO Auto-generated method stub
+		return session.delete("removeBoardRe", boardRe);
+	}
+
+	@Override
+	public int removeBoard(Board board) {
+		// TODO Auto-generated method stub
+		return session.delete("removeBoard", board);
+	}
+
+	@Override
+	public int inviteTeam(TmConn tmConn) {
+		// TODO Auto-generated method stub
+		return session.insert("inviteTeam", tmConn);
+	}
+	
 }

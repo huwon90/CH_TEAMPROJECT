@@ -118,8 +118,35 @@
         color: black;
         font-size: 20px;
     }
+	
+		#c4 table{
+    	width: 800px;
+    	margin-left: 260px;
+    	margin-top: 30px;
+    }
     
+	#c4 table tr{
+		margin:50px;
+		padding : 50px;
+		text-align:center;
+	}
+	#c4 table tr td{
+		margin:20px;
+		padding : 20px;
+		text-align:center;
+        border-top: 2px solid  #667292;
+	}
+	#c4 table tr td {
+        width: 70px;
+    }
+
+ 	#c6{
+        margin-left: 230px;
+        text-align:center;
+        width: 80%;
+    }
     #c6 table{
+    	width: 800px;
     	margin-left: 260px;
     	margin-top: 30px;
     }
@@ -133,6 +160,10 @@
 		margin:20px;
 		padding : 20px;
 		text-align:center;
+        border-top: 2px solid  #667292;
 	}
+	#c6 table tr td:nth-child(2n-1) {
+        width: 70px;
+    }
     
     

@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.ch.teampro1.model.Board;
+import com.ch.teampro1.model.BoardRe;
 import com.ch.teampro1.model.Member;
 import com.ch.teampro1.model.MemberTmConn;
 import com.ch.teampro1.model.Team;
@@ -55,36 +57,39 @@ public class TeamController {
 	
 	@RequestMapping(value="leaderTeamList", method=RequestMethod.GET)
 	public String leaderTeamList(String mId, Model model) {
-		List<TeamTmConn> list = tService.leaderTeamListAll(mId);
-		model.addAttribute("leaderTeamList", list);
-		int requestCount = tService.requestCount(mId);
-		model.addAttribute("requestCount", requestCount);
-
 		List<TeamTmConn> invitedlist = tService.memberInvitedList(mId);
 		System.out.println("초대받은멤버리스트 실행되니");
-		//model.addAttribute("mId",mId);
 		model.addAttribute("invited", invitedlist);//초대받은 리스트
+		
+		
+		List<MemberTmConn> list = tService.requestListAll(mId);
+		model.addAttribute("listRequest", list);
+
+		int requestCount = tService.requestCount(mId);
+		model.addAttribute("requestCount", requestCount);
+		
+
 
 		return "team/leaderTeamList";
 	}
 	
-	@RequestMapping(value="listRequest", method=RequestMethod.GET)
+/*	@RequestMapping(value="listRequest", method=RequestMethod.GET)
 	public String listRequest(int tId, Model model) {
 		List<MemberTmConn> list = tService.requestListAll(tId);
 		model.addAttribute("tId", tId);
 		model.addAttribute("listRequest", list);
 		return "team/listRequest";
-	}
+	}*/
 	
 	@RequestMapping(value="okTeam", method=RequestMethod.GET)
-	public String okTeam(int tId, TmConn tmConn, Model model) {
+	public String okTeam(String leaderId, int tId, TmConn tmConn, Model model) {
 		int result = tService.okTeam(tmConn);
 		if(result>0) {
 			model.addAttribute("msg", "가입승인성공");
 		} else {
 			model.addAttribute("msg", "가입승인실패");
 		}
-		return "redirect:listRequest.do?tId="+tId;
+		return "redirect:leaderTeamList.do?mId="+leaderId;
 	}
 	
 	@RequestMapping(value="noTeam", method=RequestMethod.GET)
@@ -95,7 +100,7 @@ public class TeamController {
 		} else {
 			model.addAttribute("msg", "승인거부실패");
 		}
-		return "redirect:listRequest.do?tId="+tId+"&leaderId="+leaderId;
+		return "redirect:leaderTeamList.do?mId="+leaderId;
 	}
 	
 	@RequestMapping(value="outTeam", method=RequestMethod.GET)
@@ -134,7 +139,9 @@ public class TeamController {
 	}
 	
 	@RequestMapping(value="removeTeam", method=RequestMethod.GET)
-	public String removeTeam(Team team, TeamTmConn teamTmConn, Model model){
+	public String removeTeam(Team team, TeamTmConn teamTmConn, Model model, BoardRe boardRe, Board board){
+		int bReresult = tService.removeBoardRe(boardRe);
+		int bresult = tService.removeBoard(board);
 		int result1 = tService.removeTeamTmConn(teamTmConn);
 		if(result1 > 0){
 			System.out.println("팀Conn삭제성공");
@@ -152,16 +159,6 @@ public class TeamController {
 		return "redirect:listTeam.do?mId="+teamTmConn.getmId();
 	}
 	
-	/*@RequestMapping(value="mainpage", method=RequestMethod.GET)
-	public String mainpage(MemberTmConn memberTmConn, String tId, Model model){
-		System.out.println(tId);
-		List<MemberTmConn> phoneList = tService.phoneList(tId);
-		System.out.println(memberTmConn.gettId());
-		model.addAttribute("phoneList", phoneList);
-		return "team/mainpage";
-	}*/
-	
-	
 	@RequestMapping(value="search", method=RequestMethod.GET)
 	public String search(String mId, String tName, Model model){
 		List<Team> searchList = tService.searchTeam("%"+tName+"%");
@@ -172,25 +169,25 @@ public class TeamController {
 	}
 
 	@RequestMapping(value="listMember", method=RequestMethod.GET)
-	public String listMember(String mId, Model model){
+	public String listMember(String leaderId, Model model){
 		List<Member> memberList = tService.memberList();
 		model.addAttribute("memberList", memberList);
-		List<TeamTmConn> joinedlist = tService.jointTeamListAll(mId);
+		List<TeamTmConn> joinedlist = tService.jointTeamListAll(leaderId);
 		model.addAttribute("joinedTeam", joinedlist);
 		return "team/memberList";
 	}
 	@RequestMapping(value="invite", method=RequestMethod.GET)
-	public String inviteMember(TmConn tmConn, Model model){
+	public String inviteMember(TmConn tmConn, Model model, String leaderId){
 		int result = tService.chkTmConn(tmConn);
 		if(result > 0){
 			model.addAttribute("msg", "이미 팀에 속해있습니다.");
 			System.out.println("이미 팀에 속해있습니다.");
 		}else{
-			int result2 = tService.requestTeam(tmConn);
+			int result2 = tService.inviteTeam(tmConn);
 			if(result2>0)
-				System.out.println("프로젝트 가입초대 성공");
+				model.addAttribute("msg", "프로젝트 가입초대 성공");
 		}
-		return "team/listTeam";
+		return "redirect:listMember.do?leaderId="+leaderId;
 	}
 	
 	@RequestMapping(value="invitedOk", method=RequestMethod.GET)

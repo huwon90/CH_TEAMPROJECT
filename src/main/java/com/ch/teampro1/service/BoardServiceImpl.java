@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -13,6 +15,7 @@ import com.ch.teampro1.dao.BoardDao;
 import com.ch.teampro1.model.Board;
 import com.ch.teampro1.model.BoardRe;
 import com.ch.teampro1.model.MemberTmConn;
+import com.ch.teampro1.model.Boardfile;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -124,4 +127,72 @@ public class BoardServiceImpl implements BoardService {
 	public Board detail(int bId) {
 		return boardDao.detail(bId);
 	}
+	
+	@Override
+	public int delete_reply(int bId) {
+		return boardDao.delete_reply(bId);
+	}
+	@Override
+	public int memberCount(int tId) {
+		// TODO Auto-generated method stub
+		return boardDao.memberCount(tId);
+	}
+	
+	@Override
+	public List<Board> viewfile(int tId) {
+		return boardDao.viewfile(tId);
+	}
+	@Override
+	public List<Board> viewimage(int tId) {
+		return boardDao.viewimage(tId);
+	}
+	
+	@Override
+	public List<Board> infiniteScroll(Board infi) {
+		return boardDao.infiniteScroll(infi);
+	}
+
+
+
+	@Override
+	 @Transactional(propagation=Propagation.REQUIRED)
+	public void createfile(Board board) throws Exception{
+		
+		boardDao.createfile(board);
+
+		System.out.println("createService 호출");
+		
+	    String[] files = board.getFiles();
+
+		
+	    if(files == null) { 
+			System.out.println("리턴되면 안되는곳 FAIL");
+	    	return; } 
+		
+		for(String fileName : files){
+			boardDao.addAttach(fileName);
+		}
+	}
+	@Override
+	public List<String> getAttach(Integer bId) throws Exception {
+		return boardDao.getAttach(bId);
+	}
+	@Override
+	public List<Boardfile> getAttach2() throws Exception {
+	    return boardDao.getAttach2();
+	}
+	@Override
+	public void deleteAttach(int bId) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void replaceAttach(String fullName, int bId) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	
+
 }

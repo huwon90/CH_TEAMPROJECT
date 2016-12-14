@@ -59,13 +59,17 @@ $(document).ready(function() {
 	left: 20px;
 }
 </style>
+<title>Insert title here</title>
 </head>
 <body>
 	<div id="header">
 		<div id="header2">
 			<ul id="logo">
-				<li onclick="location.href='listTeam.do?mId=${mId }'"><img src="image/4.png" alt="로고2" width="50" height="50"/>
-					Team Project</li>
+				<li onclick="location.href='listTeam.do?mId=${mId }'"><img src="image/4.png" alt="로고2" width="70" height="70" /></li>
+                <li class="bus_text" onclick="location.href='listTeam.do?mId=${mId }'"><font color="#9FB7CF" size="7">B</font>US</li>
+				<%-- <li onclick="location.href='listTeam.do?mId=${mId }'"><img src="image/4.png" alt="로고2" width="50" height="50"/>
+					Team Project</li> --%>
+					
 			</ul>
 			<form action="search.do" id="frm">
 			<ul id="search">

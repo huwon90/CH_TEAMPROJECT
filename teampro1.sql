@@ -122,7 +122,11 @@ SELECT COUNT(*)
 --- tId 팀 참여 요청 목록
 SELECT M.MID, M.MNAME, M.MEMAIL, TM.TID 
   FROM MEMBER M, TM_CONN TM 
-  WHERE M.MID=TM.MID AND TM.TID=1 AND TM.TMOK=0;
+  WHERE M.MID=TM.MID AND 
+      TM.TID IN (SELECT TID
+                FROM TM_CONN
+                WHERE MID='user14' AND TMLEADER=1) 
+      AND TM.TMOK=0;
 
 --- tId 연락처목록
 SELECT *
@@ -138,12 +142,24 @@ SELECT COUNT(*)
   WHERE TID IN (SELECT TID FROM TM_CONN
                 WHERE MID='user14' AND TMLEADER=1) AND TMOK=0;
                 
+--- user12가 팀id=1의 팀원인지 아닌지 TMOK결과값
+SELECT TMOK FROM TM_CONN
+  WHERE MID='user12' AND TID=1;
+
+
+--- 참여요청 알림 
+    
+SELECT COUNT(*) FROM TM_CONN
+  WHERE (MID='user14' AND TMOK=2)
+  OR (TID IN (SELECT TID FROM TM_CONN WHERE MID='user14' AND TMLEADER=1) AND TMOK=0);
+  
+                
 ------------------------------------- 게시판 관리(Board)
 DROP TABLE Board;
 CREATE TABLE Board(
   mId varchar2(20) REFERENCES MEMBER(mId),
   tId number(10) REFERENCES TEAM(tId),
-  bId NUMBER(10) PRIMARY KEY NOT NULL,
+  bId NUMBER(10) PRIMARY KEY,
   bContent VARCHAR(500),
   bDate timestamp NOT NULL,
   bNo number(2) NOT NULL,
@@ -181,3 +197,15 @@ CREATE TABLE BOARD_RE(
 
 DROP SEQUENCE brId_SQ;
 CREATE SEQUENCE brId_SQ; --brId_SQ 시퀸스
+
+SELECT * FROM
+  (SELECT ROWNUM RN, A.* 
+   FROM (SELECT * FROM Board ORDER BY bId) A)
+   WHERE RN BETWEEN #{startRow} AND #{endRow};
+   SELECT * FROM board;
+INSERT INTO Board
+  VALUES('user', 1, bId_SQ.NEXTVAL, '내용냐용', sysdate, 1, bfId_SQ.NEXTVAL, 'sdsds', 0, '', sysdate,sysdate,'','','');
+INSERT INTO EMP VALUES(#{empno}, #{ename}, #{job}, #{mgr}, #{hiredate}, #{sal}, #{comm}, #{deptno});
+ROLLBACK;
+commit;
+UPDATE board SET BCONTENT='요를렣이ㅣ', BFNAME='파일이다', BINAME='이미지다' WHERE BID=8; 

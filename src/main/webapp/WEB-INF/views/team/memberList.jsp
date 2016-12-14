@@ -17,11 +17,40 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<style>
+	#content { 
+ 		margin-top:180px;
+		margin-left:17%;
+	}
+	#content table tr{
+		text-align: center;
+	}
+	#content table td{
+		width:200px;
+		height: 30px;
+		text-align: center;
+		font-size:1.2em;
+	}
+	#content #invite td{
+		width:435px;
+	}
+	#content table caption{
+		margin-bottom:30px;
+		margin-top:30px;
+		font-size: 1.8em;
+	}
+	#content table td:nth-child(5) {
+		width: 500px;
+	}
+</style>
 </head>
 <body>
+<jsp:include page="../member/headerloginOk.jsp" />
+<div id="content">
+
 	<table border=1>
 		<caption>회원목록</caption>
-		<tr><th>아이디</th><th>이름</th><th>연락처</th><th>이메일</th><th>주소</th></tr>
+		<tr><td>아이디</td><td>이름</td><td>연락처</td><td>이메일</td><td>주소</td></tr>
 		<c:forEach var="mList" items="${memberList}">
 			<tr>
 				<td>${mList.mId }</td>
@@ -33,9 +62,9 @@
 		</c:forEach>
 	</table><br><br>
 	<form action="invite.do">
-		<table border=1>
+		<table border=1 id="invite">
 			<caption>프로젝트 초대멤버 설정</caption>
-			<tr><th>회원아이디</th><th>프로젝트명</th></tr>
+			<tr><td>회원아이디</td><td>프로젝트명</td><td>초대하기</td></tr>
 			<tr><td>
 					<select id="mId" name="mId" required="required">
 						<option></option>
@@ -53,9 +82,11 @@
 						</c:forEach>
 					</select>
 				</td>
+				<input type="hidden" name="leaderId" value="${param.leaderId}">
 				<td><input type="submit" value="가입초대"></td>
 			</tr>
 		</table>
 	</form>
+</div>
 </body>
 </html>

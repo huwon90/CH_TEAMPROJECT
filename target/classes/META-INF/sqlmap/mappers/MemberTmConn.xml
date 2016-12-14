@@ -17,14 +17,21 @@
 	</resultMap>
 	
 	<!-- tId 팀 참여 요청목록 -->
-	<select id="requestListAll" parameterType="int" resultMap="MemberTmConnResult">
-		SELECT M.MID, M.MNAME, M.MEMAIL, TM.TID FROM MEMBER M, TM_CONN TM WHERE M.MID=TM.MID AND TM.TID=#{tId} AND TM.TMOK=0
+	<select id="requestListAll" parameterType="String" resultMap="MemberTmConnResult">
+		SELECT M.MID, M.MNAME, M.MEMAIL, TM.TID FROM MEMBER M, TM_CONN TM 
+  		WHERE M.MID=TM.MID AND TM.TID IN (SELECT TID FROM TM_CONN WHERE MID=#{mId, jdbcType=VARCHAR} AND TMLEADER=1) AND TM.TMOK=0
 	</select>
 	
-	<!-- tId 연락처목록 -->
+	<!-- tId 참여중인 연락처목록 -->
 	<select id="phoneList" parameterType="int" resultMap="MemberTmConnResult">
 		SELECT *
 			FROM member m, tm_conn TM , team t 
 				WHERE m.mId = tm.mId and t.tId = tm.tId and tmOk=1 and tm.tId=#{tId, jdbcType=INTEGER} ORDER BY tmLeader desc
+	</select>
+	<!-- tId 참여중인 멤버수 -->
+	<select id="memberCount" parameterType="MemberTmConn" resultType="int">
+		SELECT count(*)
+			FROM member m, tm_conn TM , team t 
+   			 WHERE m.mId = tm.mId and t.tId = tm.tId and tmOk=1 and tm.tId=#{tId, jdbcType=INTEGER}
 	</select>
 </mapper>

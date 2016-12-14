@@ -12,6 +12,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+<jsp:include page="headerloginOk.jsp" />
 	<div>
     	<form action="modifyMember.do" method="post" name="frm">
 			<table>

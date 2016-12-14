@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ch.teampro1.dao.ITeamDao;
+import com.ch.teampro1.model.Board;
+import com.ch.teampro1.model.BoardRe;
 import com.ch.teampro1.model.Member;
 import com.ch.teampro1.model.MemberTmConn;
 import com.ch.teampro1.model.Team;
@@ -46,14 +48,14 @@ public class TeamServiceImpl implements ITeamService {
 		return teamDao.jointTeamListAll(mId);
 	}
 	
-	@Override
+/*	@Override
 	public List<TeamTmConn> leaderTeamListAll(String mId) { //mId가 리더로 있는 팀 목록 출력
 		return teamDao.leaderTeamListAll(mId);
-	}
+	}*/
 	
 	@Override
-	public List<MemberTmConn> requestListAll(int tId) {	//가입요청 list뿌리기
-		return teamDao.requestListAll(tId);
+	public List<MemberTmConn> requestListAll(String mId) {	//가입요청 list뿌리기
+		return teamDao.requestListAll(mId);
 	}
 
 	@Override
@@ -116,5 +118,23 @@ public class TeamServiceImpl implements ITeamService {
 	@Override
 	public int chkTmConn(TmConn tmConn) {
 		return teamDao.chkTmConn(tmConn);
+	}
+
+	@Override
+	public int removeBoardRe(BoardRe boardRe) {
+		// TODO Auto-generated method stub
+		return teamDao.removeBoardRe(boardRe);
+	}
+
+	@Override
+	public int removeBoard(Board board) {
+		// TODO Auto-generated method stub
+		return teamDao.removeBoard(board);
+	}
+
+	@Override
+	public int inviteTeam(TmConn tmConn) {
+		// TODO Auto-generated method stub
+		return teamDao.inviteTeam(tmConn);
 	}
 }
