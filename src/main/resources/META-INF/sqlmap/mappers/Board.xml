@@ -75,10 +75,7 @@
 	   SELECT * FROM BOARD WHERE tId = #{tId}  ORDER BY bId DESC
 	</select>
 	
-<<<<<<< HEAD
-=======
-    
->>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
+
 	<select id="insert_file" parameterType="Board">
 		INSERT INTO Board
 		  VALUES(#{mId, jdbcType=VARCHAR}, #{tId, jdbcType=INTEGER}, bId_SQ.NEXTVAL, #{bContent, jdbcType=VARCHAR}, SYSDATE, 1, 
@@ -130,7 +127,6 @@
 	<select id="boardreList"  resultType="com.ch.teampro1.model.BoardRe">
         select * from BOARD_RE
     </select>
-<<<<<<< HEAD
 	
 	<select id="insert_reply" parameterType="com.ch.teampro1.model.BoardRe">
 		insert into BOARD_RE
@@ -146,7 +142,7 @@
 		DELETE FROM BOARD_RE WHERE bId IN ( SELECT bId from board where tId=#{tId} )
 	</delete>
 	
-=======
+
 	
 	<select id="insert_reply" parameterType="com.ch.teampro1.model.BoardRe">
 		insert into BOARD_RE
@@ -162,17 +158,14 @@
 		DELETE FROM BOARD_RE WHERE bId IN ( SELECT bId from board where tId=#{tId} )
 	</delete>
 	
->>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
+
 	<!-- 팀해체를 위한 board삭제 -->
 	<delete id="removeBoard">
 		DELETE FROM Board WHERE tId=#{tId}
 	</delete>
 	
-<<<<<<< HEAD
 
-=======
 	<delete id="delete_reply" parameterType="int">
 		DELETE FROM BOARD_RE WHERE brId=#{brId}
 	</delete>
->>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 </mapper>

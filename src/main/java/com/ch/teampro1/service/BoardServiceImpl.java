@@ -81,14 +81,6 @@ public class BoardServiceImpl implements BoardService {
 	public int reply_insert(BoardRe boardre) {
 		return boardDao.reply_insert(boardre);
 	}
-<<<<<<< HEAD
-=======
-	
-	@Override
-	public int delete_reply(int brId) {
-		return boardDao.delete_reply(brId);
-	}
->>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 
 	@Override
 	public List<MemberTmConn> phoneList(int tId) {
@@ -137,20 +129,14 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
-<<<<<<< HEAD
 	public int delete_reply(int bId) {
 		return boardDao.delete_reply(bId);
-=======
-	public int delete_boardreply(int bId) {
-		return boardDao.delete_boardreply(bId);
->>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 	}
 	@Override
 	public int memberCount(int tId) {
 		// TODO Auto-generated method stub
 		return boardDao.memberCount(tId);
 	}
-<<<<<<< HEAD
 	
 	@Override
 	public List<Board> viewfile(int tId) {
@@ -172,7 +158,7 @@ public class BoardServiceImpl implements BoardService {
 	 @Transactional(propagation=Propagation.REQUIRED)
 	public void createfile(Board board) throws Exception{
 		
-		boardDao.createfile(board);
+
 
 		System.out.println("createService 호출");
 		
@@ -181,6 +167,7 @@ public class BoardServiceImpl implements BoardService {
 		
 	    if(files == null) { 
 			System.out.println("리턴되면 안되는곳 FAIL");
+			
 	    	return; } 
 		
 		for(String fileName : files){
@@ -205,10 +192,12 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public int delete_boardreply(int bId) {
+		return 0;
+	}
 
 
 	
 
-=======
->>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 }

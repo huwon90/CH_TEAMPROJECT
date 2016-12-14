@@ -54,11 +54,7 @@ public class BoardDaoImpl implements BoardDao{
 		return session.insert("insert_reply", boardre);
 	}
 	
-	@Override
-	public int delete_reply(int brId) {
-		return session.delete("delete_reply", brId);
-	}
-	
+
 	@Override
 	public int update_file(Board board) {
 		return session.update("update_file", board);
@@ -74,22 +70,25 @@ public class BoardDaoImpl implements BoardDao{
 		// TODO Auto-generated method stub
 		return session.selectList("phoneList", tId);
 	}
-
 	@Override
-<<<<<<< HEAD
+	public int delete_reply(int brId) {
+		return session.delete("delete_reply", brId);
+	}
+	
+	
+	@Override
 	public int delete_reply(int bId) {
 		return session.delete("delete_reply", bId);
-=======
+	}
+	
 	public int delete_boardreply(int bId) {
 		return session.delete("delete_boardreply", bId);
->>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 	}
 
 	@Override
 	public int memberCount(int tId) {
 		return session.selectOne("memberCount", tId);
 	}
-<<<<<<< HEAD
 
 	@Override
 	public List<Board> viewfile(int tId) {
@@ -128,15 +127,12 @@ public class BoardDaoImpl implements BoardDao{
 		
 	}
 
-	@Override
+/*	@Override
 	public void replaceAttach(String fullName, Integer bno) throws Exception {
 		 session.delete("delete_reply");
 	}
-
+*/
 
 	
-	
 
-=======
->>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 }
