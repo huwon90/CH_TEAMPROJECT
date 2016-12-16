@@ -2,14 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE>
-<<<<<<< HEAD
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<style>
-	body{
-=======
 <c:if test="${param.msg=='가입 성공' }">
 	<script>
 		alert('회원가입에 성공하였습니다');
@@ -21,7 +13,6 @@
 <title>BUS</title>
 <style>
 body{
->>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 		background-color:#F2F2F2;
 	}
 	table{
@@ -89,7 +80,7 @@ body{
 	}
 </style>
 </head>
-<body>
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
 	<jsp:include page="header_main.jsp" />
 		<c:if test="${msg!=null }">${msg }</c:if>
 		<form action="login.do" method="post">

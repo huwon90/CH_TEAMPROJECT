@@ -61,7 +61,7 @@
 	}
 </style>
 </head>
-<body>
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
  <jsp:include page="header_main.jsp" /> 
 		<form action="findId.do" method="post" name="frm">
 			<table>
@@ -102,5 +102,6 @@
 				</tr>
 			</table>
 		</form>
+		<jsp:include page="../member/footer.jsp" />
 </body>
 </html>

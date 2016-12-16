@@ -23,20 +23,7 @@
 </head>
 <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
 	
-	<div id="header">
-        <div id="header2">
-            <ul id="logo">
-                <li><a href="main.do"><img src="image/4.png" alt="로고2" width="70" height="70" /></a></li>
-                <li class="bus_text"><font color="#9FB7CF" size="7">B</font>US</li>
-            </ul>
-            <ul id="text">
-            	<li><a href="findIdForm.do">ID찾기</a></li>
-                <li><a href="findPwForm.do">PW찾기</a></li>
-               	<li><a href="logout.do">로그인</a></li>
-                <li><a href="joinMemberForm.do">회원가입</a></li>
-            </ul>
-         </div>
-     </div>
+     <jsp:include page="../member/header_main.jsp" />
      <div id="content">
         <p>프로젝트 중심 협업 매니저 'BUS'</p>
         <a href="logout.do">지금 시작하세요</a>
@@ -104,29 +91,7 @@
 
 
     </div>
-    <div id="footer">
-        <table>
-            <tr>
-<<<<<<< HEAD
-                <td class="bus_footer"><img src="image/footer1.png" alt="로고2" width="150" height="150" />BUS</td>
-                <td>
-                    <ul>
-                        <li> Google Chrome에 최적화된 홈페이지입니다.</li> <br />
-                        <li> Copyright © 2jo check All Rights Reserved</li> <br />
-                        <li> footer는 미완성이에양</li> 
-=======
-                <td class="bus_footer"><img src="image/footer1.png" alt="로고2" width="170" height="170" /></td>
-                <td>
-                    <ul>
-                    	<li> BUS는 Business Useful Scheduler의 줄임말입니다</li><br>
-                        <li> Google Chrome에 최적화된 홈페이지입니다</li> <br />
-                        <li> Copyright © BUS All Rights Reserved</li> <br />
->>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
-                    </ul>
-                </td>
-            </tr>
-        </table>
+    <jsp:include page="../member/footer.jsp" />
 
-    </div>
 </body>
 </html>

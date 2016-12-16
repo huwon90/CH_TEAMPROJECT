@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -15,7 +13,6 @@ import com.ch.teampro1.dao.BoardDao;
 import com.ch.teampro1.model.Board;
 import com.ch.teampro1.model.BoardRe;
 import com.ch.teampro1.model.MemberTmConn;
-import com.ch.teampro1.model.Boardfile;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -29,6 +26,14 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public List<BoardRe> boardreList()  {
 		return boardDao.boardreList();
+	}
+	@Override
+	public List<Board> listAll2(Board board) {
+		return boardDao.listAll2(board);
+	}
+	@Override
+	public List<Board> listAll3(Board board) {
+		return boardDao.listAll3(board);
 	}
 	@Override
 	public int insert_file(MultipartHttpServletRequest mRequest) {
@@ -81,6 +86,11 @@ public class BoardServiceImpl implements BoardService {
 	public int reply_insert(BoardRe boardre) {
 		return boardDao.reply_insert(boardre);
 	}
+	
+	@Override
+	public int delete_reply(int brId) {
+		return boardDao.delete_reply(brId);
+	}
 
 	@Override
 	public List<MemberTmConn> phoneList(int tId) {
@@ -129,8 +139,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
-	public int delete_reply(int bId) {
-		return boardDao.delete_reply(bId);
+	public int delete_boardreply(int bId) {
+		return boardDao.delete_boardreply(bId);
 	}
 	@Override
 	public int memberCount(int tId) {
@@ -138,66 +148,14 @@ public class BoardServiceImpl implements BoardService {
 		return boardDao.memberCount(tId);
 	}
 	
-	@Override
-	public List<Board> viewfile(int tId) {
-		return boardDao.viewfile(tId);
-	}
-	@Override
-	public List<Board> viewimage(int tId) {
-		return boardDao.viewimage(tId);
-	}
-	
-	@Override
-	public List<Board> infiniteScroll(Board infi) {
-		return boardDao.infiniteScroll(infi);
-	}
-
-
-
-	@Override
-	 @Transactional(propagation=Propagation.REQUIRED)
-	public void createfile(Board board) throws Exception{
-		
-
-
-		System.out.println("createService 호출");
-		
-	    String[] files = board.getFiles();
-
-		
-	    if(files == null) { 
-			System.out.println("리턴되면 안되는곳 FAIL");
-			
-	    	return; } 
-		
-		for(String fileName : files){
-			boardDao.addAttach(fileName);
-		}
-	}
-	@Override
-	public List<String> getAttach(Integer bId) throws Exception {
-		return boardDao.getAttach(bId);
-	}
-	@Override
-	public List<Boardfile> getAttach2() throws Exception {
-	    return boardDao.getAttach2();
-	}
-	@Override
-	public void deleteAttach(int bId) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void replaceAttach(String fullName, int bId) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public int delete_boardreply(int bId) {
-		return 0;
-	}
-
-
-	
-
+   @Override
+   public List<Board> imageList(int tId) {
+      return boardDao.imageList(tId);
+   }
+   
+   @Override
+   public List<Board> fileList(int tId) {
+      // TODO Auto-generated method stub
+      return boardDao.fileList(tId);
+   }
 }

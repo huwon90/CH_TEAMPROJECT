@@ -189,10 +189,7 @@ CREATE TABLE BOARD_RE(
   brId NUMBER(10) PRIMARY KEY, -- 댓글번호
   bRcontent VARCHAR2(500), -- 댓글내용
   bRDate timestamp DEFAULT sysdate, -- 작성일자
-  brDeleteYN CHAR(1 BYTE) DEFAULT 'n',-- 삭제여부  
-  brParent NUMBER(10), --부모댓글
-  brDepth number(10) DEFAULT 0, --깊이
-  brOrder number(10) DEFAULT 1 --순서
+  brDeleteYN CHAR(1 BYTE) DEFAULT 'n'-- 삭제여부  
 ); 
 
 DROP SEQUENCE brId_SQ;
@@ -209,3 +206,13 @@ INSERT INTO EMP VALUES(#{empno}, #{ename}, #{job}, #{mgr}, #{hiredate}, #{sal}, 
 ROLLBACK;
 commit;
 UPDATE board SET BCONTENT='요를렣이ㅣ', BFNAME='파일이다', BINAME='이미지다' WHERE BID=8; 
+
+DELETE FROM BOARD_RE WHERE brId=1;
+DELETE FROM BOARD_RE WHERE bId=63;
+DELETE FROM BOARD WHERE bId=63;
+COMMIT;
+
+SELECT * FROM BOARD WHERE BID=72;
+SELECT COUNT(*) FROM TM_CONN
+WHERE (MID='user12' AND TMOK=2)
+ OR (TID IN (SELECT TID FROM TM_CONN WHERE MID='user12' AND TMLEADER=1) AND TMOK=0);

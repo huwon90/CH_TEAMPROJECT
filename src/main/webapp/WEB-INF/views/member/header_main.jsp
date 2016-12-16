@@ -11,7 +11,7 @@
 
 </head>
 <body>
-	<div id="header">
+	<div id="header" oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
         <div id="header2">
             <ul id="logo">
                 <li><a href="main.do"><img src="image/4.png" alt="로고2" width="70" height="70" /></a></li>

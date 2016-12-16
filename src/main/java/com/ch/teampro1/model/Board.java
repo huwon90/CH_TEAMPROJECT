@@ -2,6 +2,7 @@ package com.ch.teampro1.model;
 
 import java.sql.Timestamp;
 
+
 public class Board {
 	private String mId;
 	private int tId;
@@ -18,18 +19,6 @@ public class Board {
 	private String bTitle;
 	private String bLoc;
 	private String bMemo;
-	
-	
-	private String[] files;
-	
-	
-	
-	public String[] getFiles() {
-		return files;
-	}
-	public void setFiles(String[] files) {
-		this.files = files;
-	}
 	public String getmId() {
 		return mId;
 	}
@@ -120,9 +109,4 @@ public class Board {
 	public void setbMemo(String bMemo) {
 		this.bMemo = bMemo;
 	}
-	public String toString() {
-		return "dodf";
-	}
-	
-	
 }

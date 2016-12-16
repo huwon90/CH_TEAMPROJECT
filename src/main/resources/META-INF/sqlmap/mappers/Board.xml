@@ -22,59 +22,25 @@
 		<result property="bMemo" column="bMemo" />
 	</resultMap>
 	
-	<select id="getAttach2" resultType="Boardfile">
-		select * from boardfile
-	</select>
-	
-	<select id="getAttach" resultType="String">
-		select fullname from boardfile where bId = #{bId}
-	</select>
-	
-	<insert id="addAttach"  useGeneratedKeys="true"  >
-		insert into boardfile (bId,fullName) values (1,#{fullName})	
-		</insert> 
-
-<!--   	<insert id="addAttach"  useGeneratedKeys="true" keyProperty="bId" >
-	 <selectKey keyProperty="bId" resultType="int" order="BEFORE">
-	 	SELECT  bId_SQ.currval FROM dual
-	 </selectKey> 
-		insert into boardfile (bId,fullName) values (#{bId},#{fullName})	
-		</insert>  -->
-		 
-	
-		<!-- 스크롤 아래로 내리면 나오는 리스트 -->	
-	<select id="infidown"  parameterType="Board" resultMap="BoardResult">
-	<!-- 	SELECT * FROM (
-		SELECT ROWNUM RN, A.* from 
-	   (SELECT * FROM BOARD WHERE tId = #{tId} ORDER BY bId DESC) A)
-    	 WHERE RN > 10 -->
-          SELECT  * from board WHERE bId = #{bId}
-	</select>
-	
-	<insert id="createfile" parameterType="Board">
-		<selectKey keyProperty="bId" resultType="Integer" order="AFTER">
-		SELECT  bId_SQ.currval FROM dual
-	</selectKey>
-		  INSERT INTO Board  
-        (mId,tId, bId, bDate,bNo, bTitle, bContent)
-		  VALUES
-		  (#{mId, jdbcType=VARCHAR}, #{tId, jdbcType=INTEGER}, bId_SQ.NEXTVAL, SYSDATE, 1,'bTitle',#{bContent, jdbcType=VARCHAR})
-	</insert>
-	
-			<!-- 파일 모아보기 -->
-	<select id="viewfile" parameterType="int" resultMap="BoardResult">
-		select * from board WHERE tId = #{tId} AND bfName IS NOT NULL
-	</select>
-	
-	<!-- 이미지 모아보기 -->
-	<select id="viewimage" parameterType="int" resultMap="BoardResult">
-		select * from board WHERE tId = #{tId} AND biName IS NOT NULL
-	</select>
-	
 	<select id="listAll" parameterType="int" resultMap="BoardResult">
-	   SELECT * FROM BOARD WHERE tId = #{tId}  ORDER BY bId DESC
+	  	SELECT * from
+	(SELECT * FROM BOARD WHERE tId =#{tId} ORDER BY bId DESC)
+	WHERE ROWNUM between 1 and 5
 	</select>
-	
+
+	<select id="listAll2" parameterType="Board" resultMap="BoardResult">
+	<![CDATA[
+	SELECT *FROM board
+	where bId <= #{bId} and bId > #{bId}-5 order by bId desc
+	]]>
+	</select>
+		
+	<select id="listAll3" parameterType="Board" resultMap="BoardResult">
+	<![CDATA[
+	SELECT *FROM board
+	where bId >= #{bId} and bId > #{bId}-5 order by bId desc
+	]]>
+	</select>
 
 	<select id="insert_file" parameterType="Board">
 		INSERT INTO Board
@@ -94,13 +60,13 @@
 		  null, null,'','','')
 	</select>
 	<select id="insert_schedule" parameterType="Board">
-		  INSERT INTO Board
-        (mId,tId, bId, bDate,bNo, bStart, bEnd,bTitle, bLoc,bMemo)
-		  VALUES(#{mId, jdbcType=VARCHAR}, #{tId, jdbcType=INTEGER}, bId_SQ.NEXTVAL, SYSDATE, 2, #{bStart}, #{bEnd}, #{bTitle}, #{bLoc}, #{bMemo})
+		INSERT INTO Board
+		  VALUES(#{mId, jdbcType=VARCHAR}, #{tId, jdbcType=INTEGER}, bId_SQ.NEXTVAL, '', SYSDATE, 2, null, '', null, '', 
+		  #{bStart}, #{bEnd}, #{bTitle}, #{bLoc}, #{bMemo})
 	</select>
 	
 	
-	<delete id="delete">
+	<delete id="delete" parameterType="int">
 		DELETE FROM Board WHERE bId=#{bId}
 	</delete>
 	
@@ -134,22 +100,6 @@
 		 values (#{mId, jdbcType=VARCHAR},#{bId, jdbcType=INTEGER},brId_SQ.NEXTVAL,#{bRcontent})
 	</select>
 
-	<delete id="delete_reply" parameterType="int">
-		DELETE FROM BOARD_RE WHERE bId=#{bId}
-	</delete>
-	<!-- 팀해체를 위한 boardRe삭제 -->
-	<delete id="removeBoardRe">
-		DELETE FROM BOARD_RE WHERE bId IN ( SELECT bId from board where tId=#{tId} )
-	</delete>
-	
-
-	
-	<select id="insert_reply" parameterType="com.ch.teampro1.model.BoardRe">
-		insert into BOARD_RE
-		(mId,bId,brId,bRcontent)
-		 values (#{mId, jdbcType=VARCHAR},#{bId, jdbcType=INTEGER},brId_SQ.NEXTVAL,#{bRcontent})
-	</select>
-
 	<delete id="delete_boardreply" parameterType="int">
 		DELETE FROM BOARD_RE WHERE bId=#{bId}
 	</delete>
@@ -158,14 +108,22 @@
 		DELETE FROM BOARD_RE WHERE bId IN ( SELECT bId from board where tId=#{tId} )
 	</delete>
 	
-
 	<!-- 팀해체를 위한 board삭제 -->
 	<delete id="removeBoard">
 		DELETE FROM Board WHERE tId=#{tId}
 	</delete>
 	
-
 	<delete id="delete_reply" parameterType="int">
 		DELETE FROM BOARD_RE WHERE brId=#{brId}
 	</delete>
+	
+	<!-- 이미지 모아보기 -->
+   <select id="imageList" parameterType="int" resultType="Board">
+      SELECT BIID, BINAME FROM BOARD WHERE TID=#{tId, jdbcType=INTEGER} AND BINAME!='NULL' ORDER BY BDATE
+   </select>
+   
+   <!-- 파일모아보기 -->
+   <select id="fileList" parameterType="int" resultType="Board">
+      SELECT BFID, BFNAME FROM BOARD WHERE TID=#{tId, jdbcType=INTEGER} AND BFNAME!='NULL' ORDER BY BDATE DESC
+   </select>
 </mapper>

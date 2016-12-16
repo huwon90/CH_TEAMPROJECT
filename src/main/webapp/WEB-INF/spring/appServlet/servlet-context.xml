@@ -50,6 +50,7 @@
 		<beans:property name="maxUploadSize" value="10485760"/><!-- 10MB / 최대업로드가능한 크기(-1의 경우: 무제한) -->
 	</beans:bean>
 	
+		
 	<beans:bean id ="uploadPath" class="java.lang.String">
 	<beans:constructor-arg value="C:\\zzz\\upload"/>
 	</beans:bean>

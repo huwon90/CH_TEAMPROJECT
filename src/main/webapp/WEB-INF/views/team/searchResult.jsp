@@ -28,7 +28,7 @@
 	
 </script>
 </head>
-<body>
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
 	<jsp:include page="../member/headerloginOk.jsp" />
 	<div id="c1">
 		<ul>
@@ -44,6 +44,5 @@
             </div>
 		</c:forEach>
 	</div>
-	
 </body>
 </html>

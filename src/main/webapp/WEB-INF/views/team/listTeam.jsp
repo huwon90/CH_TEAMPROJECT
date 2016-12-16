@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <c:if test="${param.msg=='가입승인대기중'}">
 	<script>
 		alert('팀 가입이 요청되었습니다');
@@ -51,7 +51,7 @@
 	$(document).ready(function() {
 	    for (var i = 0; i < "${fn:length(listjoinTeam) }"; i++) {
 			$('#ee' + i).click(function () {
-			   $(this).children('.team_out').slideToggle();
+			   $(this).siblings('.team_out').slideToggle();
 			    $(this).css('cursor','pointer');
 			});
 	    }
@@ -74,8 +74,75 @@
       }
    }
 </script>
+<style>
+.solid {
+	float: left;
+	margin-left: 30px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	width: 150px;
+	height: 100px;
+	padding: 50px;
+	border-radius: 2px;
+	margin-left: 30px;
+	list-style: none;
+	line-height: 100px;
+}
+
+.solid a {
+	text-decoration: none;
+	color: black;
+}
+
+.solid:nth-child(8n-7) {
+	background-color: #cfe0e8;
+}
+
+.solid:nth-child(8n-6) {
+	background-color: #b7d7e8;
+}
+
+.solid:nth-child(8n-5) {
+	background-color: #87bdd8;
+}
+
+.solid:nth-child(8n-4) {
+	background-color: #daebe8;
+}
+
+.solid:nth-child(8n-3) {
+	background-color: #bccad6;
+}
+
+.solid:nth-child(8n-2) {
+	background-color: #8d9db6;
+}
+
+.solid:nth-child(8n-1) {
+	background-color: #667292;
+}
+
+.solid:nth-child(8n) {
+	background-color: #f1e3dd;
+}
+
+.solid:nth-child(9) {
+	background-color: #999999;
+}
+
+#c2 span:HOVER {
+	transition: 0.15s;
+	color: #fff;
+	cursor: pointer;
+}
+#c2 .solid a:HOVER {
+	transition: 0.15s;
+	color: #fff;
+	cursor: pointer;
+}
+</style>
 </head>
-<body>
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
 
 <jsp:include page="../member/headerloginOk.jsp" />
 
@@ -88,12 +155,11 @@
 
    <div id="c2">
       <div class="dashed" onclick="insertTeam();">새 프로젝트 생성</div>
-      <%--  <c:set var="index" value="0"></c:set> --%>
       <c:forEach var="jointeam" items="${listjoinTeam }" varStatus="status">
-         <div class="dashed" id="ee${status.index }">
+         <div class="solid">
             
             <a href="boardlist.do?tId=${jointeam.tId }&mId=${mId }">${jointeam.tName }</a> 
-            <span>▼</span>
+            <span id="ee${status.index }">▼</span>
             <ul class="team_out">
                <c:if test="${jointeam.tmLeader == 0 }">
                   <li><a href='outTeam.do?mId=${mId }&tId=${jointeam.tId }'">팀
@@ -103,11 +169,9 @@
                   <li><a
                      href='removeTeam.do?tId=${jointeam.tId }&mId=${jointeam.mId}&tmLeader=${jointeam.tmLeader }'">팀
                         해체</a></li>
-                  <%-- <li><a href="leaderTeamList.do?mId=${mId }">참여요청 목록</a></li> --%>
                </c:if>
             </ul>
          </div><!-- ee -->
-         <%-- <c:set var="index" value="${index +1 }"></c:set> --%>
       </c:forEach>
 
    </div>

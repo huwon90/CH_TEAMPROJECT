@@ -35,7 +35,12 @@ $(document).ready(function() {
 	padding: 1px;
 
 }
-
+#loginname{
+	margin-top:10px;
+}
+.mypage{
+	margin-top:10px;
+}
 .alert1 {
 	position: relative;
 	display: inline-block;
@@ -59,13 +64,9 @@ $(document).ready(function() {
 	left: 20px;
 }
 </style>
-<<<<<<< HEAD:src/main/webapp/WEB-INF/views/member/headerloginOk.jsp
-<title>Insert title here</title>
-=======
 <title>BUS</title>
->>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2:src/main/webapp/WEB-INF/views/member/headerloginOk.jsp
 </head>
-<body>
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
 	<div id="header">
 		<div id="header2">
 			<ul id="logo">
@@ -83,7 +84,7 @@ $(document).ready(function() {
             </ul>
             </form>
 			<ul id="text">
-				<li><a href="#">${mName }</a></li>
+				<li id="loginname"><a href="#">${mName }</a></li>
 				<c:if test="${requestCount!=0 }">
 					<li class="alert1"><img src="image/alarm.png" alt="로고2"
 						width="30" height="30"

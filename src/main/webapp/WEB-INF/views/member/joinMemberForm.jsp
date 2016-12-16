@@ -86,7 +86,7 @@
 	}
 </style>
 </head>
-<body>
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
 <jsp:include page="header_main.jsp" /> 
 	
     	<form action="joinMember.do" method="post" name="frm">
@@ -143,11 +143,7 @@
 				<tr>
 					<th>이메일</th>
 					<td>
-<<<<<<< HEAD
-						<input type="email" name="mEmail" class="text_box"  required="required" placeholder="이메일을 입력하세요">
-=======
 						<input type="email" name="mEmail" class="text_box" required="required" placeholder="이메일을 입력하세요">
->>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 					</td>
 				</tr>
 				<tr>
@@ -161,12 +157,7 @@
 					</td>
 			</table>
 			<div class="buttons"><input type="button" class="sub_b1" value="회원가입" onclick="joinInfoConfirm()">
-<<<<<<< HEAD
-						<input type="reset" class="sub_b" value="취소"></div>
-=======
 				<input type="reset" class="sub_b" value="취소"></div>
->>>>>>> de9a4252a7f30c2785b28274882bfd7836d686e2
 		</form>
-	
 </body>
 </html>

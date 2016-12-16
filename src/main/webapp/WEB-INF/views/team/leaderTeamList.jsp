@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <c:if test="${param.msg=='거절성공'}">
 	<script>
 		alert('프로젝트 초대가 거절되었습니다.');
@@ -17,7 +17,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 </head>
-<body>
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
 	<jsp:include page="../member/headerloginOk.jsp" />
 	<div id="c5">
 		<ul>
@@ -65,7 +65,6 @@
 		</c:forEach> 
 		</table>
 	</div>
-	
 	
 	
 </body>

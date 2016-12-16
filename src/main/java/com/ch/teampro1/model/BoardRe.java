@@ -10,10 +10,6 @@ public class BoardRe {
     private String bRcontent;
     private Timestamp bRDate;
     private String brDeleteYN;    
-    private int brParent;
-    private int brDepth;
-    private int brOrder;
-    
     
 	public int gettId() {
 		return tId;
@@ -57,26 +53,4 @@ public class BoardRe {
 	public void setBrDeleteYN(String brDeleteYN) {
 		this.brDeleteYN = brDeleteYN;
 	}
-	public int getBrParent() {
-		return brParent;
-	}
-	public void setBrParent(int brParent) {
-		this.brParent = brParent;
-	}
-	public int getBrDepth() {
-		return brDepth;
-	}
-	public void setBrDepth(int brDepth) {
-		this.brDepth = brDepth;
-	}
-	public int getBrOrder() {
-		return brOrder;
-	}
-	public void setBrOrder(int brOrder) {
-		this.brOrder = brOrder;
-	}
-    
-   
-    
-    
 }

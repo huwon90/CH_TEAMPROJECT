@@ -48,6 +48,7 @@ public class MemberController {
 	public String joinMember(Member member, Model model, HttpSession session){
 		int result = memberService.joinMember(member, session);
 		if(result>0){
+			model.addAttribute("msg", "가입 성공");
 			return "redirect:joinOk.do";
 		} else{
 			model.addAttribute("msg", "가입 실패");
@@ -56,7 +57,7 @@ public class MemberController {
 	}
 	@RequestMapping("joinOk")
 	public String joinOk(){
-		return "member/joinOk";
+		return "forward:logout.do";
 	}
 	@RequestMapping("login")
 	public String login(Member member, Model model, HttpSession session){
@@ -93,8 +94,6 @@ public class MemberController {
 	public String modifyMemberForm(String mId, Model model){
 		Member member = memberService.detailMember(mId);
 		model.addAttribute("modifyMemberForm", member);
-		int requestCount = tService.requestCount(mId);
-		model.addAttribute("requestCount", requestCount);
 		return "member/modifyMemberForm";
 	}
 	@RequestMapping("modifyMember")

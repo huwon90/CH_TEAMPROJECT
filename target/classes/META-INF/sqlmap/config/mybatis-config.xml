@@ -12,7 +12,6 @@
 		<typeAlias alias="TeamTmConn" type="com.ch.teampro1.model.TeamTmConn"/>
 		<typeAlias alias="Board" type="com.ch.teampro1.model.Board"/>
 		<typeAlias alias="BoardRe" type="com.ch.teampro1.model.BoardRe"/>
-		<typeAlias alias="Boardfile" type="com.ch.teampro1.model.Boardfile"/>
 	</typeAliases>
 	<!-- 매퍼로 sql문을 찾을 위치를 지정 -->
 	<mappers>

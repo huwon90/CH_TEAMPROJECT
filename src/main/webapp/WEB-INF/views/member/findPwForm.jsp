@@ -57,7 +57,7 @@
 	}
 </style>
 </head>
-<body>
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
 <jsp:include page="header_main.jsp" />
 	<div>
 		<form action="findPw.do" method="post" name="frm">

@@ -1,41 +1,38 @@
-﻿ @import url(http://fonts.googleapis.com/earlyaccess/jejugothic.css);
+﻿@import url(http://fonts.googleapis.com/earlyaccess/jejugothic.css);
 
         #content {
-            margin-top: 30px;
-            width: 2000px;
+            width: 100%;
             height: 1000px;
             overflow-x: hidden;
+            float:center;
             background-position: center;
             background-attachment: fixed;
             background-repeat: no-repeat;
             background-size: cover;
             filter: alpha(opacity=70);
         }
-
             #content p {
-                margin: 0 auto;
+            	margin-left:600px;
                 margin-top:400px;
                 font-size: 50px;
-                text-align: center;
+                float: center;
                 background-color: #C9CCD4;
                 color: #333333;
-                width: 710px;
+                width: 690px;
                 height: 70px;
-                text-align: center;
                 line-height: 70px;
             }
 
             #content a {
                 margin-top: 5px;
                 position: absolute;
-                margin-left: 1250px;
+                margin-left: 1180px;
                 color: white;
                 text-decoration: none;
             }
-
-                #content a:hover {
-                    color: inherit;
-                }
+            #content a:hover {
+                color: inherit;
+            }
 
         table {
             margin-top: 40px;
@@ -138,23 +135,37 @@
             color: black;
             font-size: 30px;
         }
-
         #footer {
-            width: 2000px;
+            width: 1903px;
             height: 250px;
             background-color: lightgray;
         }
-
+		#footer tr{
+			
+		}
+		#footer .bus_footer{
+			padding-left:400px;
+		}
         #footer td {
-             color: black;
-             font-size: 20px;
-             width: 1000px;
-             color: #3B3B3B;
+        	margin-top:20px;
+            color: black;
+            font-size: 20px;
+            width: 1000px;
+            color: #3B3B3B;
+        }
+        #footer ul{
+        	margin-top:60px;
+        	width:1000px;
         }
         #footer li{
-            margin-left:200px;
             list-style:none;
+            color:#666666;
+        }
+        #footer li:FIRST-CHILD{
+        	color: #7383bf;
+        	font-size:26px;
         }
         #footer img{
-            margin-left:400px;
+        	margin-top:20px;
+            margin-left:200px;
         }

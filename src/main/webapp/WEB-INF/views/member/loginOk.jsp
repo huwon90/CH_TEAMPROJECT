@@ -26,7 +26,7 @@
 	}
 </style>
 </head>
-<body>
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
 <jsp:include page="headerloginOk.jsp" />
 	<div>
 		<p>${mName }님</p>
@@ -103,7 +103,8 @@
 
 
     </div>
-    <div id="footer">
+    <jsp:include page="../member/footer.jsp" />
+<!--     <div id="footer">
         <table>
             <tr>
                 <td class="bus_footer"><img src="image/footer1.png" alt="로고2" width="150" height="150" />BUS</td>
@@ -117,6 +118,6 @@
             </tr>
         </table>
 
-    </div>
+    </div> -->
 </body>
 </html>

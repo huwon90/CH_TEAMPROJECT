@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 </head>
-<body>
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
 	<div>
 		<h2>${mId }님 회원가입 성공</h2>
 		<c:if test="${msg!=null }">${msg }</c:if>

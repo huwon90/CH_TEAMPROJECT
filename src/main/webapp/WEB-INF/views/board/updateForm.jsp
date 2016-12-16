@@ -70,7 +70,7 @@
 }
 </style>
 </head>
-<body>
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
 <div id="board_content">
 	<form action="updateFile.do" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="bId" value="${updateForm.bId }">

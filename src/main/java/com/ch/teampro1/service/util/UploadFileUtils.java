@@ -1,4 +1,4 @@
-package com.ch.teampro1.util;
+package com.ch.teampro1.service.util;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
