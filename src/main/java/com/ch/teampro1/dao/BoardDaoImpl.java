@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ch.teampro1.model.Board;
 import com.ch.teampro1.model.BoardRe;
+import com.ch.teampro1.model.Boardfile;
 import com.ch.teampro1.model.MemberTmConn;
 
 @Repository
@@ -16,6 +17,23 @@ public class BoardDaoImpl implements BoardDao{
 	@Autowired
 	private SqlSession session;
 	
+	@Override
+	public void createfile(Board board) {
+		session.insert("createfile",board); 
+	}
+	@Override
+	public void addAttach(Board board) throws Exception {
+		session.insert("addAttach", board);
+	}
+	@Override
+	public List<String> getAttach(Integer bId) throws Exception {
+		return session.selectList("getAttach", bId);
+	}
+	@Override
+	public List<Boardfile> getAttach2() throws Exception {
+		return session.selectList("getAttach2");
+	}
+
 	@Override
 	public List<Board> listAll(int tId) {
 		// TODO Auto-generated method stub
@@ -95,4 +113,5 @@ public class BoardDaoImpl implements BoardDao{
       // TODO Auto-generated method stub
       return session.selectList("fileList", tId);
    }
+
 }

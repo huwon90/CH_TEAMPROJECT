@@ -20,7 +20,46 @@
 		<result property="bTitle" column="bTitle" />
 		<result property="bLoc" column="bLoc" />
 		<result property="bMemo" column="bMemo" />
+		<result property="FullName" column="FullName" />
+		<result property="ori" column="ori" />
 	</resultMap>
+
+	<insert id="addAttach" parameterType="Board">
+	insert into boardfile
+	(bId,fullName,tId,ori) values
+	(#{bId},#{fullName},#{tId},#{ori})
+	</insert>  
+
+	<!-- 이미지 모아보기 -->
+   <select id="imageList" parameterType="int" resultType="Board">
+      SELECT BIID, BINAME FROM BOARD WHERE TID=#{tId, jdbcType=INTEGER} AND BINAME!='NULL' ORDER BY BDATE
+   </select>
+   
+   <!-- 파일모아보기 -->
+   <select id="fileList" parameterType="int" resultType="Board">
+      SELECT BFID, BFNAME FROM BOARD WHERE TID=#{tId, jdbcType=INTEGER} AND BFNAME!='NULL' ORDER BY BDATE DESC
+   </select>
+
+	<insert id="createfile" parameterType="Board">
+		<selectKey keyProperty="bId" resultType="Integer" order="BEFORE">
+			SELECT bId_SQ.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO Board
+		(mId,tId, bId, bDate,bNo, bTitle, bContent)
+		VALUES
+		(#{mId, jdbcType=VARCHAR}, #{tId, jdbcType=INTEGER},#{bId}, SYSDATE,
+		1,'bTitle',#{bContent, jdbcType=VARCHAR})
+	</insert>
+
+	<select id="getAttach2" resultType="Boardfile">
+		select * from boardfile
+	</select>
+
+	<select id="getAttach" resultType="String">
+		select fullname from boardfile where bId = #{bId}
+	</select>
+
+
 	
 	<select id="listAll" parameterType="int" resultMap="BoardResult">
 	  	SELECT * from
@@ -117,13 +156,5 @@
 		DELETE FROM BOARD_RE WHERE brId=#{brId}
 	</delete>
 	
-	<!-- 이미지 모아보기 -->
-   <select id="imageList" parameterType="int" resultType="Board">
-      SELECT BIID, BINAME FROM BOARD WHERE TID=#{tId, jdbcType=INTEGER} AND BINAME!='NULL' ORDER BY BDATE
-   </select>
-   
-   <!-- 파일모아보기 -->
-   <select id="fileList" parameterType="int" resultType="Board">
-      SELECT BFID, BFNAME FROM BOARD WHERE TID=#{tId, jdbcType=INTEGER} AND BFNAME!='NULL' ORDER BY BDATE DESC
-   </select>
+
 </mapper>

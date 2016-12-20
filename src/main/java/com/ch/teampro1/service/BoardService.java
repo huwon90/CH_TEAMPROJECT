@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.ch.teampro1.model.Board;
 import com.ch.teampro1.model.BoardRe;
+import com.ch.teampro1.model.Boardfile;
 import com.ch.teampro1.model.MemberTmConn;
 
 public interface BoardService {
@@ -29,5 +30,9 @@ public interface BoardService {
 	
 	public List<Board> imageList(int tId); //이미지모아보기
 	public List<Board> fileList(int tId);    //파일 모아보기
+	
+	public void createfile(Board board) throws Exception; //파일 인서트
+	public List<String> getAttach(Integer bId)throws Exception;  
+	public List<Boardfile> getAttach2()throws Exception;
 	
 }

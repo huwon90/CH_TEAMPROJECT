@@ -1,21 +1,37 @@
 package com.ch.teampro1.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ch.teampro1.model.Board;
 import com.ch.teampro1.model.BoardRe;
+import com.ch.teampro1.model.Boardfile;
 import com.ch.teampro1.model.MemberTmConn;
 import com.ch.teampro1.model.TmConn;
 import com.ch.teampro1.service.BoardService;
 import com.ch.teampro1.service.ITeamService;
+import com.ch.teampro1.service.util.MediaUtils;
+import com.ch.teampro1.service.util.UploadFileUtils;
 
 @Controller
 public class BoardController {
@@ -23,6 +39,99 @@ public class BoardController {
 	private BoardService bService;
 	@Autowired
 	private ITeamService tService;
+
+	 @Resource(name = "uploadPath")
+	  private String uploadPath;
+	 
+	 @RequestMapping("getAttach/{bId}")
+	  @ResponseBody
+	  public List<String> getAttach(@PathVariable("bId")Integer bId)throws Exception{
+	    
+	    return bService.getAttach(bId);
+	  }  
+	 
+	@ResponseBody // @ResponseBody는 byte[]데이터 그대로 받음
+	@RequestMapping("displayFile")
+	// 전송받기 원하는 파일 이름 /년/월/일/파일명의 형태로 입력받음
+	public ResponseEntity<byte[]> displayFile(String fileName) throws Exception {
+
+		InputStream in = null;
+		ResponseEntity<byte[]> entity = null; // 리턴값은 실제 파일의 데이터 byte
+		try {
+			String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);
+			MediaType mType = MediaUtils.getMediaType(formatName);
+
+			HttpHeaders headers = new HttpHeaders();
+
+			in = new FileInputStream(uploadPath + fileName);
+
+			if (mType != null) {
+				headers.setContentType(mType); // 파일 이름에서 확장자 추출하고 이미지인 경우
+												// MINE변경
+			} else {
+				// 파일 이름에서 확장자 추출
+				fileName = fileName.substring(fileName.indexOf("_") + 1);
+				// 이미지가 아닌경우 다운로드로 사용되는 'APPLICATION_OCTET_STREAM'으로 지정
+				// 브라우저가 이것을 읽으면 사용자에게 다운로드 창 열어줌
+				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+				headers.add("Content-Disposition",
+						"attachment; filename=\"" + new String(fileName.getBytes("UTF-8"), "ISO-8859-1") + "\"");
+			} // 다운로드할떄 파일이름이므로 utf-8로 한글 처리
+
+			// commons 라이브러리로 대상파일에서 데이터를 읽어내는 함수
+			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), headers, HttpStatus.CREATED);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
+		} finally {
+			in.close();
+		}
+		return entity;
+	}
+
+	  @ResponseBody
+	  @RequestMapping(value="deleteFile", method=RequestMethod.POST)
+	  public ResponseEntity<String> deleteFile(String fileName){
+	    
+	    String formatName = fileName.substring(fileName.lastIndexOf(".")+1);
+	    
+	    MediaType mType = MediaUtils.getMediaType(formatName);
+	    
+	    if(mType != null){      
+	      
+	      String front = fileName.substring(0,12);
+	      String end = fileName.substring(14);
+	      new File(uploadPath + (front+end).replace('/', File.separatorChar)).delete();
+	    }
+	    
+	    new File(uploadPath + fileName.replace('/', File.separatorChar)).delete();
+	    
+	    
+	    return new ResponseEntity<String>("deleted", HttpStatus.OK);
+	  }  
+	
+	 
+	 
+		@ResponseBody
+		@RequestMapping(value ="uploadAjax", method=RequestMethod.POST, 
+		                  produces = "text/plain;charset=UTF-8")
+		  public ResponseEntity<String> uploadAjax(MultipartFile file)throws Exception{
+			   		
+		    return 
+		    	      new ResponseEntity<>(
+		    	          UploadFileUtils.uploadFile(uploadPath, 
+		    	                file.getOriginalFilename(), 
+		    	                file.getBytes()), 
+		    	          HttpStatus.CREATED);
+		    }
+		
+		
+	@RequestMapping(value = "createfile", method = RequestMethod.POST)
+	public String createfile(Board board, Model model, String[] files) throws Exception {
+		bService.createfile(board);
+		return "redirect:boardlist.do?tId=" + board.gettId() + "&mId=" + board.getmId();
+	}
 
 	@RequestMapping(value="boardlist", method=RequestMethod.GET)
 	public ModelAndView boardlist(String mId, TmConn tmConn, MemberTmConn memberTmConn, int tId) throws Exception{
@@ -37,6 +146,8 @@ public class BoardController {
 	        modelandview.addObject("imageList", imageList);
 	        List<Board> fileList = bService.fileList(tId);
 	        modelandview.addObject("fileList", fileList);
+	        List<Boardfile> file = bService.getAttach2();
+	        modelandview.addObject("file", file);
 			int memberCount = bService.memberCount(tId);
 			modelandview.addObject("memberCount", memberCount);
 	        modelandview.addObject("list", list);

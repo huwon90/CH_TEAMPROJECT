@@ -20,8 +20,63 @@
    type="text/css">
 <link href="${conPath}/css/style.min.css" rel="stylesheet"
    type="text/css">
-   
+   	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 <style>
+
+small {
+	margin-left: 3px;
+	font-weight: bold;
+	color: gray;
+}
+
+ul li {list-style:none}
+
+ .mailbox-attachments li {
+	float: left;
+	width: 150px;
+	border: 1px solid #eee;
+	margin-bottom: 10px;
+	margin-right: 10px
+}
+
+.mailbox-attachment-name {
+	font-weight: bold;
+	color: #666
+}
+
+.mailbox-attachment-icon, .mailbox-attachment-info,
+	.mailbox-attachment-size {
+	display: block
+}
+
+.mailbox-attachment-info {
+	padding: 10px;
+	background: #f4f4f4
+}
+
+.mailbox-attachment-size {
+	color: #999;
+	font-size: 12px
+}
+
+.mailbox-attachment-icon {
+	text-align: center;
+	font-size: 65px;
+	color: #666;
+	padding: 20px 10px
+}
+
+.mailbox-attachment-icon.has-img {
+	padding: 0
+}
+
+.mailbox-attachment-icon.has-img>img {
+	max-width: 100%;
+	height: auto
+}
+ 
+
 #board_content {
 	margin-left: 320px;
 }
@@ -371,8 +426,8 @@
             <tr id="title_1img">
                <td><a href="#" class="btn-example" onclick="view_layer('layer1');"><img src="image/file.png" alt="file"
                      width="48" height="48" /></a></td>
-               <td><a href="#" class="btn-example" onclick="view_layer('layer2');"><img src="image/image.png" alt="image"
-                     width="52" height="52" /></a></td>
+<!--                <td><a href="#" class="btn-example" onclick="view_layer('layer2');"><img src="image/image.png" alt="image"
+                     width="52" height="52" /></a></td> -->
                <td><a href="#" class="btn-example" onclick="view_layer('layer3');"><img src="image/cal.png" alt="cal"
                      width="43" height="43 " /></a></td>
                <td><a href="#" class="btn-example" onclick="view_layer('layer4');"><img src="image/phone.png" alt="phone"
@@ -380,7 +435,7 @@
             </tr>
             <tr id="submenu_tr">
                <td><a href="#" class="btn-example" onclick="view_layer('layer1');">파일</a></td>
-               <td><a href="#" class="btn-example" onclick="view_layer('layer2');">이미지</a></td>
+<!--                <td><a href="#" class="btn-example" onclick="view_layer('layer2');">이미지</a></td> -->
                <td><a href="#" class="btn-example" onclick="view_layer('layer3');">일정</a></td>
                <td><a href="#" class="btn-example" onclick="view_layer('layer4');">연락처</a></td>
             </tr>
@@ -436,12 +491,16 @@
                  <table id="collect_image" width="100%">
                     <caption>파일 모아보기</caption>
                     <tr><td>파일명</td></tr>
-                    <c:if test="${empty fileList}">
+                    <c:if test="${empty file}">
 						<tr><td>파일이 없습니다</td></tr>
-					</c:if>
-                    <c:forEach var="fileList" items="${fileList }">
+					</c:if>			
+                    <c:forEach var="file" items="${file }">
                        <tr>
-                             <td><a href="${conPath}/upload/${fileList.bfName }">${fileList.bfName }</a></td></tr>
+                            <td>  <a href="${conPath}/displayFile.do?fileName=${file.fullName}">${file.ori}</a></td>
+                             </tr>
+                             <tr>
+                             <td>			</td>
+                             </tr>
                     </c:forEach>
                  </table>
                  <div class="btn-r">
@@ -455,24 +514,28 @@
         <div id="layer2" class="pop-layer">
            <div class="pop-container">
               <div class="pop-conts">
-                 <table id="collect_image">
-                    <caption>이미지 모아보기</caption>
-                    <tr><td>파일명</td><td>이미지</td></tr>
-                    <c:if test="${empty imageList}">
-						<tr><td colspan="2">이미지가 없습니다</td></tr>
-					</c:if>
-                    <c:forEach var="imageList" items="${imageList }">
+                 <table id="collect_image" width="100%">
+                    <caption>파일 모아보기</caption>
+                    <tr><td>파일명</td></tr>
+                    <c:if test="${empty file}">
+						<tr><td>파일이 없습니다</td></tr>
+					</c:if>			
+                    <c:forEach var="file" items="${file }">
                        <tr>
-                       		<td>${imageList.biName }</td>
-                       		<td><img src="${conPath}/upload/${imageList.biName }"></td></tr>
+                            <td>  <a href="${conPath}/displayFile.do?fileName=${file.fullName}">${file.ori}</a></td>
+                             </tr>
+                             <tr>
+                             <td>			</td>
+                             </tr>
                     </c:forEach>
                  </table>
                  <div class="btn-r">
-                    <a href="#" onclick="close_layer('layer2');">Close</a>
+                    <a href="#" onclick="close_layer('layer1');">Close</a>
                  </div>
               </div>
            </div>
         </div>
+
    
    		<!-- 일정 모아보기 -->
 	   <div id="layer3" class="pop-layer">
@@ -572,22 +635,48 @@
                   <tr class="con">
                      <td colspan="4" class="con1">${board.bContent }</td>
                   </tr>
-                  <c:if test="${board.bfName!=null }">
-                     <tr>
-                        <td id="center">첨부된 파일</td>
-                        <td colspan="3" class="file1"><a
-                           href="${conPath}/upload/${board.bfName }">${board.bfName }</a></td>
-
-                     </tr>
-                  </c:if>
-                  <c:if test="${board.biName!=null }">
-                     <tr>
-                        <td id="center">첨부된 이미지</td>
-                        <td colspan="3" class="image1"><a
-                           href="${conPath}/upload/${board.biName }"><img
-                              src="${conPath}/upload/${board.biName }"></a></td>
-                     </tr>
-                  </c:if>
+        
+                  <!-- 파일뿌리기 로직 -->
+                  <c:forEach var="file" items="${file }">
+					<c:if test="${file.bId == board.bId }">             
+                  <tr>
+                    <td id="center">첨부된 파일</td>
+                    <td colspan="3" class="file1">
+                    <a href="${conPath}/displayFile.do?fileName=${file.fullName}">${file.ori}</a>
+					</td>
+                 </tr>    
+<!--        			  	<script>
+         	
+                	$(".uploadedList").on("click", ".mailbox-attachment-info a", function(event){
+                		alert("안녕1");
+                		
+                     var imgsrc = "";
+    					var fileLink = "localhost:8181/teampro123/displayFile.do?fileName=${file.fullName}";  
+    			/* 		var fileLink = imgsrc.substr(12); */
+                		alert(fileLink);
+    			
+                		if(checkImageType(fileLink)){
+                			event.preventDefault(); // href 화면이동 못하도록
+ 
+                			var imgTag = $("#popup_img");
+                			imgTag.attr("src", imgsrc);
+                			
+                			console.log(imgTag.attr("src"));
+                			
+                			$(".popup").show('slow');
+                			imgTag.addClass("show");		
+                		}	
+                	});
+                	$("#popup_img").on("click", function(){
+                		
+                		$(".popup").hide('slow');
+                		
+                	});	
+                    
+                    </script> -->
+						</c:if>  
+				</c:forEach> 
+				
                 </c:if>
 
                 <c:if test="${board.bNo==2 }">
@@ -662,6 +751,7 @@
 
 <script>
 
+
 var easeEffect = 'easeInQuint';
 
 var tId = ${param.tId};
@@ -681,8 +771,8 @@ $(window).scroll(function(){ // 1. 스크롤이벤트가 발생하면
         	console.log("scroll down");
         	var lastbId = $(".id:last").attr("data-bId");
     		console.log(lastbId+"마지막 bId");	
-     		location.href = "boardlist2.do?tId="+tId+"&mId=user&bId="+lastbId; 
-/*     		location.href = "boardlist2.do?tId="+tId+"&mId="+ mId+"&bId="+lastbId; */
+      		location.href = "boardlist2.do?tId="+tId+"&mId=${mId}&bId="+lastbId;  
+/*      		location.href = "boardlist2.do?tId="+tId+"&mId="+ ${mId}+"&bId="+lastbId;  */
         }
     }
     //업스크롤
@@ -691,8 +781,8 @@ $(window).scroll(function(){ // 1. 스크롤이벤트가 발생하면
         	 if ($(window).scrollTop() <= 1 ){ 
         		 var firstbId = $(".id:first").attr("data-bId");
         		 console.log(firstbId+"첫번쨰 bId");
-         		location.href = "boardlist3.do?tId="+tId+"&mId=user&bId="+firstbId;
-/*          		location.href = "boardlist2.do?tId="+tId+"&mId="+ mId+"&bId="+firstbId; */
+          		location.href = "boardlist3.do?tId="+tId+"&mId=${mId}&bId="+firstbId; 
+/*           		location.href = "boardlist2.do?tId="+tId+"&mId="+ ${mId}+"&bId="+firstbId;  */
         	 }
         }
        

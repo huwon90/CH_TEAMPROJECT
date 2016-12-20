@@ -19,6 +19,35 @@ public class Board {
 	private String bTitle;
 	private String bLoc;
 	private String bMemo;
+	private String fullName;
+	private String[] files;
+	private String[] oriName;	
+	private String ori;
+	
+	public String getOri() {
+		return ori;
+	}
+	public void setOri(String ori) {
+		this.ori = ori;
+	}
+	public String[] getOriName() {
+		return oriName;
+	}
+	public void setOriName(String[] oriName) {
+		this.oriName = oriName;
+	}
+	public String[] getFiles() {
+		return files;
+	}
+	public void setFiles(String[] files) {
+		this.files = files;
+	}
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
 	public String getmId() {
 		return mId;
 	}

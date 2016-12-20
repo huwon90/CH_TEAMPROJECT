@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.ch.teampro1.dao.BoardDao;
 import com.ch.teampro1.model.Board;
 import com.ch.teampro1.model.BoardRe;
+import com.ch.teampro1.model.Boardfile;
 import com.ch.teampro1.model.MemberTmConn;
 
 @Service
@@ -19,6 +20,45 @@ public class BoardServiceImpl implements BoardService {
 	@Autowired
 	private BoardDao boardDao;
 
+	@Override
+	public void createfile(Board board) throws Exception {
+		
+		boardDao.createfile(board);
+
+		System.out.println("createService 시작");
+		
+	    String[] files = board.getFiles();
+	    String [] oriName = board.getOriName();
+		for(String OriNE : oriName){
+			System.out.println(OriNE+"오리네임");
+		}
+	    if(files == null) { 
+			System.out.println("파일이 없음");
+	    	return; } 
+		for(String OriNE : oriName){
+		for(String fileName : files){
+			board.setFullName(fileName);
+
+			}
+	    board.gettId();
+		board.getbId();
+		board.settId(board.gettId());
+		board.setbId(board.getbId());
+		board.setmId(board.getmId());
+		board.setOri(OriNE);
+		boardDao.addAttach(board);
+		System.out.println(OriNE+"오리네임");
+		}
+	}
+
+	@Override
+	public List<String> getAttach(Integer bId) throws Exception {
+		return boardDao.getAttach(bId);
+	}
+	@Override
+	public List<Boardfile> getAttach2() throws Exception {
+	    return boardDao.getAttach2();
+	}
 	@Override
 	public List<Board> listAll(int tId) {
 		return boardDao.listAll(tId);
@@ -158,4 +198,5 @@ public class BoardServiceImpl implements BoardService {
       // TODO Auto-generated method stub
       return boardDao.fileList(tId);
    }
+
 }

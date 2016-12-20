@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ch.teampro1.model.Board;
 import com.ch.teampro1.model.BoardRe;
+import com.ch.teampro1.model.Boardfile;
 import com.ch.teampro1.model.MemberTmConn;
 
 public interface BoardDao {
@@ -23,4 +24,12 @@ public interface BoardDao {
 	public int memberCount(int tId);
 	public List<Board> imageList(int tId); //이미지 모아보기
 	public List<Board> fileList(int tId);    //파일 모아보기
+	
+	public void createfile(Board board); //허원 파일 인서트
+	public void addAttach(Board board)throws Exception; //파일첨부  
+	
+	public List<String> getAttach(Integer bId)throws Exception; 
+	
+	public List<Boardfile> getAttach2()throws Exception;   
+
 }
